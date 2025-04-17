@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>PRS</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myproject</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">PRS</h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2025-04-17
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myproject/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250327code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20250327)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20250327code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20250327)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong3d07189">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong> 3d07189
+</a>
+</p>
+</div>
+<div id="strongRepositoryversionstrong3d07189"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version 3d07189.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/.DS_Store
+    Ignored:    data/.DS_Store
+
+Untracked files:
+    Untracked:  analysis/normalized_counts.txt
+    Untracked:  analysis/prs_blood_cell.txt
+    Untracked:  analysis/prs_immune.txt
+    Untracked:  data/GTEx_v8.bed
+    Untracked:  data/GTEx_v8.bim
+    Untracked:  data/GTEx_v8.bk
+    Untracked:  data/GTEx_v8.fam
+    Untracked:  data/GTEx_v8.rds
+    Untracked:  data/Whole_Blood.v8.covariates.txt
+    Untracked:  data/blood_cell/
+    Untracked:  data/gene_reads_2017-06-05_v8_whole_blood.gct
+    Untracked:  data/gene_tpm_2017-06-05_v8_whole_blood.gct.gz
+    Untracked:  data/immune/
+
+Unstaged changes:
+    Modified:   myproject.Rproj
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/PRS.Rmd</code>) and HTML
+(<code>docs/PRS.html</code>) files. If you’ve configured a remote Git
+repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
+in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+3d07189
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-17
+</td>
+<td>
+wflow_publish(c("analysis/about.Rmd",
+"analysis/expression_normalization.Rmd",
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="function-to-calculate-prs-for-each-snp-file"
+class="section level1">
+<h1>Function to calculate PRS for each SNP file</h1>
+<pre class="r"><code>calculate_prs &lt;- function(file_path, snp_prs, map, geno, common_snp, sample) {
+  
+  # Match the SNPs with the map
+  common_snp &lt;- snp_match(snp_prs, map)
+  names(common_snp) &lt;- c(&quot;chr&quot;, &quot;pos&quot;, &quot;effect_allele&quot;, &quot;other_allele&quot;, &quot;beta&quot;, &quot;rsid&quot;, 
+                         &quot;prs_index&quot;, &quot;map_index&quot;)
+  common_snp &lt;- cbind(common_snp, map[common_snp$map_index, 3:4])
+  common_snp$rsid &lt;- ifelse(common_snp$rsid == &quot;&quot;, 
+                           paste0(&quot;chr&quot;, common_snp$chr, &quot;_&quot;, common_snp$pos), 
+                           common_snp$rsid)
+  
+  # Extract genotype data
+  geno_snp &lt;- geno[, common_snp$map_index]
+  colnames(geno_snp) &lt;- common_snp$rsid
+  
+  # Initialize an empty matrix to store the PRS values
+  prs_matrix &lt;- matrix(0, nrow = nrow(geno_snp), ncol = ncol(geno_snp))
+  
+  # Loop through each SNP and calculate PRS for each individual
+  for (snp_index in 1:ncol(geno_snp)) {
+    snp_name &lt;- colnames(geno_snp)[snp_index]
+    snp_data &lt;- common_snp[common_snp$rsid == snp_name, ]
+    effect_allele &lt;- snp_data$effect_allele
+    effect_weight &lt;- snp_data$beta
+    a1 &lt;- snp_data$a1
+    a0 &lt;- snp_data$a0
+    
+    # Loop through each individual (sample)
+    for (sample_index in 1:nrow(geno_snp)) {
+      genotype &lt;- geno_snp[sample_index, snp_index]
+      
+      # Handle NA genotypes and calculate PRS
+      if (is.na(genotype)) {
+        prs_matrix[sample_index, snp_index] &lt;- 0  # No contribution to PRS for this SNP
+      } else {
+        if (effect_allele == a1) {
+          if (genotype == 0) {
+            prs_matrix[sample_index, snp_index] &lt;- 2 * effect_weight
+          } else if (genotype == 1) {
+            prs_matrix[sample_index, snp_index] &lt;- effect_weight
+          } else if (genotype == 2) {
+            prs_matrix[sample_index, snp_index] &lt;- 2 * effect_weight
+          }
+        } else if (effect_allele == a0) {
+          if (genotype == 0) {
+            prs_matrix[sample_index, snp_index] &lt;- 2 * effect_weight
+          } else if (genotype == 1) {
+            prs_matrix[sample_index, snp_index] &lt;- effect_weight
+          } else if (genotype == 2) {
+            prs_matrix[sample_index, snp_index] &lt;- 2 * effect_weight
+          }
+        }
+      }
+    }
+  }
+  
+  # Calculate total PRS for each individual (sum across all SNPs)
+  total_prs &lt;- rowSums(prs_matrix)
+  
+  # Return a dataframe with sample IDs and total PRS for this file
+  prs_data &lt;- data.frame(sample = sample, total_prs = total_prs)
+  return(prs_data)
+}</code></pre>
+</div>
+<div id="data-preparation" class="section level1">
+<h1>Data Preparation</h1>
+<pre class="r"><code># read in genotype data (only need to do once for each data set)
+# snp_readBed(&quot;data/GTEx_v8.bed&quot;)
+
+# attach the genotype object
+obj.bigSNP &lt;- snp_attach(&quot;data/GTEx_v8.rds&quot;)
+
+# extract the SNP information from the genotype
+map &lt;- obj.bigSNP$map[,c(1, 4:6)]
+names(map) &lt;- c(&quot;chr&quot;, &quot;pos&quot;, &quot;a1&quot;, &quot;a0&quot;)
+
+# extract genotype data
+geno &lt;- obj.bigSNP$genotypes
+
+# Get the sample IDs from plink fam file
+sample &lt;- obj.bigSNP$fam$sample.ID</code></pre>
+</div>
+<div id="prs-for-blood-cell-trait" class="section level1">
+<h1>PRS for blood cell trait</h1>
+<pre class="r"><code># Get list of all SNP files in the blood_cell folder
+snp_files &lt;- list.files(&quot;data/blood_cell&quot;,
+                        pattern = &quot;*.txt&quot;, full.names = TRUE)
+
+# Initialize an empty list to store the PRS data for all files
+all_prs_data &lt;- list()
+
+# Loop through each file and calculate the PRS
+for (file_path in snp_files) {
+  # Read in SNP_PRS data
+  snp_prs &lt;- fread(file_path, header = TRUE, stringsAsFactors = FALSE)
+  snp_prs &lt;- snp_prs[, c(4:6, 8:10)]
+  snp_prs$hm_chr &lt;- as.integer(snp_prs$hm_chr)
+  names(snp_prs) &lt;- c(&quot;a1&quot;, &quot;a0&quot;, &quot;beta&quot;, &quot;rsid&quot;, &quot;chr&quot;, &quot;pos&quot;)
+  
+  # calculate PRS
+  prs_data &lt;- calculate_prs(file_path, snp_prs, map, geno, common_snp, sample)
+  file_name &lt;- gsub(&quot;.*/(PGS[0-9]+)_hmPOS_GRCh38.txt&quot;, &quot;\\1&quot;, file_path)
+  colnames(prs_data) &lt;- c(&quot;sample_id&quot;, file_name)
+  all_prs_data[[file_name]] &lt;- prs_data
+}
+
+# Combine the PRS data for all files into one dataframe
+final_prs_df &lt;- Reduce(function(x, y) merge(x, y, by = &quot;sample_id&quot;, all = TRUE), all_prs_data)
+head(final_prs_df)
+#write.table(final_prs_df, &quot;prs_blood_trait.txt&quot;, sep=&quot;\t&quot;, row.names = F, col.names = T)</code></pre>
+</div>
+<div id="prs-for-immune-traits" class="section level1">
+<h1>PRS for immune traits</h1>
+<div id="convert-genome-build-hg19-tp-hg38" class="section level2">
+<h2>convert genome build (hg19 tp hg38)</h2>
+<pre class="r"><code># Load the chain file for liftOver
+library(rtracklayer)
+path = system.file(package=&quot;liftOver&quot;, &quot;extdata&quot;, &quot;hg19ToHg38.over.chain&quot;)
+chain = import.chain(path)
+chain
+str(chain[[1]])
+
+# Get list of all SNP files in the immune folder
+immune_files &lt;- list.files(&quot;data/immune&quot;, pattern = &quot;*.txt&quot;, full.names = TRUE)
+
+# Function to perform liftOver and modify chromosome labels
+process_file &lt;- function(file_path, chain) {
+  # Read in SNP_PRS data
+  snp_prs &lt;- fread(file_path, header = TRUE, stringsAsFactors = FALSE)
+  names(snp_prs) &lt;- c(&quot;chr&quot;, &quot;rsid&quot;, &quot;pos&quot;, &quot;a1&quot;, &quot;a0&quot;, &quot;beta&quot;)
+  
+  # Create a GRanges object for the SNP positions
+  snp_gr &lt;- GRanges(
+    seqnames = paste0(&quot;chr&quot;, snp_prs$chr),  # Add &quot;chr&quot; prefix
+    ranges = IRanges(start = snp_prs$pos, end = snp_prs$pos),
+    rsid = snp_prs$rsid
+  )
+  
+  # Perform liftOver from hg19 to hg38
+  seqlevelsStyle(snp_gr) = &quot;UCSC&quot;
+  snp_gr_hg38 &lt;- liftOver(snp_gr, chain)
+  
+  # Convert the lifted GRanges object back to a data frame
+  lifted_positions &lt;- as.data.frame(snp_gr_hg38)
+  
+  # Merge the lifted positions with the original SNP data
+  final_snp_data &lt;- cbind(snp_prs, lifted_positions[, c(&quot;seqnames&quot;, &quot;start&quot;)])
+  names(final_snp_data)[ncol(final_snp_data)-1] &lt;- &quot;chr_hg38&quot;
+  names(final_snp_data)[ncol(final_snp_data)] &lt;- &quot;pos_hg38&quot;
+  
+  # Convert &#39;chr_hg38&#39; from &#39;chr1&#39;, &#39;chr2&#39;, etc. to &#39;1&#39;, &#39;2&#39;, etc.
+  final_snp_data$chr_hg38 &lt;- as.integer(gsub(&quot;chr&quot;, &quot;&quot;, final_snp_data$chr_hg38))
+  
+  # Save the result as a new text file
+  output_file &lt;- paste0(tools::file_path_sans_ext(basename(file_path)), &quot;_hg38.txt&quot;)
+  write.table(final_snp_data, output_file, row.names = FALSE, col.names = TRUE, quote = FALSE, sep = &quot;\t&quot;)
+  
+  return(output_file)  # Return the output file name
+}
+
+# Loop through each file and process it
+output_files &lt;- sapply(immune_files, process_file, chain = chain)</code></pre>
+</div>
+<div id="compute-prs" class="section level2">
+<h2>compute PRS</h2>
+<pre class="r"><code># Get list of all hg38-aligned SNP files in the immune folder
+immune_hg38_files &lt;- list.files(&quot;data/immune&quot;, pattern = &quot;hg38.*\\.txt&quot;, full.names = TRUE)
+
+# Initialize an empty list to store the PRS data for all files
+all_prs_immune &lt;- list()
+
+# Loop through each file and calculate the PRS
+for (file_path in immune_hg38_files) {
+  # Read in SNP_PRS data
+  snp_prs &lt;- fread(file_path, header = TRUE, stringsAsFactors = FALSE)
+  snp_prs &lt;- snp_prs[,c(4:6, 2, 7:8)]
+  names(snp_prs) &lt;- c(&quot;a1&quot;, &quot;a0&quot;, &quot;beta&quot;, &quot;rsid&quot;, &quot;chr&quot;, &quot;pos&quot;)
+  
+  # calculate PRS
+  prs_data &lt;- calculate_prs(file_path, snp_prs, map, geno, common_snp, sample)
+  file_name &lt;- gsub(&quot;^([^_]+_[^_]+).*&quot;, &quot;\\1&quot;, basename(file_path))
+  colnames(prs_data) &lt;- c(&quot;sample_id&quot;, file_name)
+  all_prs_immune[[file_name]] &lt;- prs_data
+}
+
+# Combine the PRS data for all files into one dataframe
+final_prs_df &lt;- Reduce(function(x, y) merge(x, y, by = &quot;sample_id&quot;, all = TRUE), all_prs_immune)
+head(final_prs_df)
+#write.table(final_prs_df, &quot;prs_immune.txt&quot;, sep=&quot;\t&quot;, row.names = F, col.names = T)</code></pre>
+</div>
+</div>
+<div id="check-the-distribution-of-prs-for-each-blood-cell-trait"
+class="section level1">
+<h1>Check the distribution of PRS for each blood cell trait</h1>
+<pre class="r"><code>prs_blood &lt;- fread(&quot;analysis/prs_blood_cell.txt&quot;, header = TRUE, stringsAsFactors = FALSE)
+head(prs_blood)</code></pre>
+<pre><code>    sample_id PGS000163 PGS000164 PGS000165 PGS000166  PGS000167 PGS000168
+       &lt;char&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;      &lt;num&gt;     &lt;num&gt;
+1: GTEX-1117F 0.3806469 0.8780380 -3.713591 -3.229141  0.4163683  2.136815
+2: GTEX-111CU 0.2064739 0.7548888 -3.949216 -3.695229  0.2869358  1.723604
+3: GTEX-111FC 0.1510253 0.8561732 -3.837647 -3.134617 -0.3309690  1.225690
+4: GTEX-111VG 0.0782434 0.7029858 -3.875660 -3.109327  0.1998405  1.925761
+5: GTEX-111YS 0.5410653 1.0156237 -3.584264 -3.380372  0.0788395  1.386430
+6: GTEX-1122O 0.2568363 0.9157099 -4.195580 -3.219698  0.4280533  2.024007
+   PGS000169 PGS000170 PGS000171  PGS000172  PGS000173 PGS000174 PGS000175
+       &lt;num&gt;     &lt;num&gt;     &lt;num&gt;      &lt;num&gt;      &lt;num&gt;     &lt;num&gt;     &lt;num&gt;
+1:  4.434960  4.372898  2.883154  0.2446934  0.3569089  2.661169  1.801754
+2:  4.130046  4.525788  2.628253 -0.0900860 -0.0592994  2.500414  2.050340
+3:  4.412963  4.595019  3.133287 -0.2846926 -0.1086845  2.878752  1.960197
+4:  3.979648  4.393256  2.745925 -0.0435285  0.0491368  2.840849  1.805051
+5:  4.759111  4.850884  3.073905 -0.0895070  0.2374592  2.636155  1.632886
+6:  4.202698  4.515898  3.180095  0.1487145  0.2513990  2.790015  1.781026
+   PGS000176 PGS000177 PGS000178  PGS000179  PGS000180  PGS000181  PGS000182
+       &lt;num&gt;     &lt;num&gt;     &lt;num&gt;      &lt;num&gt;      &lt;num&gt;      &lt;num&gt;      &lt;num&gt;
+1:  2.324056  1.567493 0.8574966  0.9338375 -0.7149604 -0.1537221 -0.9485420
+2:  1.866515  1.623798 0.7156781  0.8308186 -0.5291329 -0.2985605 -1.0259112
+3:  2.545554  1.544912 0.4508785 -0.1097440 -0.1745706 -0.3416134 -0.8944093
+4:  2.547886  1.427934 0.1186987  0.4256803 -1.1218271 -0.4094764 -1.0032017
+5:  2.411277  2.051295 0.9079310  0.7683186 -0.6711704 -0.1915244 -0.7245853
+6:  2.681980  1.223256 0.0900392  1.0050662 -0.7286477 -0.0609871 -1.0541924
+    PGS000183 PGS000184 PGS000185 PGS000186 PGS000187 PGS000188 PGS000189
+        &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;
+1: -0.4955733  3.032858  1.691766 0.7397075 0.9214347 0.8427240  4.219304
+2: -0.4303846  1.943666  2.212776 0.0984095 0.6143391 0.9863121  4.268113
+3: -0.1609818  2.499798  2.318054 1.2521282 0.3350280 0.8855678  4.558498
+4: -0.3787154  2.717517  2.059975 1.2534249 1.0891001 0.1868042  4.283260
+5: -0.3556682  3.317813  1.995272 1.2545477 0.5340879 0.9369695  4.549213
+6: -0.5039774  2.423712  2.592336 0.6764149 0.9435796 1.2345469  4.160999
+   PGS000190  PGS000191
+       &lt;num&gt;      &lt;num&gt;
+1:  4.218706 -0.4845900
+2:  4.450465 -0.9142476
+3:  4.505412 -0.5593480
+4:  4.648625 -1.0679006
+5:  4.758601 -0.5033859
+6:  4.367083 -0.8890277</code></pre>
+<pre class="r"><code># Summary statistics for each PRS column (trait)
+summary(prs_blood[,-1]) </code></pre>
+<pre><code>   PGS000163         PGS000164        PGS000165        PGS000166     
+ Min.   :-0.1760   Min.   :0.4462   Min.   :-4.994   Min.   :-4.403  
+ 1st Qu.: 0.2311   1st Qu.:0.8050   1st Qu.:-4.179   1st Qu.:-3.561  
+ Median : 0.3183   Median :0.8891   Median :-3.982   Median :-3.372  
+ Mean   : 0.3258   Mean   :0.8893   Mean   :-3.979   Mean   :-3.379  
+ 3rd Qu.: 0.4144   3rd Qu.:0.9760   3rd Qu.:-3.775   3rd Qu.:-3.193  
+ Max.   : 0.7381   Max.   :1.2485   Max.   :-2.938   Max.   :-2.418  
+   PGS000167          PGS000168        PGS000169       PGS000170    
+ Min.   :-0.72700   Min.   :0.8813   Min.   :3.042   Min.   :3.165  
+ 1st Qu.:-0.08874   1st Qu.:1.5474   1st Qu.:3.961   1st Qu.:4.151  
+ Median : 0.06276   Median :1.7022   Median :4.175   Median :4.373  
+ Mean   : 0.05916   Mean   :1.6976   Mean   :4.166   Mean   :4.363  
+ 3rd Qu.: 0.20001   3rd Qu.:1.8530   3rd Qu.:4.392   3rd Qu.:4.566  
+ Max.   : 0.72360   Max.   :2.4055   Max.   :5.231   Max.   :5.383  
+   PGS000171       PGS000172         PGS000173           PGS000174    
+ Min.   :1.420   Min.   :-0.8853   Min.   :-0.829929   Min.   :1.431  
+ 1st Qu.:2.501   1st Qu.:-0.3249   1st Qu.:-0.150182   1st Qu.:2.484  
+ Median :2.683   Median :-0.1443   Median : 0.009484   Median :2.749  
+ Mean   :2.685   Mean   :-0.1461   Mean   : 0.002973   Mean   :2.737  
+ 3rd Qu.:2.889   3rd Qu.: 0.0352   3rd Qu.: 0.154690   3rd Qu.:3.020  
+ Max.   :3.499   Max.   : 0.7415   Max.   : 0.537481   Max.   :3.869  
+   PGS000175       PGS000176       PGS000177       PGS000178      
+ Min.   :1.265   Min.   :1.105   Min.   :0.269   Min.   :-0.8200  
+ 1st Qu.:1.742   1st Qu.:2.244   1st Qu.:1.211   1st Qu.: 0.1258  
+ Median :1.878   Median :2.508   Median :1.439   Median : 0.3566  
+ Mean   :1.871   Mean   :2.518   Mean   :1.433   Mean   : 0.3448  
+ 3rd Qu.:2.003   3rd Qu.:2.796   3rd Qu.:1.680   3rd Qu.: 0.5725  
+ Max.   :2.353   Max.   :3.719   Max.   :2.502   Max.   : 1.4235  
+   PGS000179         PGS000180         PGS000181         PGS000182       
+ Min.   :-0.7994   Min.   :-1.8701   Min.   :-1.2291   Min.   :-1.68032  
+ 1st Qu.: 0.4226   1st Qu.:-0.8858   1st Qu.:-0.1601   1st Qu.:-1.02547  
+ Median : 0.6984   Median :-0.6414   Median : 0.1272   Median :-0.85999  
+ Mean   : 0.7046   Mean   :-0.6423   Mean   : 0.1203   Mean   :-0.85693  
+ 3rd Qu.: 1.0185   3rd Qu.:-0.3736   3rd Qu.: 0.4164   3rd Qu.:-0.70218  
+ Max.   : 1.9150   Max.   : 0.7296   Max.   : 1.3974   Max.   :-0.06296  
+   PGS000183          PGS000184       PGS000185       PGS000186      
+ Min.   :-0.77535   Min.   :1.642   Min.   :1.016   Min.   :-0.2803  
+ 1st Qu.:-0.28186   1st Qu.:2.533   1st Qu.:2.037   1st Qu.: 0.6965  
+ Median :-0.12743   Median :2.751   Median :2.277   Median : 0.9104  
+ Mean   :-0.12193   Mean   :2.764   Mean   :2.261   Mean   : 0.9262  
+ 3rd Qu.: 0.02156   3rd Qu.:3.015   3rd Qu.:2.510   3rd Qu.: 1.1664  
+ Max.   : 0.55981   Max.   :3.956   Max.   :3.382   Max.   : 2.1380  
+   PGS000187         PGS000188         PGS000189       PGS000190    
+ Min.   :-0.4268   Min.   :-0.1191   Min.   :3.102   Min.   :3.319  
+ 1st Qu.: 0.3940   1st Qu.: 0.7155   1st Qu.:4.069   1st Qu.:4.300  
+ Median : 0.6050   Median : 0.9247   Median :4.274   Median :4.505  
+ Mean   : 0.6038   Mean   : 0.9134   Mean   :4.270   Mean   :4.487  
+ 3rd Qu.: 0.8104   3rd Qu.: 1.1168   3rd Qu.:4.450   3rd Qu.:4.689  
+ Max.   : 1.6088   Max.   : 1.8368   Max.   :5.408   Max.   :5.483  
+   PGS000191      
+ Min.   :-1.4839  
+ 1st Qu.:-0.8319  
+ Median :-0.6528  
+ Mean   :-0.6482  
+ 3rd Qu.:-0.4644  
+ Max.   : 0.2692  </code></pre>
+<pre class="r"><code># Loop through each PRS trait
+for (trait in names(prs_blood)[-1]) {  # Skip the sample_id column
+  
+  # Get the data for the current trait
+  trait_data &lt;- prs_blood[[trait]]
+  
+  # Calculate the 25th and 75th percentiles
+  p25 &lt;- quantile(trait_data, 0.25, na.rm = TRUE)
+  p75 &lt;- quantile(trait_data, 0.75, na.rm = TRUE)
+  
+  # Calculate the density values for the trait
+  trait_density &lt;- density(trait_data, na.rm = TRUE)
+  
+  # Create a data frame from the density object
+  density_data &lt;- data.frame(x = trait_density$x, y = trait_density$y)
+  
+  # Create the density plot
+  p &lt;- ggplot(density_data, aes(x = x, y = y)) +
+    # Plot the density curve
+    geom_line(color = &quot;black&quot;) +
+    # Shade the area below 25th percentile (in light blue)
+    geom_ribbon(data = subset(density_data, x &lt;= p25), 
+                aes(x = x, ymin = 0, ymax = y), 
+                fill = &quot;lightblue&quot;, alpha = 0.5) +
+    # Shade the area above 75th percentile (in light red)
+    geom_ribbon(data = subset(density_data, x &gt;= p75), 
+                aes(x = x, ymin = 0, ymax = y), 
+                fill = &quot;lightcoral&quot;, alpha = 0.5) +
+    # Add vertical lines at the 25th and 75th percentiles
+    geom_vline(aes(xintercept = p25), color = &quot;blue&quot;, linetype = &quot;dashed&quot;) +
+    geom_vline(aes(xintercept = p75), color = &quot;red&quot;, linetype = &quot;dashed&quot;) +
+    scale_x_continuous(breaks = c(p25, p75), labels = c(&quot;25%&quot;, &quot;75%&quot;)) +
+    labs(title = paste(trait, &quot;PRS&quot;), y = &quot;Density&quot;, x = &quot;&quot;) +
+    theme(plot.title = element_text(hjust = 0.5)) + 
+    theme_classic()
+  
+  # Print the plot for the current trait
+  print(p)
+}</code></pre>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-8.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-9.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-10.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-11.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-12.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-13.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-14.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-15.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-16.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-17.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-18.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-19.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-20.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-21.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-22.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-23.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-24.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-25.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-26.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-27.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-28.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-29.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Calculate the correlation matrix
+cor_matrix &lt;- cor(prs_blood[, -1], use = &quot;complete.obs&quot;)
+
+# Create the heatmap using corrplot
+corrplot(cor_matrix, 
+         method = &quot;color&quot;, 
+         col = colorRampPalette(c(&quot;blue&quot;, &quot;white&quot;, &quot;red&quot;))(200), 
+         addCoef.col = &quot;black&quot;, # Add correlation coefficients to the plot
+         number.cex = 0.4, # Adjust the font size of the numbers
+         diag = FALSE, # Optionally remove diagonal (self-correlation)
+         tl.col = &quot;black&quot;, tl.cex = 0.5) # Make the column names smaller</code></pre>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The correlation plot shows that some traits are more strongly
+correlated than others due to two main factors: 1) Traits mapping to the
+same ontological category, such as PGS000169, PGS000170, PGS000189, and
+PGS000190, which are all associated with reticulocyte count and thus
+exhibit high correlation; and 2) One trait measuring count and the other
+measuring percentage, as seen with PGS000163 (Basophil count) and
+PGS000164 (Basophil percentage of white cells), which are highly
+correlated.</p>
+</div>
+<div id="check-the-distribution-of-prs-for-each-immune-trait"
+class="section level1">
+<h1>Check the distribution of PRS for each immune trait</h1>
+<pre class="r"><code>prs_immune &lt;- fread(&quot;analysis/prs_immune.txt&quot;, header = TRUE, stringsAsFactors = FALSE)
+head(prs_immune)</code></pre>
+<pre><code>    sample_id Celiac_GCST90014442 Celiac_GCST90468120 IBD_GCST90013901
+       &lt;char&gt;               &lt;num&gt;               &lt;num&gt;            &lt;num&gt;
+1: GTEX-1117F         -0.32693209           -1.448741       -0.9787049
+2: GTEX-111CU         -0.15219597           -1.618983       -0.8481748
+3: GTEX-111FC         -0.04052229           -2.030101       -0.9549538
+4: GTEX-111VG         -0.47044719           -2.362654       -0.8591210
+5: GTEX-111YS         -0.26979202           -1.664964       -0.9357205
+6: GTEX-1122O         -0.29874466           -2.266667       -0.9111857
+   IBD_GCST90013951 T1D_GCST90000529 T1D_GCST90014023 LUPUS_GCST003156
+              &lt;num&gt;            &lt;num&gt;            &lt;num&gt;            &lt;num&gt;
+1:       -1.0383590        -25.64693        -58.17413       -2.1789873
+2:       -1.0258023        -18.05505        -60.30144        2.2221766
+3:       -1.0904262        -11.69991        -58.65058        2.0571710
+4:       -0.9766343        -14.59983        -61.41665        0.9189866
+5:       -1.0311671         -3.54534        -60.34438        5.0958297
+6:       -1.0231325        -20.04924        -66.73086       -1.0720317
+   LUPUS_GCST011096
+              &lt;num&gt;
+1:        -1.844698
+2:         2.258127
+3:         2.237044
+4:         1.147420
+5:         5.118655
+6:        -1.105486</code></pre>
+<pre class="r"><code># Summary statistics for each PRS column (trait)
+summary(prs_immune[,-1]) </code></pre>
+<pre><code> Celiac_GCST90014442 Celiac_GCST90468120 IBD_GCST90013901  IBD_GCST90013951 
+ Min.   :-0.5946     Min.   :-3.5320     Min.   :-1.1602   Min.   :-1.3853  
+ 1st Qu.:-0.3547     1st Qu.:-2.3761     1st Qu.:-1.0098   1st Qu.:-1.1617  
+ Median :-0.2732     Median :-2.0377     Median :-0.9669   Median :-1.1063  
+ Mean   :-0.2616     Mean   :-2.0164     Mean   :-0.9661   Mean   :-1.1042  
+ 3rd Qu.:-0.1704     3rd Qu.:-1.6654     3rd Qu.:-0.9269   3rd Qu.:-1.0480  
+ Max.   : 0.1226     Max.   :-0.4657     Max.   :-0.7623   Max.   :-0.8907  
+ T1D_GCST90000529  T1D_GCST90014023 LUPUS_GCST003156  LUPUS_GCST011096 
+ Min.   :-31.769   Min.   :-68.94   Min.   :-6.5371   Min.   :-7.1746  
+ 1st Qu.:-20.145   1st Qu.:-62.44   1st Qu.:-0.7967   1st Qu.:-0.6102  
+ Median :-16.173   Median :-59.62   Median : 2.0734   Median : 2.2687  
+ Mean   :-16.325   Mean   :-59.93   Mean   : 1.5832   Mean   : 1.7587  
+ 3rd Qu.:-12.623   3rd Qu.:-57.30   3rd Qu.: 3.7490   3rd Qu.: 3.9703  
+ Max.   : -2.541   Max.   :-47.85   Max.   : 8.1614   Max.   : 8.4091  </code></pre>
+<pre class="r"><code># Loop through each PRS trait
+for (trait in names(prs_immune)[-1]) {  # Skip the sample_id column
+  
+  # Get the data for the current trait
+  trait_data &lt;- prs_immune[[trait]]
+  
+  # Calculate the 25th and 75th percentiles
+  p25 &lt;- quantile(trait_data, 0.25, na.rm = TRUE)
+  p75 &lt;- quantile(trait_data, 0.75, na.rm = TRUE)
+  
+  # Calculate the density values for the trait
+  trait_density &lt;- density(trait_data, na.rm = TRUE)
+  
+  # Create a data frame from the density object
+  density_data &lt;- data.frame(x = trait_density$x, y = trait_density$y)
+  
+  # Create the density plot
+  p &lt;- ggplot(density_data, aes(x = x, y = y)) +
+    # Plot the density curve
+    geom_line(color = &quot;black&quot;) +
+    # Shade the area below 25th percentile (in light blue)
+    geom_ribbon(data = subset(density_data, x &lt;= p25), 
+                aes(x = x, ymin = 0, ymax = y), 
+                fill = &quot;lightblue&quot;, alpha = 0.5) +
+    # Shade the area above 75th percentile (in light red)
+    geom_ribbon(data = subset(density_data, x &gt;= p75), 
+                aes(x = x, ymin = 0, ymax = y), 
+                fill = &quot;lightcoral&quot;, alpha = 0.5) +
+    # Add vertical lines at the 25th and 75th percentiles
+    geom_vline(aes(xintercept = p25), color = &quot;blue&quot;, linetype = &quot;dashed&quot;) +
+    geom_vline(aes(xintercept = p75), color = &quot;red&quot;, linetype = &quot;dashed&quot;) +
+    scale_x_continuous(breaks = c(p25, p75), labels = c(&quot;25%&quot;, &quot;75%&quot;)) +
+    labs(title = paste(trait, &quot;PRS&quot;), y = &quot;Density&quot;, x = &quot;&quot;) +
+    theme(plot.title = element_text(hjust = 0.5)) + 
+    theme_classic()
+  
+  # Print the plot for the current trait
+  print(p)
+}</code></pre>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-10-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-10-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-10-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-10-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-10-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-10-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-10-8.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The LUPUS_GCST011096 sample shows a bimodal distribution of PRS,
+which can likely be attributed to the presence of both Han Chinese and
+European ancestry data in this cohort. These two groups may have
+distinct genetic backgrounds or environmental exposures, leading to
+differing risk profiles, and thus a bimodal distribution of PRS.</p>
+<p>In contrast, the LUPUS_GCST003156 sample also exhibits a bimodal PRS
+distribution despite containing only individuals of European ancestry.
+This could be influenced by population substructures, as the sample
+consists of cases from the University of Michigan Health and Retirement
+Study (HRS) and controls from Southern Europe and HRS cohort. These
+subpopulations might have different genetic factors or environmental
+exposures, contributing to the observed bimodality.</p>
+<pre class="r"><code># Calculate the correlation matrix
+cor_matrix &lt;- cor(prs_immune[, -1], use = &quot;complete.obs&quot;)
+
+# Create the heatmap using corrplot
+corrplot(cor_matrix, 
+         method = &quot;color&quot;, 
+         col = colorRampPalette(c(&quot;blue&quot;, &quot;white&quot;, &quot;red&quot;))(200), 
+         addCoef.col = &quot;black&quot;, # Add correlation coefficients to the plot
+         number.cex = 0.4, # Adjust the font size of the numbers
+         diag = FALSE, # Optionally remove diagonal (self-correlation)
+         tl.col = &quot;black&quot;, tl.cex = 0.5) # Make the column names smaller</code></pre>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Similarly, PRS for the same trait is highly correlated.</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.2 (2022-10-31)
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS Big Sur ... 10.16
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] corrplot_0.95     ggplot2_3.5.1     bigsnpr_1.12.2    bigstatsr_1.5.12 
+[5] data.table_1.16.4 workflowr_1.7.1  
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_1.2.1   xfun_0.50          bslib_0.9.0        lattice_0.22-6    
+ [5] bigassertr_0.1.6   colorspace_2.1-1   vctrs_0.6.5        generics_0.1.3    
+ [9] htmltools_0.5.8.1  yaml_2.3.10        rlang_1.1.5        jquerylib_0.1.4   
+[13] later_1.4.1        pillar_1.10.1      withr_3.0.2        glue_1.8.0        
+[17] rngtools_1.5.2     doRNG_1.8.6.1      foreach_1.5.2      lifecycle_1.0.4   
+[21] stringr_1.5.1      munsell_0.5.1      gtable_0.3.6       codetools_0.2-20  
+[25] evaluate_1.0.3     labeling_0.4.3     knitr_1.49         callr_3.7.6       
+[29] fastmap_1.2.0      doParallel_1.0.17  httpuv_1.6.15      ps_1.8.1          
+[33] parallel_4.2.2     Rcpp_1.0.14        promises_1.3.2     scales_1.3.0      
+[37] cachem_1.1.0       bigsparser_0.7.3   jsonlite_1.8.9     farver_2.1.2      
+[41] fs_1.6.5           digest_0.6.37      stringi_1.8.4      bigparallelr_0.3.2
+[45] processx_3.8.5     dplyr_1.1.4        getPass_0.2-4      cowplot_1.1.3     
+[49] rprojroot_2.0.4    grid_4.2.2         cli_3.6.3          tools_4.2.2       
+[53] magrittr_2.0.3     sass_0.4.9         tibble_3.2.1       whisker_0.4.1     
+[57] pkgconfig_2.0.3    Matrix_1.5-1       rmarkdown_2.29     httr_1.4.7        
+[61] rstudioapi_0.17.1  iterators_1.0.14   rmio_0.4.0         R6_2.5.1          
+[65] flock_0.7          git2r_0.33.0       compiler_4.2.2    </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
