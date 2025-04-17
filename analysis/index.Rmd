@@ -9,3 +9,18 @@ editor_options:
 ---
 
 Welcome to my research website.
+
+# Data
+
+- [PRS Data Description](PRS_data_info.html)
+
+# PRS Calculation
+
+- [Obtain PRS for each trait](PRS.html)
+
+# Differential Expression
+
+## Normalization
+
+- [Normalization gene read counts](expression_normalization.html)
+
