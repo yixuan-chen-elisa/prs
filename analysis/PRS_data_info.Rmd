@@ -1,0 +1,44 @@
+---
+title: "PRS_Data"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Data
+
+To analyze the correlation between polygenetic risk score (PRS) and gene expression, we first compute PRS of each GTEx samples for a trait:
+
+-   SNP-based PRS:
+
+    -   **Immune traits:** trained by our collaborator, Salem Werdyani. Study information including Open GWAS ID, sample sizes, number of cases & controls are listed below:
+
+    +--------+----------+---------------+-------------+-----------+-----------+
+    | Trait  | pmid     | Open GWAS ID  | Sample size | Cases     | Control   |
+    +========+==========+===============+=============+===========+===========+
+    | Celiac | 34278373 | GCST90014442  | 326,438     | 2,364     | 324,074   |
+    +--------+----------+---------------+-------------+-----------+-----------+
+    | Celiac | 38789286 | GCST90468120  | 15,283      | 4,533     | 10,750    |
+    |        |          |               |             |           |           |
+    |        | 20190752 |               |             |           |           |
+    +--------+----------+---------------+-------------+-----------+-----------+
+    | IBD    | 34017140 | GCST90013901  | 407,746     | 4,161     | 403,585   |
+    +--------+----------+---------------+-------------+-----------+-----------+
+    | IBD    | 34017140 | GCST90013951  | 404,781     | 4,130     | 400,650   |
+    +--------+----------+---------------+-------------+-----------+-----------+
+    | SLE    | 26502338 | GCST003156    | 14,267      | 5,201     | 9,066     |
+    +--------+----------+---------------+-------------+-----------+-----------+
+    | SLE    | 33536424 | GCST011096    | 12,615      | 4,576     | 8,039     |
+    +--------+----------+---------------+-------------+-----------+-----------+
+    | T1D    | 33830302 | GCST90000529  | 17,685      | 7,467     | 10,218    |
+    +--------+----------+---------------+-------------+-----------+-----------+
+    | T1D    | 34012112 | GCST90014023  | 520,580     | 18,942    | 501,638   |
+    +--------+----------+---------------+-------------+-----------+-----------+
+
+    -   **blood cell counts:** sourced from Vuckovic D et al's [study](https://www.cell.com/cell/fulltext/S0092-8674(20)30999-5?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0092867420309995%3Fshowall%3Dtrue). The study leverages UK Biobank cohort to perform a genome-wide discovery analysis in 408,112 European participants, investigating 29 blood cell phenotypes.
+
+    Both data sources provide effect weights for SNPs associated with specific traits, facilitating the construction of PRS.
+
+-   GTEx genotype data (version 8), consisting of 15,201 RNA-sequencing samples from 49 tissues of 838 postmortem donors. Here, we focus on whole blood samples (n = 670).

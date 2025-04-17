@@ -1,0 +1,345 @@
+---
+title: "PRS"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+library(data.table)
+library(bigsnpr)
+library(ggplot2)
+library(corrplot)
+```
+
+# Function to calculate PRS for each SNP file
+```{r}
+calculate_prs <- function(file_path, snp_prs, map, geno, common_snp, sample) {
+  
+  # Match the SNPs with the map
+  common_snp <- snp_match(snp_prs, map)
+  names(common_snp) <- c("chr", "pos", "effect_allele", "other_allele", "beta", "rsid", 
+                         "prs_index", "map_index")
+  common_snp <- cbind(common_snp, map[common_snp$map_index, 3:4])
+  common_snp$rsid <- ifelse(common_snp$rsid == "", 
+                           paste0("chr", common_snp$chr, "_", common_snp$pos), 
+                           common_snp$rsid)
+  
+  # Extract genotype data
+  geno_snp <- geno[, common_snp$map_index]
+  colnames(geno_snp) <- common_snp$rsid
+  
+  # Initialize an empty matrix to store the PRS values
+  prs_matrix <- matrix(0, nrow = nrow(geno_snp), ncol = ncol(geno_snp))
+  
+  # Loop through each SNP and calculate PRS for each individual
+  for (snp_index in 1:ncol(geno_snp)) {
+    snp_name <- colnames(geno_snp)[snp_index]
+    snp_data <- common_snp[common_snp$rsid == snp_name, ]
+    effect_allele <- snp_data$effect_allele
+    effect_weight <- snp_data$beta
+    a1 <- snp_data$a1
+    a0 <- snp_data$a0
+    
+    # Loop through each individual (sample)
+    for (sample_index in 1:nrow(geno_snp)) {
+      genotype <- geno_snp[sample_index, snp_index]
+      
+      # Handle NA genotypes and calculate PRS
+      if (is.na(genotype)) {
+        prs_matrix[sample_index, snp_index] <- 0  # No contribution to PRS for this SNP
+      } else {
+        if (effect_allele == a1) {
+          if (genotype == 0) {
+            prs_matrix[sample_index, snp_index] <- 2 * effect_weight
+          } else if (genotype == 1) {
+            prs_matrix[sample_index, snp_index] <- effect_weight
+          } else if (genotype == 2) {
+            prs_matrix[sample_index, snp_index] <- 2 * effect_weight
+          }
+        } else if (effect_allele == a0) {
+          if (genotype == 0) {
+            prs_matrix[sample_index, snp_index] <- 2 * effect_weight
+          } else if (genotype == 1) {
+            prs_matrix[sample_index, snp_index] <- effect_weight
+          } else if (genotype == 2) {
+            prs_matrix[sample_index, snp_index] <- 2 * effect_weight
+          }
+        }
+      }
+    }
+  }
+  
+  # Calculate total PRS for each individual (sum across all SNPs)
+  total_prs <- rowSums(prs_matrix)
+  
+  # Return a dataframe with sample IDs and total PRS for this file
+  prs_data <- data.frame(sample = sample, total_prs = total_prs)
+  return(prs_data)
+}
+```
+
+# Data Preparation
+```{r, eval = F}
+# read in genotype data (only need to do once for each data set)
+# snp_readBed("data/GTEx_v8.bed")
+
+# attach the genotype object
+obj.bigSNP <- snp_attach("data/GTEx_v8.rds")
+
+# extract the SNP information from the genotype
+map <- obj.bigSNP$map[,c(1, 4:6)]
+names(map) <- c("chr", "pos", "a1", "a0")
+
+# extract genotype data
+geno <- obj.bigSNP$genotypes
+
+# Get the sample IDs from plink fam file
+sample <- obj.bigSNP$fam$sample.ID
+```
+
+# PRS for blood cell trait
+```{r, eval = F}
+# Get list of all SNP files in the blood_cell folder
+snp_files <- list.files("data/blood_cell",
+                        pattern = "*.txt", full.names = TRUE)
+
+# Initialize an empty list to store the PRS data for all files
+all_prs_data <- list()
+
+# Loop through each file and calculate the PRS
+for (file_path in snp_files) {
+  # Read in SNP_PRS data
+  snp_prs <- fread(file_path, header = TRUE, stringsAsFactors = FALSE)
+  snp_prs <- snp_prs[, c(4:6, 8:10)]
+  snp_prs$hm_chr <- as.integer(snp_prs$hm_chr)
+  names(snp_prs) <- c("a1", "a0", "beta", "rsid", "chr", "pos")
+  
+  # calculate PRS
+  prs_data <- calculate_prs(file_path, snp_prs, map, geno, common_snp, sample)
+  file_name <- gsub(".*/(PGS[0-9]+)_hmPOS_GRCh38.txt", "\\1", file_path)
+  colnames(prs_data) <- c("sample_id", file_name)
+  all_prs_data[[file_name]] <- prs_data
+}
+
+# Combine the PRS data for all files into one dataframe
+final_prs_df <- Reduce(function(x, y) merge(x, y, by = "sample_id", all = TRUE), all_prs_data)
+head(final_prs_df)
+#write.table(final_prs_df, "prs_blood_trait.txt", sep="\t", row.names = F, col.names = T)
+```
+
+# PRS for immune traits
+## convert genome build (hg19 tp hg38)
+```{r, eval = F}
+# Load the chain file for liftOver
+library(rtracklayer)
+path = system.file(package="liftOver", "extdata", "hg19ToHg38.over.chain")
+chain = import.chain(path)
+chain
+str(chain[[1]])
+
+# Get list of all SNP files in the immune folder
+immune_files <- list.files("data/immune", pattern = "*.txt", full.names = TRUE)
+
+# Function to perform liftOver and modify chromosome labels
+process_file <- function(file_path, chain) {
+  # Read in SNP_PRS data
+  snp_prs <- fread(file_path, header = TRUE, stringsAsFactors = FALSE)
+  names(snp_prs) <- c("chr", "rsid", "pos", "a1", "a0", "beta")
+  
+  # Create a GRanges object for the SNP positions
+  snp_gr <- GRanges(
+    seqnames = paste0("chr", snp_prs$chr),  # Add "chr" prefix
+    ranges = IRanges(start = snp_prs$pos, end = snp_prs$pos),
+    rsid = snp_prs$rsid
+  )
+  
+  # Perform liftOver from hg19 to hg38
+  seqlevelsStyle(snp_gr) = "UCSC"
+  snp_gr_hg38 <- liftOver(snp_gr, chain)
+  
+  # Convert the lifted GRanges object back to a data frame
+  lifted_positions <- as.data.frame(snp_gr_hg38)
+  
+  # Merge the lifted positions with the original SNP data
+  final_snp_data <- cbind(snp_prs, lifted_positions[, c("seqnames", "start")])
+  names(final_snp_data)[ncol(final_snp_data)-1] <- "chr_hg38"
+  names(final_snp_data)[ncol(final_snp_data)] <- "pos_hg38"
+  
+  # Convert 'chr_hg38' from 'chr1', 'chr2', etc. to '1', '2', etc.
+  final_snp_data$chr_hg38 <- as.integer(gsub("chr", "", final_snp_data$chr_hg38))
+  
+  # Save the result as a new text file
+  output_file <- paste0(tools::file_path_sans_ext(basename(file_path)), "_hg38.txt")
+  write.table(final_snp_data, output_file, row.names = FALSE, col.names = TRUE, quote = FALSE, sep = "\t")
+  
+  return(output_file)  # Return the output file name
+}
+
+# Loop through each file and process it
+output_files <- sapply(immune_files, process_file, chain = chain)
+```
+
+## compute PRS
+```{r, eval = F}
+# Get list of all hg38-aligned SNP files in the immune folder
+immune_hg38_files <- list.files("data/immune", pattern = "hg38.*\\.txt", full.names = TRUE)
+
+# Initialize an empty list to store the PRS data for all files
+all_prs_immune <- list()
+
+# Loop through each file and calculate the PRS
+for (file_path in immune_hg38_files) {
+  # Read in SNP_PRS data
+  snp_prs <- fread(file_path, header = TRUE, stringsAsFactors = FALSE)
+  snp_prs <- snp_prs[,c(4:6, 2, 7:8)]
+  names(snp_prs) <- c("a1", "a0", "beta", "rsid", "chr", "pos")
+  
+  # calculate PRS
+  prs_data <- calculate_prs(file_path, snp_prs, map, geno, common_snp, sample)
+  file_name <- gsub("^([^_]+_[^_]+).*", "\\1", basename(file_path))
+  colnames(prs_data) <- c("sample_id", file_name)
+  all_prs_immune[[file_name]] <- prs_data
+}
+
+# Combine the PRS data for all files into one dataframe
+final_prs_df <- Reduce(function(x, y) merge(x, y, by = "sample_id", all = TRUE), all_prs_immune)
+head(final_prs_df)
+#write.table(final_prs_df, "prs_immune.txt", sep="\t", row.names = F, col.names = T)
+```
+
+# Check the distribution of PRS for each blood cell trait
+```{r}
+prs_blood <- fread("analysis/prs_blood_cell.txt", header = TRUE, stringsAsFactors = FALSE)
+head(prs_blood)
+# Summary statistics for each PRS column (trait)
+summary(prs_blood[,-1]) 
+```
+
+```{r}
+# Loop through each PRS trait
+for (trait in names(prs_blood)[-1]) {  # Skip the sample_id column
+  
+  # Get the data for the current trait
+  trait_data <- prs_blood[[trait]]
+  
+  # Calculate the 25th and 75th percentiles
+  p25 <- quantile(trait_data, 0.25, na.rm = TRUE)
+  p75 <- quantile(trait_data, 0.75, na.rm = TRUE)
+  
+  # Calculate the density values for the trait
+  trait_density <- density(trait_data, na.rm = TRUE)
+  
+  # Create a data frame from the density object
+  density_data <- data.frame(x = trait_density$x, y = trait_density$y)
+  
+  # Create the density plot
+  p <- ggplot(density_data, aes(x = x, y = y)) +
+    # Plot the density curve
+    geom_line(color = "black") +
+    # Shade the area below 25th percentile (in light blue)
+    geom_ribbon(data = subset(density_data, x <= p25), 
+                aes(x = x, ymin = 0, ymax = y), 
+                fill = "lightblue", alpha = 0.5) +
+    # Shade the area above 75th percentile (in light red)
+    geom_ribbon(data = subset(density_data, x >= p75), 
+                aes(x = x, ymin = 0, ymax = y), 
+                fill = "lightcoral", alpha = 0.5) +
+    # Add vertical lines at the 25th and 75th percentiles
+    geom_vline(aes(xintercept = p25), color = "blue", linetype = "dashed") +
+    geom_vline(aes(xintercept = p75), color = "red", linetype = "dashed") +
+    scale_x_continuous(breaks = c(p25, p75), labels = c("25%", "75%")) +
+    labs(title = paste(trait, "PRS"), y = "Density", x = "") +
+    theme(plot.title = element_text(hjust = 0.5)) + 
+    theme_classic()
+  
+  # Print the plot for the current trait
+  print(p)
+}
+```
+
+```{r}
+# Calculate the correlation matrix
+cor_matrix <- cor(prs_blood[, -1], use = "complete.obs")
+
+# Create the heatmap using corrplot
+corrplot(cor_matrix, 
+         method = "color", 
+         col = colorRampPalette(c("blue", "white", "red"))(200), 
+         addCoef.col = "black", # Add correlation coefficients to the plot
+         number.cex = 0.4, # Adjust the font size of the numbers
+         diag = FALSE, # Optionally remove diagonal (self-correlation)
+         tl.col = "black", tl.cex = 0.5) # Make the column names smaller
+```
+
+The correlation plot shows that some traits are more strongly correlated than others due to two main factors: 1) Traits mapping to the same ontological category, such as PGS000169, PGS000170, PGS000189, and PGS000190, which are all associated with reticulocyte count and thus exhibit high correlation; and 2) One trait measuring count and the other measuring percentage, as seen with PGS000163 (Basophil count) and PGS000164 (Basophil percentage of white cells), which are highly correlated.
+
+# Check the distribution of PRS for each immune trait
+```{r}
+prs_immune <- fread("analysis/prs_immune.txt", header = TRUE, stringsAsFactors = FALSE)
+head(prs_immune)
+# Summary statistics for each PRS column (trait)
+summary(prs_immune[,-1]) 
+```
+
+```{r}
+# Loop through each PRS trait
+for (trait in names(prs_immune)[-1]) {  # Skip the sample_id column
+  
+  # Get the data for the current trait
+  trait_data <- prs_immune[[trait]]
+  
+  # Calculate the 25th and 75th percentiles
+  p25 <- quantile(trait_data, 0.25, na.rm = TRUE)
+  p75 <- quantile(trait_data, 0.75, na.rm = TRUE)
+  
+  # Calculate the density values for the trait
+  trait_density <- density(trait_data, na.rm = TRUE)
+  
+  # Create a data frame from the density object
+  density_data <- data.frame(x = trait_density$x, y = trait_density$y)
+  
+  # Create the density plot
+  p <- ggplot(density_data, aes(x = x, y = y)) +
+    # Plot the density curve
+    geom_line(color = "black") +
+    # Shade the area below 25th percentile (in light blue)
+    geom_ribbon(data = subset(density_data, x <= p25), 
+                aes(x = x, ymin = 0, ymax = y), 
+                fill = "lightblue", alpha = 0.5) +
+    # Shade the area above 75th percentile (in light red)
+    geom_ribbon(data = subset(density_data, x >= p75), 
+                aes(x = x, ymin = 0, ymax = y), 
+                fill = "lightcoral", alpha = 0.5) +
+    # Add vertical lines at the 25th and 75th percentiles
+    geom_vline(aes(xintercept = p25), color = "blue", linetype = "dashed") +
+    geom_vline(aes(xintercept = p75), color = "red", linetype = "dashed") +
+    scale_x_continuous(breaks = c(p25, p75), labels = c("25%", "75%")) +
+    labs(title = paste(trait, "PRS"), y = "Density", x = "") +
+    theme(plot.title = element_text(hjust = 0.5)) + 
+    theme_classic()
+  
+  # Print the plot for the current trait
+  print(p)
+}
+```
+
+The LUPUS_GCST011096 sample shows a bimodal distribution of PRS, which can likely be attributed to the presence of both Han Chinese and European ancestry data in this cohort. These two groups may have distinct genetic backgrounds or environmental exposures, leading to differing risk profiles, and thus a bimodal distribution of PRS.
+
+In contrast, the LUPUS_GCST003156 sample also exhibits a bimodal PRS distribution despite containing only individuals of European ancestry. This could be influenced by population substructures, as the sample consists of cases from the University of Michigan Health and Retirement Study (HRS) and controls from Southern Europe and HRS cohort. These subpopulations might have different genetic factors or environmental exposures, contributing to the observed bimodality.
+
+```{r}
+# Calculate the correlation matrix
+cor_matrix <- cor(prs_immune[, -1], use = "complete.obs")
+
+# Create the heatmap using corrplot
+corrplot(cor_matrix, 
+         method = "color", 
+         col = colorRampPalette(c("blue", "white", "red"))(200), 
+         addCoef.col = "black", # Add correlation coefficients to the plot
+         number.cex = 0.4, # Adjust the font size of the numbers
+         diag = FALSE, # Optionally remove diagonal (self-correlation)
+         tl.col = "black", tl.cex = 0.5) # Make the column names smaller
+```
+
+Similarly, PRS for the same trait is highly correlated. 
+
