@@ -12,7 +12,7 @@ Welcome to my research website.
 
 # Data
 
-- [PRS Data Description](PRS_data_info.html)
+- [Data Description](PRS_data_info.html)
 
 # PRS Calculation
 
@@ -20,7 +20,11 @@ Welcome to my research website.
 
 # Differential Expression
 
-## Normalization
+- [Create Metadata (PRS + PCs + Sex)](metadata.html)
 
-- [Normalization gene read counts](expression_normalization.html)
+- [Normalization](expression_normalization.html)
+
+- [Quality Control for Sampling Clustering](QC.html)
+
+- [Differential gene expression](differential_expression.html)
 

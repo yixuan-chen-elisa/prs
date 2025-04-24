@@ -1,5 +1,5 @@
 ---
-title: "expression_normalization"
+title: "Normalization gene counts"
 output: html_document
 ---
 
@@ -10,6 +10,8 @@ library(dplyr)
 library(DESeq2)
 library(preprocessCore)
 library(ggplot2)
+library(tidyr)
+library(SummarizedExperiment)
 ```
 
 # Raw count
@@ -23,71 +25,49 @@ raw_count_df <- raw_count_df[, -c(1:3)]
 
 # modify GTEx sample names matching names used in PRS data
 colnames(raw_count_df) <- sub("^(GTEX-[^-.]+).*", "\\1", colnames(raw_count_df))
-```
 
-# Match samples between PRS and count matrix
-```{r}
-# load PRS data for blood trait
-prs_file <- "analysis/prs_blood_cell.txt"
-prs_blood <- fread(prs_file, header = T, stringsAsFactors = FALSE)
-
-# obtain GTEx sample id
-id <- prs_blood$sample_id
-
-# Load the PRS data for immune trait
-prs_file <- "analysis/prs_immune.txt"
-prs_immune <- fread(prs_file, header = T, stringsAsFactors = FALSE)
-
-# subset samples
-matching_samples <- intersect(id, colnames(raw_count_df))
-prs_blood <- prs_blood[prs_blood$sample_id %in% matching_samples, ]
-prs_immune <- prs_immune[prs_immune$sample_id %in% matching_samples, ]
-final_count <- raw_count_df[,  ..matching_samples]
+# load metadata
+metadata_file <- "analysis/metadata.txt"
+metadata <- read.csv(metadata_file, header = T, sep = "\t", stringsAsFactors = T)
+metadata$sex <- as.factor(metadata$sex)
+matching_samples <- intersect(rownames(metadata), colnames(raw_count_df))
+final_count <- raw_count_df[ , ..matching_samples]
 dim(final_count) 
 ```
 
-# Stratify by PRS level (High vs Median vs Low)
-## Blood trait
+# Create DESeq2 object
+
 ```{r}
-# Loop through each column (starting from the second column, as the first column is sample_id)
-for (i in 2:ncol(prs_blood)) {
-  # Extract the PRS values for the current trait
-  prs_trait <- prs_blood[[i]]
+# Create the DESeq2 object (DESeqDataSet) from the raw count matrix and PRS
+group_columns <- grep("^group_", colnames(metadata), value = TRUE)
+dds <- DESeqDataSetFromMatrix(countData = as.matrix(final_count), 
+                              colData = metadata, 
+                              design = as.formula(paste("~ PC1 + PC2 + PC3 + PC4 + PC5 + sex +", 
+                                                        paste(group_columns, collapse = " + "))))
+rownames(dds) <- gene_name
 
-  # Calculate the 25th and 75th percentiles for the trait
-  p25 <- quantile(prs_trait, 0.25, na.rm = TRUE)
-  p75 <- quantile(prs_trait, 0.75, na.rm = TRUE)
-
-  # Create a new column for the group classification based on the percentiles
-  group <- ifelse(prs_trait > p75, "High", 
-                  ifelse(prs_trait < p25, "Low", "Median"))
-
-  # Assign the group to the new column for this trait
-  prs_blood[[paste0("group_", colnames(prs_blood)[i])]] <- as.factor(group)
-}
+# prefilter: keep only rows that have a count of at least 10 for a minimal number of samples
+keep_genes <- rowSums(counts(dds) >= 10) >= 100
+dds <- dds[keep_genes, ]
+#save(dds, file = "analysis/dds.rda")
 ```
 
-## Immune trait
+# Estimate size factors for normalization
 ```{r}
-# Loop through each column (starting from the second column, as the first column is sample_id)
-for (i in 2:ncol(prs_immune)) {
-  # Extract the PRS values for the current trait
-  prs_trait <- prs_immune[[i]]
-
-  # Calculate the 25th and 75th percentiles for the trait
-  p25 <- quantile(prs_trait, 0.25, na.rm = TRUE)
-  p75 <- quantile(prs_trait, 0.75, na.rm = TRUE)
-
-  # Create a new column for the group classification based on the percentiles
-  group <- ifelse(prs_trait > p75, "High", 
-                  ifelse(prs_trait < p25, "Low", "Median"))
-
-  # Assign the group to the new column for this trait
-  prs_immune[[paste0("group_", colnames(prs_immune)[i])]] <- as.factor(group)
-}
+dds <- estimateSizeFactors(dds)
+outliers <- which(sizeFactors(dds) > 4)
+plot(sizeFactors(dds), colSums(counts(dds)), ylab = "library sizes", 
+     xlab = "size factors", cex = .5)
+text(sizeFactors(dds)[outliers], colSums(counts(dds))[outliers], 
+     labels = colnames(dds)[outliers], pos = 2, cex = .5, col = "red")
 ```
 
-# DESeq2 normalization by median of ratios
+
+The plot suggests a positive correlation between the library sizes and size factors, indicating that samples with higher total counts tend to have higher size factors. The sample GTEX-YEC3 is an outlier. GTEX-YEC3 may have significantly different sequencing characteristics, leading to a higher library size and size factor compared to the other samples.
+
+# To address this issue of the outlier and sequencing depth, we apply two normalization methods: 
+
+## 1. DESeq2 normalization by median of ratios
 
 The size factor is calculated as follows:
 
@@ -100,32 +80,13 @@ The size factor is calculated as follows:
 Thus, DESeq2 normalizes for both sequencing depth and RNA composition differences, and this process is independent of the design matrix, meaning it is unaffected by the specific traits (whether blood or immune traits) used in the analysis.
 
 ```{r}
-# Create the DESeq2 object (DESeqDataSet) from the raw count matrix and PRS
-dds <- DESeqDataSetFromMatrix(countData = as.matrix(final_count), 
-                              colData = prs_blood, 
-                              design = ~ group_PGS000163)
-rownames(dds) <- gene_name
-
-# remove genes with no reads
-keep_genes <- rowSums(counts(dds)) > 0
-dds <- dds[keep_genes, ]
-dds
-
-# Estimate size factors for normalization
-dds <- estimateSizeFactors(dds)
-outliers <- which(sizeFactors(dds) > 4)
-plot(sizeFactors(dds), colSums(counts(dds)), ylab = "library sizes", 
-     xlab = "size factors", cex = .5)
-text(sizeFactors(dds)[outliers], colSums(counts(dds))[outliers], 
-     labels = colnames(dds)[outliers], pos = 2, cex = .5, col = "red")
-
 # obtain normalized counts
 normalized_counts <- counts(dds, normalized=TRUE)
-#write.table(normalized_counts, "analysis/normalized_counts.txt", 
-#            sep="\t", row.names = T, col.names = T)
+#save(normalized_counts, file = "analysis/normalized_counts.rda")
 ```
 
-# Quantile normalization
+
+## 2. TPM Quantile normalization
 
 ```{r}
 # load TPM counts data
@@ -135,7 +96,8 @@ colnames(tpm_count_df) <- sub("^(GTEX-[^-.]+).*", "\\1", colnames(tpm_count_df))
 
 # subset samples & remove no read genes
 tpm_subset_df <- tpm_count_df[, matching_samples, with = FALSE]
-tpm_subset_df <- tpm_subset_df[rowSums(tpm_subset_df[, -1, with = FALSE]) > 0, ]
+# Keep rows with at least 10 counts in at least 100 samples
+tpm_subset_df <- tpm_subset_df[rowSums(tpm_subset_df[, -1, with = FALSE] >= 10) >= 100, ]
 
 # convert into matrix
 tpm_count <- as.matrix(tpm_subset_df)
@@ -159,5 +121,92 @@ boxplot(log2(counts(dds, normalize = TRUE) + 1)[, c(1:10, outliers)],
 boxplot(log2(qn_counts + 1)[, c(1:10, outliers)], 
         main = "Quantile normalized read counts", ylab = "log2(read counts)", 
         cex = .6, col = c(rep("lightblue", 10), "red"), las = 2) 
+```
+
+Both normalization methods successfully adjust for the differences in sequencing depth across samples. 
+
+# Correlation between outlier with other samples after normalization
+
+## 1. DESeq2 normalized counts 
+```{r}
+assay(dds, "log.counts") <- log2(counts(dds, normalized = FALSE) + 1)
+assay(dds, "log.norm.counts") <- log2(counts(dds, normalized=TRUE) + 1)
+
+par(mfrow=c(1,2))
+dds[, c("GTEX-YEC3", "GTEX-111YS")] %>%
+  assay(., "log.norm.counts") %>%
+  plot(., cex=.1, main = "GTEX-YEC3 vs GTEX-111YS")
+
+dds[, c("GTEX-YEC3", "GTEX-1122O")] %>%
+  assay(., "log.norm.counts") %>%
+  plot(., cex=.1, main = "GTEX-YEC3 vs GTEX-1122O")
+
+dds[, c("GTEX-YEC3", "GTEX-YEC4")] %>%
+  assay(., "log.norm.counts") %>%
+  plot(., cex=.1, main = "GTEX-YEC3 vs GTEX-YEC4")
+
+dds[, c("GTEX-YEC3", "GTEX-YBZK")] %>%
+  assay(., "log.norm.counts") %>%
+  plot(., cex=.1, main = "GTEX-YEC3 vs GTEX-YBZK")
+```
+
+## 2. Quantile Normalization
+
+```{r}
+log2_qn_counts <- log2(qn_counts + 1)
+
+par(mfrow=c(1,2))
+plot(log2_qn_counts[, "GTEX-YEC3"], log2_qn_counts[, "GTEX-111YS"], cex=.1, 
+      main = "GTEX-YEC3 vs GTEX-111YS", xlab = "GTEX-YEC3", ylab = "GTEX-111YS")
+
+plot(log2_qn_counts[, "GTEX-YEC3"], log2_qn_counts[, "GTEX-1122O"], cex=.1, 
+      main = "GTEX-YEC3 vs GTEX-1122O", xlab = "GTEX-YEC3", ylab = "GTEX-1122O")
+
+plot(log2_qn_counts[, "GTEX-YEC3"], log2_qn_counts[, "GTEX-YEC4"], cex=.1, 
+      main = "GTEX-YEC3 vs GTEX-YEC4", xlab = "GTEX-YEC3", ylab = "GTEX-YEC4")
+
+plot(log2_qn_counts[, "GTEX-YEC3"], log2_qn_counts[, "GTEX-YBZK"], cex=.1, 
+      main = "GTEX-YEC3 vs GTEX-YBZK", xlab = "GTEX-YEC3", ylab = "GTEX-YBZK")
+```
+
+We could see a positive correlation between the outlier with other samples after applying either normalization methods, so the outlier shouldn't be an effect. 
+
+From the DESeq2 normalization plot, we see a fanning out pattern for points before $2^5 = 32$, suggesting that read counts correlate less well when they are low. The observation also implies that the standard deviation of the expression levels may depend on the mean: the lower the mean read counts per gene, the higher the standard deviation. 
+
+# Reduce the dependence of the variance on the mean 
+
+```{r}
+# mean & sd relationship
+log.norm.counts <- log2(counts(dds, normalized=TRUE) + 1)
+
+msd_plot <- vsn::meanSdPlot(log.norm.counts,
+                            ranks=FALSE,
+                            plot = FALSE)
+msd_plot$gg +
+  ggtitle("Sequencing depth normalized log2(read counts)") +
+  ylab("standard deviation")
+```
+
+Given the large sample size of 670, we use varianceStabilizingTransformation (vst) to log-transformed counts for genes with very counts. 
+
+```{r, eval = F}
+# reduce variance dependent on mean
+dds.vsd <- vst(dds, blind=FALSE)
+save(dds.vsd, file = "analysis/vst norm counts.rda")
+```
+
+```{r}
+load("analysis/vst norm counts.rda")
+vsd.norm.counts <- assay(dds.vsd)
+par(mfrow=c(1,2))
+
+plot(log.norm.counts[,1:2], cex=.1, main = "log2-transformed")
+
+plot(vsd.norm.counts[,1], vsd.norm.counts[,2], cex=.1, main = "Variance Stabilizing Transformed",
+     xlab = colnames(vsd.norm.counts[,1]),
+     ylab = colnames(vsd.norm.counts[,1]))
+
+msd_plot <- vsn::meanSdPlot(vsd.norm.counts, ranks=FALSE, plot = FALSE)
+msd_plot$gg + ggtitle("vst transformation") + coord_cartesian(ylim = c(0,4))
 ```
 

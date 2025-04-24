@@ -323,9 +323,7 @@ for (trait in names(prs_immune)[-1]) {  # Skip the sample_id column
 }
 ```
 
-The LUPUS_GCST011096 sample shows a bimodal distribution of PRS, which can likely be attributed to the presence of both Han Chinese and European ancestry data in this cohort. These two groups may have distinct genetic backgrounds or environmental exposures, leading to differing risk profiles, and thus a bimodal distribution of PRS.
-
-In contrast, the LUPUS_GCST003156 sample also exhibits a bimodal PRS distribution despite containing only individuals of European ancestry. This could be influenced by population substructures, as the sample consists of cases from the University of Michigan Health and Retirement Study (HRS) and controls from Southern Europe and HRS cohort. These subpopulations might have different genetic factors or environmental exposures, contributing to the observed bimodality.
+Compared to other traits, LUPUS_GCST011096 and LUPUS_GCST003156 traits are more sensitive to population substructures. The LUPUS_GCST011096 and LUPUS_GCST003156 traits show a bimodal distribution of PRS, which can likely be attributed to the presence of both non-European and European ancestry data in the GTEx data. These two groups may have distinct genetic backgrounds or environmental exposures, leading to differing risk profiles, and thus a bimodal distribution of PRS.
 
 ```{r}
 # Calculate the correlation matrix
