@@ -11,7 +11,7 @@
 
 
 
-<title>PRS_Data</title>
+<title>metadata</title>
 
 <script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -357,7 +357,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">PRS_Data</h1>
+<h1 class="title toc-ignore">metadata</h1>
 
 </div>
 
@@ -589,10 +589,10 @@ have uncommitted changes.
 <div id="versions" class="tab-pane fade">
 <p>
 These are the previous versions of the repository in which changes were
-made to the R Markdown (<code>analysis/PRS_data_info.Rmd</code>) and
-HTML (<code>docs/PRS_data_info.html</code>) files. If you’ve configured
-a remote Git repository (see <code>?wflow_git_remote</code>), click on
-the hyperlinks in the table below to view the files as they were in that
+made to the R Markdown (<code>analysis/metadata.Rmd</code>) and HTML
+(<code>docs/metadata.html</code>) files. If you’ve configured a remote
+Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
 past version.
 </p>
 <div class="table-responsive">
@@ -622,16 +622,17 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/yixuan-chen-elisa/prs/blob/7338250dc7dd5bfd24a56925d3b8a25156d2118f/analysis/PRS_data_info.Rmd" target="_blank">7338250</a>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/077b30f4f57d3617d14cf5187a9fb610e1b2f7b8/analysis/metadata.Rmd" target="_blank">077b30f</a>
 </td>
 <td>
 ElisaChen
 </td>
 <td>
-2025-04-17
+2025-04-24
 </td>
 <td>
-first commit
+wflow_publish(c("analysis/index.Rmd", "analysis/about.Rmd",
+"analysis/license.Rmd",
 </td>
 </tr>
 </tbody>
@@ -641,119 +642,231 @@ first commit
 </div>
 </div>
 </div>
-<div id="data" class="section level1">
-<h1>Data</h1>
-<p>To analyze the correlation between polygenetic risk score (PRS) and
-gene expression, we first compute PRS of each GTEx samples for a
-trait:</p>
-<ul>
-<li><p>SNP-based PRS:</p>
-<ul>
-<li><strong>Immune traits:</strong> trained by our collaborator, Salem
-Werdyani. Study information including Open GWAS ID, sample sizes, number
-of cases &amp; controls are listed below:</li>
-</ul>
-<table style="width:95%;">
-<colgroup>
-<col width="11%" />
-<col width="14%" />
-<col width="20%" />
-<col width="17%" />
-<col width="15%" />
-<col width="15%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Trait</th>
-<th>pmid</th>
-<th>Open GWAS ID</th>
-<th>Sample size</th>
-<th>Cases</th>
-<th>Control</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Celiac</td>
-<td>34278373</td>
-<td>GCST90014442</td>
-<td>326,438</td>
-<td>2,364</td>
-<td>324,074</td>
-</tr>
-<tr class="even">
-<td>Celiac</td>
-<td><p>38789286</p>
-<p>20190752</p></td>
-<td>GCST90468120</td>
-<td>15,283</td>
-<td>4,533</td>
-<td>10,750</td>
-</tr>
-<tr class="odd">
-<td>IBD</td>
-<td>34017140</td>
-<td>GCST90013901</td>
-<td>407,746</td>
-<td>4,161</td>
-<td>403,585</td>
-</tr>
-<tr class="even">
-<td>IBD</td>
-<td>34017140</td>
-<td>GCST90013951</td>
-<td>404,781</td>
-<td>4,130</td>
-<td>400,650</td>
-</tr>
-<tr class="odd">
-<td>SLE</td>
-<td>26502338</td>
-<td>GCST003156</td>
-<td>14,267</td>
-<td>5,201</td>
-<td>9,066</td>
-</tr>
-<tr class="even">
-<td>SLE</td>
-<td>33536424</td>
-<td>GCST011096</td>
-<td>12,615</td>
-<td>4,576</td>
-<td>8,039</td>
-</tr>
-<tr class="odd">
-<td>T1D</td>
-<td>33830302</td>
-<td>GCST90000529</td>
-<td>17,685</td>
-<td>7,467</td>
-<td>10,218</td>
-</tr>
-<tr class="even">
-<td>T1D</td>
-<td>34012112</td>
-<td>GCST90014023</td>
-<td>520,580</td>
-<td>18,942</td>
-<td>501,638</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><strong>blood cell counts:</strong> sourced from Vuckovic D et al’s
-<a
-href="https://www.cell.com/cell/fulltext/S0092-8674(20)30999-5?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0092867420309995%3Fshowall%3Dtrue">study</a>.
-The study leverages UK Biobank cohort to perform a genome-wide discovery
-analysis in 408,112 European participants, investigating 29 blood cell
-phenotypes.</li>
-</ul>
-<p>Both data sources provide effect weights for SNPs associated with
-specific traits, facilitating the construction of PRS.</p></li>
-<li><p>GTEx genotype data (version 8), consisting of 15,201
-RNA-sequencing samples from 49 tissues of 838 postmortem donors. Here,
-we focus on whole blood samples (n = 670).</p></li>
-</ul>
+<div id="obtain-whole-blood-gene-expression-samples"
+class="section level1">
+<h1>Obtain whole blood gene expression samples</h1>
+<pre class="r"><code># Load the gene expression data
+gene_expr_file &lt;- &quot;data/gene_reads_2017-06-05_v8_whole_blood.gct&quot;
+raw_count_df &lt;- fread(gene_expr_file, header = TRUE)
+raw_count_df &lt;- raw_count_df[, -c(1:3)]
+
+# modify GTEx sample names matching names used in PRS data
+colnames(raw_count_df) &lt;- sub(&quot;^(GTEX-[^-.]+).*&quot;, &quot;\\1&quot;, colnames(raw_count_df))</code></pre>
+</div>
+<div id="match-samples-between-prs-and-count-matrix"
+class="section level1">
+<h1>Match samples between PRS and count matrix</h1>
+<pre class="r"><code># load PRS data for blood trait
+prs_file &lt;- &quot;analysis/prs_blood_cell.txt&quot;
+prs_blood &lt;- fread(prs_file, header = T, stringsAsFactors = FALSE)
+
+# obtain GTEx sample id
+id &lt;- prs_blood$sample_id
+
+# Load the PRS data for immune trait
+prs_file &lt;- &quot;analysis/prs_immune.txt&quot;
+prs_immune &lt;- fread(prs_file, header = T, stringsAsFactors = FALSE)
+
+# subset samples
+matching_samples &lt;- intersect(id, colnames(raw_count_df))
+prs_blood &lt;- prs_blood[prs_blood$sample_id %in% matching_samples, ]
+prs_immune &lt;- prs_immune[prs_immune$sample_id %in% matching_samples, ]</code></pre>
+</div>
+<div id="stratify-by-prs-level-high-vs-median-vs-low"
+class="section level1">
+<h1>Stratify by PRS level (High vs Median vs Low)</h1>
+<div id="blood-trait" class="section level2">
+<h2>Blood trait</h2>
+<pre class="r"><code># Loop through each column (starting from the second column, as the first column is sample_id)
+for (i in 2:ncol(prs_blood)) {
+  # Extract the PRS values for the current trait
+  prs_trait &lt;- prs_blood[[i]]
+
+  # Calculate the 25th and 75th percentiles for the trait
+  p25 &lt;- quantile(prs_trait, 0.25, na.rm = TRUE)
+  p75 &lt;- quantile(prs_trait, 0.75, na.rm = TRUE)
+
+  # Create a new column for the group classification based on the percentiles
+  group &lt;- ifelse(prs_trait &gt; p75, &quot;High&quot;, 
+                  ifelse(prs_trait &lt; p25, &quot;Low&quot;, &quot;Median&quot;))
+
+  # Assign the group to the new column for this trait
+  prs_blood[[paste0(&quot;group_&quot;, colnames(prs_blood)[i])]] &lt;- factor(group, 
+                                      levels = c(&quot;Low&quot;, &quot;Median&quot;, &quot;High&quot;))
+}</code></pre>
+</div>
+<div id="immune-trait" class="section level2">
+<h2>Immune trait</h2>
+<pre class="r"><code># Loop through each column (starting from the second column, as the first column is sample_id)
+for (i in 2:ncol(prs_immune)) {
+  # Extract the PRS values for the current trait
+  prs_trait &lt;- prs_immune[[i]]
+
+  # Calculate the 25th and 75th percentiles for the trait
+  p25 &lt;- quantile(prs_trait, 0.25, na.rm = TRUE)
+  p75 &lt;- quantile(prs_trait, 0.75, na.rm = TRUE)
+
+  # Create a new column for the group classification based on the percentiles
+  group &lt;- ifelse(prs_trait &gt; p75, &quot;High&quot;, 
+                  ifelse(prs_trait &lt; p25, &quot;Low&quot;, &quot;Median&quot;))
+
+  # Assign the group to the new column for this trait
+  prs_immune[[paste0(&quot;group_&quot;, colnames(prs_immune)[i])]] &lt;- factor(group, 
+                                      levels = c(&quot;Low&quot;, &quot;Median&quot;, &quot;High&quot;))
+}</code></pre>
+</div>
+</div>
+<div id="whole-blood-covariates" class="section level1">
+<h1>Whole blood covariates</h1>
+<pre class="r"><code>cov_file &lt;- &quot;data/Whole_Blood.v8.covariates.txt&quot;
+cov &lt;- fread(cov_file, header = T, stringsAsFactors = FALSE)
+cov &lt;- cov %&gt;% filter(ID %in% c(paste0(&quot;PC&quot;, 1:5), &quot;sex&quot;))
+col &lt;- cov$ID
+cov &lt;- as.matrix(t(cov[, -1])) 
+colnames(cov) &lt;- col</code></pre>
+</div>
+<div id="combine-for-metadata" class="section level1">
+<h1>Combine for metadata</h1>
+<pre class="r"><code>metadata &lt;- cbind(cov, prs_blood[,-1], prs_immune[,-1])
+rownames(metadata) &lt;- matching_samples
+head(metadata)</code></pre>
+<pre><code>       PC1     PC2     PC3     PC4     PC5   sex PGS000163 PGS000164 PGS000165
+     &lt;num&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt; &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;
+1:  0.0154 -0.0093  0.0107 -0.0038 -0.0083     1 0.5410653 1.0156237 -3.584264
+2:  0.0139 -0.0097  0.0067 -0.0144  0.0296     2 0.2568363 0.9157099 -4.195580
+3:  0.0145 -0.0093  0.0327  0.0056  0.0510     2 0.4498869 0.9594237 -4.354380
+4: -0.0728 -0.0077 -0.0044 -0.0146  0.0063     1 0.2381773 0.8845315 -3.847279
+5:  0.0106  0.0037 -0.0116 -0.0239 -0.0036     2 0.0698766 0.6832743 -3.697957
+6:  0.0139 -0.0056 -0.0096 -0.0022  0.0177     1 0.2181521 0.8695345 -3.709683
+   PGS000166  PGS000167 PGS000168 PGS000169 PGS000170 PGS000171  PGS000172
+       &lt;num&gt;      &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;      &lt;num&gt;
+1: -3.380372  0.0788395  1.386430  4.759111  4.850884  3.073905 -0.0895070
+2: -3.219698  0.4280533  2.024007  4.202698  4.515898  3.180095  0.1487145
+3: -3.727362 -0.3491181  1.248190  4.561965  4.653108  3.066648  0.0183342
+4: -3.262860  0.2038707  1.859773  4.206057  4.560175  2.724009 -0.0072076
+5: -3.324072  0.3378556  2.139808  4.207088  4.453233  2.500608 -0.4254034
+6: -3.616119 -0.0546889  1.734757  4.300133  4.315553  2.662584 -0.1073850
+    PGS000173 PGS000174 PGS000175 PGS000176 PGS000177  PGS000178 PGS000179
+        &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;      &lt;num&gt;     &lt;num&gt;
+1:  0.2374592  2.636155  1.632886  2.411277 2.0512947  0.9079310 0.7683186
+2:  0.2513990  2.790015  1.781026  2.681980 1.2232565  0.0900392 1.0050662
+3: -0.0272472  2.227260  1.870210  1.707190 1.2055734  0.5576229 0.5335173
+4: -0.0555840  2.433216  1.923650  1.997743 0.9881165 -0.4985315 0.9883115
+5:  0.0748983  3.202261  2.100451  2.924678 1.1199602  0.2586746 0.3808877
+6:  0.3191792  3.315746  1.901161  3.245288 1.0788232  0.1757293 0.9693893
+    PGS000180  PGS000181  PGS000182  PGS000183 PGS000184 PGS000185 PGS000186
+        &lt;num&gt;      &lt;num&gt;      &lt;num&gt;      &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;
+1: -0.6711704 -0.1915244 -0.7245853 -0.3556682  3.317813  1.995272 1.2545477
+2: -0.7286477 -0.0609871 -1.0541924 -0.5039774  2.423712  2.592336 0.6764149
+3: -0.9191123  0.0123445 -0.5928827  0.0069968  2.904152  1.301701 1.5763316
+4: -1.0593541 -0.1854266 -0.7716597 -0.1767276  3.195600  2.720634 1.2843909
+5: -0.7623533 -0.1125280 -1.1219023 -0.0572866  3.074190  2.202220 1.0326955
+6:  0.1781564  0.7304979 -1.2248109 -0.1422708  2.890912  1.622803 1.4565123
+    PGS000187 PGS000188 PGS000189 PGS000190  PGS000191 group_PGS000163
+        &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;      &lt;num&gt;          &lt;fctr&gt;
+1:  0.5340879 0.9369695  4.549213  4.758601 -0.5033859            High
+2:  0.9435796 1.2345469  4.160999  4.367083 -0.8890277          Median
+3:  0.6182782 1.6481568  4.525393  4.599732 -0.6487270            High
+4:  0.3390140 1.0718717  4.426697  4.391039 -0.4018935          Median
+5:  0.8687638 0.2488524  4.553244  4.626704 -0.9232945             Low
+6: -0.1164535 0.9978962  4.165813  4.265575 -0.9320550             Low
+   group_PGS000164 group_PGS000165 group_PGS000166 group_PGS000167
+            &lt;fctr&gt;          &lt;fctr&gt;          &lt;fctr&gt;          &lt;fctr&gt;
+1:            High            High          Median          Median
+2:          Median             Low          Median            High
+3:          Median             Low             Low             Low
+4:          Median          Median          Median            High
+5:             Low            High          Median            High
+6:          Median            High             Low          Median
+   group_PGS000168 group_PGS000169 group_PGS000170 group_PGS000171
+            &lt;fctr&gt;          &lt;fctr&gt;          &lt;fctr&gt;          &lt;fctr&gt;
+1:             Low            High            High            High
+2:            High          Median          Median            High
+3:             Low            High            High            High
+4:            High          Median          Median          Median
+5:            High          Median          Median          Median
+6:          Median          Median          Median          Median
+   group_PGS000172 group_PGS000173 group_PGS000174 group_PGS000175
+            &lt;fctr&gt;          &lt;fctr&gt;          &lt;fctr&gt;          &lt;fctr&gt;
+1:          Median            High          Median             Low
+2:            High            High          Median          Median
+3:          Median          Median             Low          Median
+4:          Median          Median             Low          Median
+5:             Low          Median            High            High
+6:          Median            High            High          Median
+   group_PGS000176 group_PGS000177 group_PGS000178 group_PGS000179
+            &lt;fctr&gt;          &lt;fctr&gt;          &lt;fctr&gt;          &lt;fctr&gt;
+1:          Median            High            High          Median
+2:          Median          Median             Low          Median
+3:             Low             Low            High          Median
+4:             Low             Low             Low          Median
+5:            High             Low          Median             Low
+6:            High             Low          Median          Median
+   group_PGS000180 group_PGS000181 group_PGS000182 group_PGS000183
+            &lt;fctr&gt;          &lt;fctr&gt;          &lt;fctr&gt;          &lt;fctr&gt;
+1:          Median             Low          Median             Low
+2:          Median          Median             Low             Low
+3:             Low          Median            High          Median
+4:             Low             Low          Median          Median
+5:          Median          Median             Low          Median
+6:            High            High             Low          Median
+   group_PGS000184 group_PGS000185 group_PGS000186 group_PGS000187
+            &lt;fctr&gt;          &lt;fctr&gt;          &lt;fctr&gt;          &lt;fctr&gt;
+1:            High             Low            High          Median
+2:             Low            High             Low            High
+3:          Median             Low            High          Median
+4:            High            High            High             Low
+5:            High          Median          Median            High
+6:          Median             Low            High             Low
+   group_PGS000188 group_PGS000189 group_PGS000190 group_PGS000191
+            &lt;fctr&gt;          &lt;fctr&gt;          &lt;fctr&gt;          &lt;fctr&gt;
+1:          Median            High            High          Median
+2:            High          Median          Median             Low
+3:            High            High          Median          Median
+4:          Median          Median          Median            High
+5:             Low            High          Median             Low
+6:          Median          Median             Low             Low
+   Celiac_GCST90014442 Celiac_GCST90468120 IBD_GCST90013901 IBD_GCST90013951
+                 &lt;num&gt;               &lt;num&gt;            &lt;num&gt;            &lt;num&gt;
+1:         -0.26979202           -1.664964       -0.9357205        -1.031167
+2:         -0.29874466           -2.266667       -0.9111857        -1.023133
+3:         -0.30873975           -2.037649       -0.9511192        -1.084680
+4:         -0.08861998           -2.234620       -0.9120145        -1.027695
+5:         -0.19971851           -2.091880       -0.8808438        -1.034828
+6:         -0.02010055           -2.856789       -0.9944172        -1.112842
+   T1D_GCST90000529 T1D_GCST90014023 LUPUS_GCST003156 LUPUS_GCST011096
+              &lt;num&gt;            &lt;num&gt;            &lt;num&gt;            &lt;num&gt;
+1:         -3.54534        -60.34438        5.0958297       5.11865538
+2:        -20.04924        -66.73086       -1.0720317      -1.10548637
+3:        -19.21859        -54.94239       -2.6333984      -2.91795672
+4:        -24.05473        -58.12421        0.1342057       0.04848093
+5:        -18.64035        -61.99394        6.5632418       7.13558573
+6:        -16.68449        -59.92546        1.0688929       1.10597115
+   group_Celiac_GCST90014442 group_Celiac_GCST90468120 group_IBD_GCST90013901
+                      &lt;fctr&gt;                    &lt;fctr&gt;                 &lt;fctr&gt;
+1:                    Median                      High                 Median
+2:                    Median                    Median                   High
+3:                    Median                    Median                 Median
+4:                      High                    Median                   High
+5:                    Median                    Median                   High
+6:                      High                       Low                 Median
+   group_IBD_GCST90013951 group_T1D_GCST90000529 group_T1D_GCST90014023
+                   &lt;fctr&gt;                 &lt;fctr&gt;                 &lt;fctr&gt;
+1:                   High                   High                 Median
+2:                   High                 Median                    Low
+3:                 Median                 Median                   High
+4:                   High                    Low                 Median
+5:                   High                 Median                 Median
+6:                 Median                 Median                 Median
+   group_LUPUS_GCST003156 group_LUPUS_GCST011096
+                   &lt;fctr&gt;                 &lt;fctr&gt;
+1:                   High                   High
+2:                    Low                    Low
+3:                    Low                    Low
+4:                 Median                 Median
+5:                   High                   High
+6:                 Median                 Median</code></pre>
+<pre class="r"><code>#write.table(metadata, &quot;analysis/metadata.txt&quot;, sep=&quot;\t&quot;, row.names = T, col.names = T, quote = F)</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -778,7 +891,7 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] workflowr_1.7.1
+[1] dplyr_1.1.4       data.table_1.16.4 workflowr_1.7.1  
 
 loaded via a namespace (and not attached):
  [1] Rcpp_1.0.14       compiler_4.2.2    pillar_1.10.1     bslib_0.9.0      
@@ -787,11 +900,11 @@ loaded via a namespace (and not attached):
 [13] lifecycle_1.0.4   tibble_3.2.1      pkgconfig_2.0.3   rlang_1.1.5      
 [17] cli_3.6.3         rstudioapi_0.17.1 yaml_2.3.10       xfun_0.50        
 [21] fastmap_1.2.0     httr_1.4.7        stringr_1.5.1     knitr_1.49       
-[25] fs_1.6.5          vctrs_0.6.5       sass_0.4.9        rprojroot_2.0.4  
-[29] glue_1.8.0        R6_2.5.1          processx_3.8.5    rmarkdown_2.29   
-[33] callr_3.7.6       magrittr_2.0.3    whisker_0.4.1     ps_1.8.1         
-[37] promises_1.3.2    htmltools_0.5.8.1 httpuv_1.6.15     stringi_1.8.4    
-[41] cachem_1.1.0     </code></pre>
+[25] generics_0.1.3    fs_1.6.5          vctrs_0.6.5       sass_0.4.9       
+[29] tidyselect_1.2.1  rprojroot_2.0.4   glue_1.8.0        R6_2.5.1         
+[33] processx_3.8.5    rmarkdown_2.29    callr_3.7.6       magrittr_2.0.3   
+[37] whisker_0.4.1     ps_1.8.1          promises_1.3.2    htmltools_0.5.8.1
+[41] httpuv_1.6.15     stringi_1.8.4     cachem_1.1.0     </code></pre>
 </div>
 </div>
 </div>

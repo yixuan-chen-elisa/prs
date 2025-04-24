@@ -32,6 +32,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -263,7 +265,13 @@ $(document).ready(function () {
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/yixuan-chen-elisa/myproject">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -302,7 +310,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-04-17
+<strong>Last updated:</strong> 2025-04-24
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -311,7 +319,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
 aria-hidden="true"></span> 0
 </p>
 <p>
-<strong>Knit directory:</strong> <code>myproject/</code> <span
+<strong>Knit directory:</strong> <code>prs/</code> <span
 class="glyphicon glyphicon-question-sign" aria-hidden="true"
 title="This is the local directory in which the code in this file was executed.">
 </span>
@@ -349,13 +357,15 @@ results.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong3d07189">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree077b30f4f57d3617d14cf5187a9fb610e1b2f7b8targetblank077b30fa">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> 3d07189
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/077b30f4f57d3617d14cf5187a9fb610e1b2f7b8" target="_blank">077b30f</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong3d07189"
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree077b30f4f57d3617d14cf5187a9fb610e1b2f7b8targetblank077b30fa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -364,7 +374,8 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 3d07189.
+The results in this page were generated with repository version
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/077b30f4f57d3617d14cf5187a9fb610e1b2f7b8" target="_blank">077b30f</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -386,13 +397,12 @@ Ignored files:
     Ignored:    data/.DS_Store
 
 Untracked files:
-    Untracked:  analysis/normalized_counts.txt
-    Untracked:  analysis/prs_blood_cell.txt
-    Untracked:  analysis/prs_immune.txt
-    Untracked:  data/GTEx_v8.bed
-    Untracked:  data/GTEx_v8.bim
+    Untracked:  analysis/dds.rda
+    Untracked:  analysis/differential_expression.Rmd
+    Untracked:  analysis/metadata.txt
+    Untracked:  analysis/normalized_counts.rda
+    Untracked:  analysis/vst norm counts.rda
     Untracked:  data/GTEx_v8.bk
-    Untracked:  data/GTEx_v8.fam
     Untracked:  data/GTEx_v8.rds
     Untracked:  data/Whole_Blood.v8.covariates.txt
     Untracked:  data/blood_cell/
@@ -401,7 +411,8 @@ Untracked files:
     Untracked:  data/immune/
 
 Unstaged changes:
-    Modified:   myproject.Rproj
+    Deleted:    analysis/normalized_counts.txt
+    Modified:   prs.Rproj
 
 </code></pre>
 <p>
@@ -450,13 +461,13 @@ Message
 Rmd
 </td>
 <td>
-eb3c446
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/470bb78edbedde54e9cbc5692918fe083b67dce8/analysis/about.Rmd" target="_blank">470bb78</a>
 </td>
 <td>
 ElisaChen
 </td>
 <td>
-2025-03-27
+2025-04-17
 </td>
 <td>
 Start workflowr project.

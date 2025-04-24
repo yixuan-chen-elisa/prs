@@ -11,7 +11,7 @@
 
 
 
-<title>PRS_Data</title>
+<title>QC</title>
 
 <script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -357,7 +357,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">PRS_Data</h1>
+<h1 class="title toc-ignore">QC</h1>
 
 </div>
 
@@ -589,11 +589,10 @@ have uncommitted changes.
 <div id="versions" class="tab-pane fade">
 <p>
 These are the previous versions of the repository in which changes were
-made to the R Markdown (<code>analysis/PRS_data_info.Rmd</code>) and
-HTML (<code>docs/PRS_data_info.html</code>) files. If you’ve configured
-a remote Git repository (see <code>?wflow_git_remote</code>), click on
-the hyperlinks in the table below to view the files as they were in that
-past version.
+made to the R Markdown (<code>analysis/QC.Rmd</code>) and HTML
+(<code>docs/QC.html</code>) files. If you’ve configured a remote Git
+repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
+in the table below to view the files as they were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -622,16 +621,17 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/yixuan-chen-elisa/prs/blob/7338250dc7dd5bfd24a56925d3b8a25156d2118f/analysis/PRS_data_info.Rmd" target="_blank">7338250</a>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/077b30f4f57d3617d14cf5187a9fb610e1b2f7b8/analysis/QC.Rmd" target="_blank">077b30f</a>
 </td>
 <td>
 ElisaChen
 </td>
 <td>
-2025-04-17
+2025-04-24
 </td>
 <td>
-first commit
+wflow_publish(c("analysis/index.Rmd", "analysis/about.Rmd",
+"analysis/license.Rmd",
 </td>
 </tr>
 </tbody>
@@ -641,119 +641,39 @@ first commit
 </div>
 </div>
 </div>
-<div id="data" class="section level1">
-<h1>Data</h1>
-<p>To analyze the correlation between polygenetic risk score (PRS) and
-gene expression, we first compute PRS of each GTEx samples for a
-trait:</p>
-<ul>
-<li><p>SNP-based PRS:</p>
-<ul>
-<li><strong>Immune traits:</strong> trained by our collaborator, Salem
-Werdyani. Study information including Open GWAS ID, sample sizes, number
-of cases &amp; controls are listed below:</li>
-</ul>
-<table style="width:95%;">
-<colgroup>
-<col width="11%" />
-<col width="14%" />
-<col width="20%" />
-<col width="17%" />
-<col width="15%" />
-<col width="15%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Trait</th>
-<th>pmid</th>
-<th>Open GWAS ID</th>
-<th>Sample size</th>
-<th>Cases</th>
-<th>Control</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Celiac</td>
-<td>34278373</td>
-<td>GCST90014442</td>
-<td>326,438</td>
-<td>2,364</td>
-<td>324,074</td>
-</tr>
-<tr class="even">
-<td>Celiac</td>
-<td><p>38789286</p>
-<p>20190752</p></td>
-<td>GCST90468120</td>
-<td>15,283</td>
-<td>4,533</td>
-<td>10,750</td>
-</tr>
-<tr class="odd">
-<td>IBD</td>
-<td>34017140</td>
-<td>GCST90013901</td>
-<td>407,746</td>
-<td>4,161</td>
-<td>403,585</td>
-</tr>
-<tr class="even">
-<td>IBD</td>
-<td>34017140</td>
-<td>GCST90013951</td>
-<td>404,781</td>
-<td>4,130</td>
-<td>400,650</td>
-</tr>
-<tr class="odd">
-<td>SLE</td>
-<td>26502338</td>
-<td>GCST003156</td>
-<td>14,267</td>
-<td>5,201</td>
-<td>9,066</td>
-</tr>
-<tr class="even">
-<td>SLE</td>
-<td>33536424</td>
-<td>GCST011096</td>
-<td>12,615</td>
-<td>4,576</td>
-<td>8,039</td>
-</tr>
-<tr class="odd">
-<td>T1D</td>
-<td>33830302</td>
-<td>GCST90000529</td>
-<td>17,685</td>
-<td>7,467</td>
-<td>10,218</td>
-</tr>
-<tr class="even">
-<td>T1D</td>
-<td>34012112</td>
-<td>GCST90014023</td>
-<td>520,580</td>
-<td>18,942</td>
-<td>501,638</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><strong>blood cell counts:</strong> sourced from Vuckovic D et al’s
-<a
-href="https://www.cell.com/cell/fulltext/S0092-8674(20)30999-5?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0092867420309995%3Fshowall%3Dtrue">study</a>.
-The study leverages UK Biobank cohort to perform a genome-wide discovery
-analysis in 408,112 European participants, investigating 29 blood cell
-phenotypes.</li>
-</ul>
-<p>Both data sources provide effect weights for SNPs associated with
-specific traits, facilitating the construction of PRS.</p></li>
-<li><p>GTEx genotype data (version 8), consisting of 15,201
-RNA-sequencing samples from 49 tissues of 838 postmortem donors. Here,
-we focus on whole blood samples (n = 670).</p></li>
-</ul>
+<div id="pca" class="section level1">
+<h1>PCA</h1>
+<pre class="r"><code>load(&quot;analysis/vst norm counts.rda&quot;)
+
+metadata_file &lt;- &quot;analysis/metadata.txt&quot;
+metadata &lt;- read.csv(metadata_file, header = T, sep = &quot;\t&quot;, stringsAsFactors = T)
+metadata$sex &lt;- as.factor(metadata$sex)
+
+group_columns &lt;- grep(&quot;^group_&quot;, colnames(metadata), value = TRUE)
+
+for (group in group_columns) {
+  # Plot PCA for the current group
+  pca_plot &lt;- plotPCA(dds.vsd, intgroup = group) + 
+    labs(title = paste(&quot;PCA for&quot;, group))
+  
+  # Print the plot
+  print(pca_plot)
+}</code></pre>
+<p><img src="figure/QC.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-8.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-9.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-10.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-11.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-12.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-13.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-14.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-15.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-16.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-17.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-18.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-19.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-20.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-21.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-22.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-23.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-24.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-25.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-26.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-27.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-28.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-29.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-30.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-31.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-32.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-33.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-34.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-35.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-36.png" width="672" style="display: block; margin: auto;" /><img src="figure/QC.Rmd/unnamed-chunk-1-37.png" width="672" style="display: block; margin: auto;" /></p>
+<p>There is no clear clustering on the PCA plot across traits,
+suggesting that there are no strong, patterns in the data.</p>
+</div>
+<div id="heatmap-of-sample-to-sample-distance" class="section level1">
+<h1>heatmap of sample-to-sample distance</h1>
+<pre class="r"><code>sampleDists &lt;- dist(t(assay(dds.vsd)))
+sampleDistMatrix &lt;- as.matrix(sampleDists)
+rownames(sampleDistMatrix) &lt;- rownames(metadata)
+colnames(sampleDistMatrix) &lt;- NULL
+pheatmap(sampleDistMatrix,
+         clustering_distance_rows=sampleDists,
+         clustering_distance_cols=sampleDists
+         )</code></pre>
+<p><img src="figure/QC.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -775,23 +695,46 @@ locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
 attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
+[1] stats4    stats     graphics  grDevices utils     datasets  methods  
+[8] base     
 
 other attached packages:
-[1] workflowr_1.7.1
+ [1] ggplot2_3.5.1               DESeq2_1.38.3              
+ [3] SummarizedExperiment_1.28.0 Biobase_2.58.0             
+ [5] MatrixGenerics_1.10.0       matrixStats_1.2.0          
+ [7] GenomicRanges_1.50.2        GenomeInfoDb_1.34.9        
+ [9] IRanges_2.32.0              S4Vectors_0.36.2           
+[11] BiocGenerics_0.44.0         pheatmap_1.0.12            
+[13] workflowr_1.7.1            
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.14       compiler_4.2.2    pillar_1.10.1     bslib_0.9.0      
- [5] later_1.4.1       git2r_0.33.0      jquerylib_0.1.4   tools_4.2.2      
- [9] getPass_0.2-4     digest_0.6.37     jsonlite_1.8.9    evaluate_1.0.3   
-[13] lifecycle_1.0.4   tibble_3.2.1      pkgconfig_2.0.3   rlang_1.1.5      
-[17] cli_3.6.3         rstudioapi_0.17.1 yaml_2.3.10       xfun_0.50        
-[21] fastmap_1.2.0     httr_1.4.7        stringr_1.5.1     knitr_1.49       
-[25] fs_1.6.5          vctrs_0.6.5       sass_0.4.9        rprojroot_2.0.4  
-[29] glue_1.8.0        R6_2.5.1          processx_3.8.5    rmarkdown_2.29   
-[33] callr_3.7.6       magrittr_2.0.3    whisker_0.4.1     ps_1.8.1         
-[37] promises_1.3.2    htmltools_0.5.8.1 httpuv_1.6.15     stringi_1.8.4    
-[41] cachem_1.1.0     </code></pre>
+ [1] httr_1.4.7             sass_0.4.9             bit64_4.6.0-1         
+ [4] jsonlite_1.8.9         bslib_0.9.0            getPass_0.2-4         
+ [7] blob_1.2.4             GenomeInfoDbData_1.2.9 yaml_2.3.10           
+[10] pillar_1.10.1          RSQLite_2.3.9          lattice_0.22-6        
+[13] glue_1.8.0             digest_0.6.37          RColorBrewer_1.1-3    
+[16] promises_1.3.2         XVector_0.38.0         colorspace_2.1-1      
+[19] htmltools_0.5.8.1      httpuv_1.6.15          Matrix_1.5-1          
+[22] XML_3.99-0.18          pkgconfig_2.0.3        zlibbioc_1.44.0       
+[25] xtable_1.8-4           scales_1.3.0           processx_3.8.5        
+[28] whisker_0.4.1          later_1.4.1            BiocParallel_1.32.6   
+[31] git2r_0.33.0           tibble_3.2.1           annotate_1.76.0       
+[34] KEGGREST_1.38.0        farver_2.1.2           generics_0.1.3        
+[37] withr_3.0.2            cachem_1.1.0           cli_3.6.3             
+[40] magrittr_2.0.3         crayon_1.5.3           memoise_2.0.1         
+[43] evaluate_1.0.3         ps_1.8.1               fs_1.6.5              
+[46] tools_4.2.2            lifecycle_1.0.4        stringr_1.5.1         
+[49] locfit_1.5-9.8         munsell_0.5.1          DelayedArray_0.24.0   
+[52] AnnotationDbi_1.60.2   callr_3.7.6            Biostrings_2.66.0     
+[55] compiler_4.2.2         jquerylib_0.1.4        rlang_1.1.5           
+[58] grid_4.2.2             RCurl_1.98-1.16        rstudioapi_0.17.1     
+[61] labeling_0.4.3         bitops_1.0-9           rmarkdown_2.29        
+[64] gtable_0.3.6           codetools_0.2-20       DBI_1.2.3             
+[67] R6_2.5.1               dplyr_1.1.4            knitr_1.49            
+[70] fastmap_1.2.0          bit_4.5.0.1            rprojroot_2.0.4       
+[73] stringi_1.8.4          parallel_4.2.2         Rcpp_1.0.14           
+[76] vctrs_0.6.5            geneplotter_1.76.0     png_0.1-8             
+[79] tidyselect_1.2.1       xfun_0.50             </code></pre>
 </div>
 </div>
 </div>
