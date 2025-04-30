@@ -42,43 +42,37 @@ prs_immune <- prs_immune[prs_immune$sample_id %in% matching_samples, ]
 # Stratify by PRS level (High vs Median vs Low)
 ## Blood trait
 ```{r}
-# Loop through each column (starting from the second column, as the first column is sample_id)
 for (i in 2:ncol(prs_blood)) {
   # Extract the PRS values for the current trait
   prs_trait <- prs_blood[[i]]
 
-  # Calculate the 25th and 75th percentiles for the trait
-  p25 <- quantile(prs_trait, 0.25, na.rm = TRUE)
+  # Calculate the 75th percentile for the trait (top 25% threshold)
   p75 <- quantile(prs_trait, 0.75, na.rm = TRUE)
 
-  # Create a new column for the group classification based on the percentiles
-  group <- ifelse(prs_trait > p75, "High", 
-                  ifelse(prs_trait < p25, "Low", "Median"))
+  # Create a new column for the group classification based on the 75th percentile
+  group <- ifelse(prs_trait > p75, "Top 25%", "Remaining")
 
   # Assign the group to the new column for this trait
   prs_blood[[paste0("group_", colnames(prs_blood)[i])]] <- factor(group, 
-                                      levels = c("Low", "Median", "High"))
+                                      levels = c("Remaining", "Top 25%"))
 }
 ```
 
 ## Immune trait
 ```{r}
-# Loop through each column (starting from the second column, as the first column is sample_id)
 for (i in 2:ncol(prs_immune)) {
   # Extract the PRS values for the current trait
   prs_trait <- prs_immune[[i]]
 
-  # Calculate the 25th and 75th percentiles for the trait
-  p25 <- quantile(prs_trait, 0.25, na.rm = TRUE)
+  # Calculate the 75th percentile for the trait (top 25% threshold)
   p75 <- quantile(prs_trait, 0.75, na.rm = TRUE)
 
-  # Create a new column for the group classification based on the percentiles
-  group <- ifelse(prs_trait > p75, "High", 
-                  ifelse(prs_trait < p25, "Low", "Median"))
+  # Create a new column for the group classification based on the 75th percentile
+  group <- ifelse(prs_trait > p75, "Top 25%", "Remaining")
 
   # Assign the group to the new column for this trait
   prs_immune[[paste0("group_", colnames(prs_immune)[i])]] <- factor(group, 
-                                      levels = c("Low", "Median", "High"))
+                                      levels = c("Remaining", "Top 25%"))
 }
 ```
 
@@ -94,10 +88,12 @@ colnames(cov) <- col
 
 # Combine for metadata
 ```{r}
-metadata <- cbind(cov, prs_blood[,-1], prs_immune[,-1])
+metadata <- cbind(cov, prs_blood[, 2:30], prs_immune[,2:9], prs_blood[, 31:59], prs_immune[,10:17])
 rownames(metadata) <- matching_samples
+metadata$sex <- as.factor(metadata$sex)
 head(metadata)
-#write.table(metadata, "analysis/metadata.txt", sep="\t", row.names = T, col.names = T, quote = F)
+write.table(metadata, "analysis/metadata.txt", sep="\t", row.names = T,
+            col.names = T, quote = F)
 ```
 
 

@@ -24,7 +24,5 @@ Welcome to my research website.
 
 - [Normalization](expression_normalization.html)
 
-- [Quality Control for Sampling Clustering](QC.html)
-
 - [Differential gene expression](differential_expression.html)
 
