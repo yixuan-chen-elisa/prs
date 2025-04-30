@@ -365,7 +365,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -376,8 +376,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -386,13 +386,13 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-04-24
+<strong>Last updated:</strong> 2025-04-30
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>prs/</code> <span
@@ -415,21 +415,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -520,15 +517,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree7338250dc7dd5bfd24a56925d3b8a25156d2118ftargetblank7338250a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree9017040dcd0d02e9db257f816e709459bea482adtargetblank9017040a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/yixuan-chen-elisa/prs/tree/7338250dc7dd5bfd24a56925d3b8a25156d2118f" target="_blank">7338250</a>
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/9017040dcd0d02e9db257f816e709459bea482ad" target="_blank">9017040</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree7338250dc7dd5bfd24a56925d3b8a25156d2118ftargetblank7338250a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree9017040dcd0d02e9db257f816e709459bea482adtargetblank9017040a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -538,7 +535,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/yixuan-chen-elisa/prs/tree/7338250dc7dd5bfd24a56925d3b8a25156d2118f" target="_blank">7338250</a>.
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/9017040dcd0d02e9db257f816e709459bea482ad" target="_blank">9017040</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -557,14 +554,124 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    analysis/.DS_Store
+    Ignored:    analysis/ma_plot_Celiac_GCST90014442.png
+    Ignored:    analysis/ma_plot_Celiac_GCST90468120.png
+    Ignored:    analysis/ma_plot_IBD_GCST90013901.png
+    Ignored:    analysis/ma_plot_IBD_GCST90013951.png
+    Ignored:    analysis/ma_plot_LUPUS_GCST003156.png
+    Ignored:    analysis/ma_plot_LUPUS_GCST011096.png
+    Ignored:    analysis/ma_plot_PGS000163.png
+    Ignored:    analysis/ma_plot_PGS000164.png
+    Ignored:    analysis/ma_plot_PGS000165.png
+    Ignored:    analysis/ma_plot_PGS000166.png
+    Ignored:    analysis/ma_plot_PGS000167.png
+    Ignored:    analysis/ma_plot_PGS000168.png
+    Ignored:    analysis/ma_plot_PGS000169.png
+    Ignored:    analysis/ma_plot_PGS000170.png
+    Ignored:    analysis/ma_plot_PGS000171.png
+    Ignored:    analysis/ma_plot_PGS000172.png
+    Ignored:    analysis/ma_plot_PGS000173.png
+    Ignored:    analysis/ma_plot_PGS000174.png
+    Ignored:    analysis/ma_plot_PGS000175.png
+    Ignored:    analysis/ma_plot_PGS000176.png
+    Ignored:    analysis/ma_plot_PGS000177.png
+    Ignored:    analysis/ma_plot_PGS000178.png
+    Ignored:    analysis/ma_plot_PGS000179.png
+    Ignored:    analysis/ma_plot_PGS000180.png
+    Ignored:    analysis/ma_plot_PGS000181.png
+    Ignored:    analysis/ma_plot_PGS000182.png
+    Ignored:    analysis/ma_plot_PGS000183.png
+    Ignored:    analysis/ma_plot_PGS000184.png
+    Ignored:    analysis/ma_plot_PGS000185.png
+    Ignored:    analysis/ma_plot_PGS000186.png
+    Ignored:    analysis/ma_plot_PGS000187.png
+    Ignored:    analysis/ma_plot_PGS000188.png
+    Ignored:    analysis/ma_plot_PGS000189.png
+    Ignored:    analysis/ma_plot_PGS000190.png
+    Ignored:    analysis/ma_plot_PGS000191.png
+    Ignored:    analysis/ma_plot_T1D_GCST90000529.png
+    Ignored:    analysis/ma_plot_T1D_GCST90014023.png
+    Ignored:    analysis/volcano_plot_Celiac_GCST90014442.png
+    Ignored:    analysis/volcano_plot_Celiac_GCST90468120.png
+    Ignored:    analysis/volcano_plot_IBD_GCST90013901.png
+    Ignored:    analysis/volcano_plot_IBD_GCST90013951.png
+    Ignored:    analysis/volcano_plot_LUPUS_GCST003156.png
+    Ignored:    analysis/volcano_plot_LUPUS_GCST011096.png
+    Ignored:    analysis/volcano_plot_PGS000163.png
+    Ignored:    analysis/volcano_plot_PGS000164.png
+    Ignored:    analysis/volcano_plot_PGS000165.png
+    Ignored:    analysis/volcano_plot_PGS000166.png
+    Ignored:    analysis/volcano_plot_PGS000167.png
+    Ignored:    analysis/volcano_plot_PGS000168.png
+    Ignored:    analysis/volcano_plot_PGS000169.png
+    Ignored:    analysis/volcano_plot_PGS000170.png
+    Ignored:    analysis/volcano_plot_PGS000171.png
+    Ignored:    analysis/volcano_plot_PGS000172.png
+    Ignored:    analysis/volcano_plot_PGS000173.png
+    Ignored:    analysis/volcano_plot_PGS000174.png
+    Ignored:    analysis/volcano_plot_PGS000175.png
+    Ignored:    analysis/volcano_plot_PGS000176.png
+    Ignored:    analysis/volcano_plot_PGS000177.png
+    Ignored:    analysis/volcano_plot_PGS000178.png
+    Ignored:    analysis/volcano_plot_PGS000179.png
+    Ignored:    analysis/volcano_plot_PGS000180.png
+    Ignored:    analysis/volcano_plot_PGS000181.png
+    Ignored:    analysis/volcano_plot_PGS000182.png
+    Ignored:    analysis/volcano_plot_PGS000183.png
+    Ignored:    analysis/volcano_plot_PGS000184.png
+    Ignored:    analysis/volcano_plot_PGS000185.png
+    Ignored:    analysis/volcano_plot_PGS000186.png
+    Ignored:    analysis/volcano_plot_PGS000187.png
+    Ignored:    analysis/volcano_plot_PGS000188.png
+    Ignored:    analysis/volcano_plot_PGS000189.png
+    Ignored:    analysis/volcano_plot_PGS000190.png
+    Ignored:    analysis/volcano_plot_PGS000191.png
+    Ignored:    analysis/volcano_plot_T1D_GCST90000529.png
+    Ignored:    analysis/volcano_plot_T1D_GCST90014023.png
     Ignored:    data/.DS_Store
 
 Untracked files:
     Untracked:  analysis/dds.rda
-    Untracked:  analysis/differential_expression.Rmd
-    Untracked:  analysis/metadata.Rmd
+    Untracked:  analysis/differential_expression_Celiac_GCST90014442_results.csv
+    Untracked:  analysis/differential_expression_Celiac_GCST90468120_results.csv
+    Untracked:  analysis/differential_expression_IBD_GCST90013901_results.csv
+    Untracked:  analysis/differential_expression_IBD_GCST90013951_results.csv
+    Untracked:  analysis/differential_expression_LUPUS_GCST003156_results.csv
+    Untracked:  analysis/differential_expression_LUPUS_GCST011096_results.csv
+    Untracked:  analysis/differential_expression_PGS000163_results.csv
+    Untracked:  analysis/differential_expression_PGS000164_results.csv
+    Untracked:  analysis/differential_expression_PGS000165_results.csv
+    Untracked:  analysis/differential_expression_PGS000166_results.csv
+    Untracked:  analysis/differential_expression_PGS000167_results.csv
+    Untracked:  analysis/differential_expression_PGS000168_results.csv
+    Untracked:  analysis/differential_expression_PGS000169_results.csv
+    Untracked:  analysis/differential_expression_PGS000170_results.csv
+    Untracked:  analysis/differential_expression_PGS000171_results.csv
+    Untracked:  analysis/differential_expression_PGS000172_results.csv
+    Untracked:  analysis/differential_expression_PGS000173_results.csv
+    Untracked:  analysis/differential_expression_PGS000174_results.csv
+    Untracked:  analysis/differential_expression_PGS000175_results.csv
+    Untracked:  analysis/differential_expression_PGS000176_results.csv
+    Untracked:  analysis/differential_expression_PGS000177_results.csv
+    Untracked:  analysis/differential_expression_PGS000178_results.csv
+    Untracked:  analysis/differential_expression_PGS000179_results.csv
+    Untracked:  analysis/differential_expression_PGS000180_results.csv
+    Untracked:  analysis/differential_expression_PGS000181_results.csv
+    Untracked:  analysis/differential_expression_PGS000182_results.csv
+    Untracked:  analysis/differential_expression_PGS000183_results.csv
+    Untracked:  analysis/differential_expression_PGS000184_results.csv
+    Untracked:  analysis/differential_expression_PGS000185_results.csv
+    Untracked:  analysis/differential_expression_PGS000186_results.csv
+    Untracked:  analysis/differential_expression_PGS000187_results.csv
+    Untracked:  analysis/differential_expression_PGS000188_results.csv
+    Untracked:  analysis/differential_expression_PGS000189_results.csv
+    Untracked:  analysis/differential_expression_PGS000190_results.csv
+    Untracked:  analysis/differential_expression_PGS000191_results.csv
+    Untracked:  analysis/differential_expression_T1D_GCST90000529_results.csv
+    Untracked:  analysis/differential_expression_T1D_GCST90014023_results.csv
     Untracked:  analysis/metadata.txt
     Untracked:  analysis/normalized_counts.rda
+    Untracked:  analysis/vst norm counts.rda
     Untracked:  data/GTEx_v8.bk
     Untracked:  data/GTEx_v8.rds
     Untracked:  data/Whole_Blood.v8.covariates.txt
@@ -574,9 +681,7 @@ Untracked files:
     Untracked:  data/immune/
 
 Unstaged changes:
-    Modified:   analysis/PRS.Rmd
-    Modified:   analysis/expression_normalization.Rmd
-    Modified:   analysis/index.Rmd
+    Deleted:    analysis/QC.Rmd
     Deleted:    analysis/normalized_counts.txt
     Modified:   prs.Rproj
 
@@ -594,15 +699,428 @@ have uncommitted changes.
 </div>
 <div id="versions" class="tab-pane fade">
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown
+(<code>analysis/differential_expression.Rmd</code>) and HTML
+(<code>docs/differential_expression.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/9017040dcd0d02e9db257f816e709459bea482ad/analysis/differential_expression.Rmd" target="_blank">9017040</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-30
+</td>
+<td>
+workflowr::wflow_publish("analysis/differential_expression.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/yixuan-chen-elisa/prs/ae6b2a5a84a3f81a852cfc7d12b2415ef4477224/docs/differential_expression.html" target="_blank">ae6b2a5</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-30
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/6488595341c3d6d4422847d065b8d8e5d65b6a4d/analysis/differential_expression.Rmd" target="_blank">6488595</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-30
+</td>
+<td>
+workflowr::wflow_publish("analysis/differential_expression.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/yixuan-chen-elisa/prs/c4ece77e6e04279cb27efb04a88e27335aa144a4/docs/differential_expression.html" target="_blank">c4ece77</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-30
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/5b80e272b1564a6835a64729103a8791c1dba21f/analysis/differential_expression.Rmd" target="_blank">5b80e27</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-30
+</td>
+<td>
+workflowr::wflow_publish(c("analysis/differential_expression.Rmd",
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
 </div>
-<div id="estimate-gene-wise-dispersion" class="section level1">
-<h1>Estimate gene-wise dispersion</h1>
+<div id="correlation-between-prs-pcs" class="section level1">
+<h1>Correlation between PRS &amp; PCs</h1>
+<pre class="r"><code># load prs &amp; pcs
+metadata_file &lt;- &quot;analysis/metadata.txt&quot;
+metadata &lt;- read.csv(metadata_file, header = T, sep = &quot;\t&quot;, stringsAsFactors = T)
+metadata$sex &lt;- as.factor(metadata$sex)
+
+traits &lt;- metadata[, 7:43]
+pc &lt;- metadata[, 1:5]
+
+# Calculate the correlation between each trait and each PC
+correlation_matrix &lt;- cor(traits, pc)
+range(correlation_matrix)</code></pre>
+<pre><code>[1] -0.2850667  0.2787222</code></pre>
+<pre class="r"><code>correlation_matrix &lt;- t(correlation_matrix)
+
+# Create the heatmap using corrplot
+corrplot(correlation_matrix, method = &quot;color&quot;, 
+         col = colorRampPalette(c(&quot;blue&quot;, &quot;white&quot;, &quot;red&quot;))(200), # color palette
+         addCoef.col = &quot;black&quot;, # Add correlation coefficients to the plot
+         number.cex = 0.4, # Adjust the font size of the numbers
+         tl.col = &quot;black&quot;, # text label color
+         tl.srt = 90, # rotate text labels
+         tl.cex = 0.5, 
+         title = &quot;Correlation between Traits and PCs&quot;, 
+         mar = c(0, 0, 1, 0)
+)</code></pre>
+<p><img src="figure/differential_expression.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-1">
+Past versions of unnamed-chunk-1-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/c4ece77e6e04279cb27efb04a88e27335aa144a4/docs/figure/differential_expression.Rmd/unnamed-chunk-1-1.png" target="_blank">c4ece77</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="perform-deseq2-differential-expression-analysis-for-each-trait"
+class="section level1">
+<h1>Perform DESeq2 differential expression analysis for each trait</h1>
+<pre class="r"><code># Load the gene expression data
+gene_expr_file &lt;- &quot;data/gene_reads_2017-06-05_v8_whole_blood.gct&quot;
+raw_count_df &lt;- fread(gene_expr_file, header = TRUE, sep = &quot;\t&quot;, drop = &quot;id&quot;)
+
+id &lt;- raw_count_df$Name
+raw_count &lt;- raw_count_df[, -c(1:2)]
+
+# modify GTEx sample names matching names used in PRS data
+colnames(raw_count) &lt;- sub(&quot;^(GTEX-[^-.]+).*&quot;, &quot;\\1&quot;, colnames(raw_count))
+
+matching_samples &lt;- intersect(rownames(metadata), colnames(raw_count))
+final_count &lt;- raw_count[ , ..matching_samples]
+
+# prefilter: keep only rows that have a count of at least 10 for a minimal number of samples
+keep_genes &lt;- rowSums(final_count &gt;= 10) &gt;= 100
+final_count &lt;- final_count[keep_genes, ]
+id &lt;- id[keep_genes]
+
+# Loop through each trait and run DESeq2
+for (trait in colnames(traits)) {
+  
+  # Create the DESeqDataSet for the current trait
+  dds &lt;- DESeqDataSetFromMatrix(
+    countData = as.matrix(final_count),  # Raw counts
+    colData = metadata[, c(1:6, which(colnames(metadata) == trait))],
+    design = as.formula(paste(&quot;~ PC1 + PC2 + PC3 + PC4 + PC5 + sex +&quot;, trait))
+  )
+  rownames(dds) &lt;- id
+  
+  # Run DESeq2 analysis
+  dds &lt;- DESeq(dds, parallel = TRUE, BPPARAM = MulticoreParam(4))
+  
+  # Get the results for the current trait
+  res &lt;- results(dds)
+  
+  # Save the results to a file
+  write.csv(res, paste0(&quot;differential_expression_&quot;, trait, &quot;_results.csv&quot;))
+  
+  # print a summary of the results
+  print(paste(&quot;Results for trait:&quot;, trait))
+  print(summary(res))
+  
+  # plot the MA-plot for the current trait
+  png(paste0(&quot;ma_plot_&quot;, trait, &quot;.png&quot;), width = 800, height = 600)
+  plotMA(res, main = paste(&quot;MA Plot for&quot;, trait))
+  dev.off()
+  
+  # volcano plot
+  res_tableOE &lt;- as.data.frame(res)
+  res_tableOE$gene_name &lt;- raw_count_df$Description[match(rownames(res_tableOE), id)]
+  res_tableOE &lt;- mutate(res_tableOE, threshold_OE = padj &lt; 0.05 &amp; 
+                          abs(log2FoldChange) &gt;= 1)
+  res_tableOE &lt;- res_tableOE %&gt;% arrange(padj) %&gt;% mutate(genelabels = &quot;&quot;)
+  res_tableOE$genelabels[1:10] &lt;- res_tableOE$gene_name[1:10]
+  
+  volcano_plot &lt;- ggplot(res_tableOE, aes(x = log2FoldChange, y = -log10(padj))) +
+    geom_point(aes(colour = threshold_OE)) +
+    geom_text_repel(aes(label = genelabels)) +
+    ggtitle(paste(&quot;Volcano Plot for&quot;, trait)) +
+    xlab(&quot;log2 fold change&quot;) + 
+    ylab(&quot;-log10 adjusted p-value&quot;) +
+    theme(legend.position = &quot;none&quot;,
+          plot.title = element_text(size = rel(1.5), hjust = 0.5),
+          axis.title = element_text(size = rel(1.25)))
+  
+  # Save the volcano plot
+  png(paste0(&quot;volcano_plot_&quot;, trait, &quot;.png&quot;), width = 800, height = 600)
+  print(volcano_plot)
+  dev.off()
+}</code></pre>
+<pre class="r"><code>for (trait in colnames(traits)) {
+  res &lt;- read.csv(paste0(&quot;analysis/differential_expression_&quot;, trait, &quot;_results.csv&quot;), row.names = 1, header = T)
+  print(paste0(trait, &quot;: number of significant differential genes is &quot;, sum(res$padj &lt; 0.05, na.rm=TRUE)))
+}</code></pre>
+<pre><code>[1] &quot;PGS000163: number of significant differential genes is 226&quot;
+[1] &quot;PGS000164: number of significant differential genes is 104&quot;
+[1] &quot;PGS000165: number of significant differential genes is 252&quot;
+[1] &quot;PGS000166: number of significant differential genes is 133&quot;
+[1] &quot;PGS000167: number of significant differential genes is 152&quot;
+[1] &quot;PGS000168: number of significant differential genes is 57&quot;
+[1] &quot;PGS000169: number of significant differential genes is 196&quot;
+[1] &quot;PGS000170: number of significant differential genes is 272&quot;
+[1] &quot;PGS000171: number of significant differential genes is 201&quot;
+[1] &quot;PGS000172: number of significant differential genes is 344&quot;
+[1] &quot;PGS000173: number of significant differential genes is 458&quot;
+[1] &quot;PGS000174: number of significant differential genes is 228&quot;
+[1] &quot;PGS000175: number of significant differential genes is 369&quot;
+[1] &quot;PGS000176: number of significant differential genes is 128&quot;
+[1] &quot;PGS000177: number of significant differential genes is 205&quot;
+[1] &quot;PGS000178: number of significant differential genes is 100&quot;
+[1] &quot;PGS000179: number of significant differential genes is 115&quot;
+[1] &quot;PGS000180: number of significant differential genes is 206&quot;
+[1] &quot;PGS000181: number of significant differential genes is 211&quot;
+[1] &quot;PGS000182: number of significant differential genes is 707&quot;
+[1] &quot;PGS000183: number of significant differential genes is 168&quot;
+[1] &quot;PGS000184: number of significant differential genes is 69&quot;
+[1] &quot;PGS000185: number of significant differential genes is 90&quot;
+[1] &quot;PGS000186: number of significant differential genes is 53&quot;
+[1] &quot;PGS000187: number of significant differential genes is 112&quot;
+[1] &quot;PGS000188: number of significant differential genes is 444&quot;
+[1] &quot;PGS000189: number of significant differential genes is 69&quot;
+[1] &quot;PGS000190: number of significant differential genes is 141&quot;
+[1] &quot;PGS000191: number of significant differential genes is 719&quot;
+[1] &quot;Celiac_GCST90014442: number of significant differential genes is 75&quot;
+[1] &quot;Celiac_GCST90468120: number of significant differential genes is 245&quot;
+[1] &quot;IBD_GCST90013901: number of significant differential genes is 256&quot;
+[1] &quot;IBD_GCST90013951: number of significant differential genes is 185&quot;
+[1] &quot;T1D_GCST90000529: number of significant differential genes is 298&quot;
+[1] &quot;T1D_GCST90014023: number of significant differential genes is 61&quot;
+[1] &quot;LUPUS_GCST003156: number of significant differential genes is 74&quot;
+[1] &quot;LUPUS_GCST011096: number of significant differential genes is 79&quot;</code></pre>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000163.png"
+alt="MA plot PGS000163" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000163.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000164.png"
+alt="MA plot PGS000164" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000164.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000165.png"
+alt="MA plot PGS000165" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000165.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000166.png"
+alt="MA plot PGS000166" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000166.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000167.png"
+alt="MA plot PGS000167" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000167.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000168.png"
+alt="MA plot PGS000168" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000168.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000169.png"
+alt="MA plot PGS000169" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000169.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000170.png"
+alt="MA plot PGS000170" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000170.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000171.png"
+alt="MA plot PGS000171" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000171.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000172.png"
+alt="MA plot PGS000172" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000172.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000173.png"
+alt="MA plot PGS000173" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000173.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000174.png"
+alt="MA plot PGS000174" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000174.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000175.png"
+alt="MA plot PGS000175" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000175.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000176.png"
+alt="MA plot PGS000176" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000176.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000177.png"
+alt="MA plot PGS000177" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000177.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000178.png"
+alt="MA plot PGS000178" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000178.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000179.png"
+alt="MA plot PGS000179" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000179.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000180.png"
+alt="MA plot PGS000180" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000180.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000181.png"
+alt="MA plot PGS000181" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000181.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000182.png"
+alt="MA plot PGS000182" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000182.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000183.png"
+alt="MA plot PGS000183" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000183.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000184.png"
+alt="MA plot PGS000184" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000184.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000185.png"
+alt="MA plot PGS000185" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000185.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000186.png"
+alt="MA plot PGS000186" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000186.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000187.png"
+alt="MA plot PGS000187" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000187.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000188.png"
+alt="MA plot PGS000188" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000188.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000189.png"
+alt="MA plot PGS000189" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000189.png" /></p>
+<p><img src="figure/differential_expression.Rmd/ma_plot_PGS000190.png"
+alt="MA plot PGS000190" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_PGS000190.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Celiac_GCST90014442.png"
+alt="MA plot Celiac_GCST90014442" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90014442.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Celiac_GCST90014442.png"
+alt="MA plot Celiac_GCST90014442" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90014442.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Celiac_GCST90468120.png"
+alt="MA plot Celiac_GCST90468120" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90468120.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_IBD_GCST90013901.png"
+alt="MA plot IBD_GCST90013901" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013901.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_IBD_GCST90013951.png"
+alt="MA plot IBD_GCST90013951" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013951.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_LUPUS_GCST003156.png"
+alt="MA plot LUPUS_GCST003156" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST003156.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_LUPUS_GCST011096.png"
+alt="MA plot LUPUS_GCST011096" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST011096.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_T1D_GCST90000529.png"
+alt="MA plot T1D_GCST90000529" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_T1D_GCST90000529.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_T1D_GCST90014023.png"
+alt="MA plot T1D_GCST90014023" /> <img
+src="figure/differential_expression.Rmd/volcano_plot_T1D_GCST90014023.png" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -624,23 +1142,47 @@ locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
 attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
+[1] stats4    stats     graphics  grDevices utils     datasets  methods  
+[8] base     
 
 other attached packages:
-[1] workflowr_1.7.1
+ [1] ggrepel_0.9.6               BiocParallel_1.32.6        
+ [3] DESeq2_1.38.3               SummarizedExperiment_1.28.0
+ [5] Biobase_2.58.0              MatrixGenerics_1.10.0      
+ [7] matrixStats_1.2.0           GenomicRanges_1.50.2       
+ [9] GenomeInfoDb_1.34.9         IRanges_2.32.0             
+[11] S4Vectors_0.36.2            BiocGenerics_0.44.0        
+[13] corrplot_0.95               ggplot2_3.5.1              
+[15] dplyr_1.1.4                 data.table_1.16.4          
+[17] workflowr_1.7.1            
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.14       compiler_4.2.2    pillar_1.10.1     bslib_0.9.0      
- [5] later_1.4.1       git2r_0.33.0      jquerylib_0.1.4   tools_4.2.2      
- [9] getPass_0.2-4     digest_0.6.37     jsonlite_1.8.9    evaluate_1.0.3   
-[13] lifecycle_1.0.4   tibble_3.2.1      pkgconfig_2.0.3   rlang_1.1.5      
-[17] cli_3.6.3         rstudioapi_0.17.1 yaml_2.3.10       xfun_0.50        
-[21] fastmap_1.2.0     httr_1.4.7        stringr_1.5.1     knitr_1.49       
-[25] fs_1.6.5          vctrs_0.6.5       sass_0.4.9        rprojroot_2.0.4  
-[29] glue_1.8.0        R6_2.5.1          processx_3.8.5    rmarkdown_2.29   
-[33] callr_3.7.6       magrittr_2.0.3    whisker_0.4.1     ps_1.8.1         
-[37] promises_1.3.2    htmltools_0.5.8.1 httpuv_1.6.15     stringi_1.8.4    
-[41] cachem_1.1.0     </code></pre>
+ [1] httr_1.4.7             sass_0.4.9             bit64_4.6.0-1         
+ [4] jsonlite_1.8.9         bslib_0.9.0            getPass_0.2-4         
+ [7] blob_1.2.4             GenomeInfoDbData_1.2.9 yaml_2.3.10           
+[10] pillar_1.10.1          RSQLite_2.3.9          lattice_0.22-6        
+[13] glue_1.8.0             digest_0.6.37          RColorBrewer_1.1-3    
+[16] promises_1.3.2         XVector_0.38.0         colorspace_2.1-1      
+[19] htmltools_0.5.8.1      httpuv_1.6.15          Matrix_1.5-1          
+[22] XML_3.99-0.18          pkgconfig_2.0.3        zlibbioc_1.44.0       
+[25] xtable_1.8-4           scales_1.3.0           processx_3.8.5        
+[28] whisker_0.4.1          later_1.4.1            git2r_0.33.0          
+[31] tibble_3.2.1           annotate_1.76.0        KEGGREST_1.38.0       
+[34] generics_0.1.3         cachem_1.1.0           withr_3.0.2           
+[37] cli_3.6.3              crayon_1.5.3           magrittr_2.0.3        
+[40] memoise_2.0.1          evaluate_1.0.3         ps_1.8.1              
+[43] fs_1.6.5               tools_4.2.2            lifecycle_1.0.4       
+[46] stringr_1.5.1          locfit_1.5-9.8         munsell_0.5.1         
+[49] DelayedArray_0.24.0    Biostrings_2.66.0      AnnotationDbi_1.60.2  
+[52] callr_3.7.6            compiler_4.2.2         jquerylib_0.1.4       
+[55] rlang_1.1.5            grid_4.2.2             RCurl_1.98-1.16       
+[58] rstudioapi_0.17.1      bitops_1.0-9           rmarkdown_2.29        
+[61] gtable_0.3.6           codetools_0.2-20       DBI_1.2.3             
+[64] R6_2.5.1               knitr_1.49             fastmap_1.2.0         
+[67] bit_4.5.0.1            rprojroot_2.0.4        stringi_1.8.4         
+[70] parallel_4.2.2         Rcpp_1.0.14            png_0.1-8             
+[73] vctrs_0.6.5            geneplotter_1.76.0     tidyselect_1.2.1      
+[76] xfun_0.50             </code></pre>
 </div>
 </div>
 </div>
