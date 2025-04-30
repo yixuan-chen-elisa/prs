@@ -126,77 +126,114 @@ for (trait in colnames(traits)) {
 }
 ```
 
-![MA plot PGS000163](figure/differential_expression.Rmd/ma_plot_PGS000163.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000163.png)
+![MA plot PGS000163](figure/differential_expression.Rmd/ma_plot_PGS000163.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000163.png)
 
-![MA plot PGS000164](figure/differential_expression.Rmd/ma_plot_PGS000164.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000164.png)
+![MA plot PGS000164](figure/differential_expression.Rmd/ma_plot_PGS000164.png)
+![](figure/differential_expression.Rmd/volcano_plot_PGS000164.png)
 
-![MA plot PGS000165](figure/differential_expression.Rmd/ma_plot_PGS000165.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000165.png)
+![MA plot PGS000165](figure/differential_expression.Rmd/ma_plot_PGS000165.png)
+![](figure/differential_expression.Rmd/volcano_plot_PGS000165.png)
 
-![MA plot PGS000166](figure/differential_expression.Rmd/ma_plot_PGS000166.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000166.png)
+![MA plot PGS000166](figure/differential_expression.Rmd/ma_plot_PGS000166.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000166.png)
 
-![MA plot PGS000167](figure/differential_expression.Rmd/ma_plot_PGS000167.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000167.png)
+![MA plot PGS000167](figure/differential_expression.Rmd/ma_plot_PGS000167.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000167.png)
 
-![MA plot PGS000168](figure/differential_expression.Rmd/ma_plot_PGS000168.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000168.png)
+![MA plot PGS000168](figure/differential_expression.Rmd/ma_plot_PGS000168.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000168.png)
 
-![MA plot PGS000169](figure/differential_expression.Rmd/ma_plot_PGS000169.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000169.png)
+![MA plot PGS000169](figure/differential_expression.Rmd/ma_plot_PGS000169.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000169.png)
 
-![MA plot PGS000170](figure/differential_expression.Rmd/ma_plot_PGS000170.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000170.png)
+![MA plot PGS000170](figure/differential_expression.Rmd/ma_plot_PGS000170.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000170.png)
 
-![MA plot PGS000171](figure/differential_expression.Rmd/ma_plot_PGS000171.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000171.png)
+![MA plot PGS000171](figure/differential_expression.Rmd/ma_plot_PGS000171.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000171.png)
 
-![MA plot PGS000172](figure/differential_expression.Rmd/ma_plot_PGS000172.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000172.png)
+![MA plot PGS000172](figure/differential_expression.Rmd/ma_plot_PGS000172.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000172.png)
 
-![MA plot PGS000173](figure/differential_expression.Rmd/ma_plot_PGS000173.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000173.png)
+![MA plot PGS000173](figure/differential_expression.Rmd/ma_plot_PGS000173.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000173.png)
 
-![MA plot PGS000174](figure/differential_expression.Rmd/ma_plot_PGS000174.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000174.png)
+![MA plot PGS000174](figure/differential_expression.Rmd/ma_plot_PGS000174.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000174.png)
 
-![MA plot PGS000175](figure/differential_expression.Rmd/ma_plot_PGS000175.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000175.png)
+![MA plot PGS000175](figure/differential_expression.Rmd/ma_plot_PGS000175.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000175.png)
 
-![MA plot PGS000176](figure/differential_expression.Rmd/ma_plot_PGS000176.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000176.png)
+![MA plot PGS000176](figure/differential_expression.Rmd/ma_plot_PGS000176.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000176.png)
 
-![MA plot PGS000177](figure/differential_expression.Rmd/ma_plot_PGS000177.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000177.png)
+![MA plot PGS000177](figure/differential_expression.Rmd/ma_plot_PGS000177.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000177.png)
 
-![MA plot PGS000178](figure/differential_expression.Rmd/ma_plot_PGS000178.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000178.png)
+![MA plot PGS000178](figure/differential_expression.Rmd/ma_plot_PGS000178.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000178.png)
 
-![MA plot PGS000179](figure/differential_expression.Rmd/ma_plot_PGS000179.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000179.png)
+![MA plot PGS000179](figure/differential_expression.Rmd/ma_plot_PGS000179.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000179.png)
 
-![MA plot PGS000180](figure/differential_expression.Rmd/ma_plot_PGS000180.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000180.png)
+![MA plot PGS000180](figure/differential_expression.Rmd/ma_plot_PGS000180.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000180.png)
 
-![MA plot PGS000181](figure/differential_expression.Rmd/ma_plot_PGS000181.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000181.png)
+![MA plot PGS000181](figure/differential_expression.Rmd/ma_plot_PGS000181.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000181.png)
 
-![MA plot PGS000182](figure/differential_expression.Rmd/ma_plot_PGS000182.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000182.png)
+![MA plot PGS000182](figure/differential_expression.Rmd/ma_plot_PGS000182.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000182.png)
 
-![MA plot PGS000183](figure/differential_expression.Rmd/ma_plot_PGS000183.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000183.png)
+![MA plot PGS000183](figure/differential_expression.Rmd/ma_plot_PGS000183.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000183.png)
 
-![MA plot PGS000184](figure/differential_expression.Rmd/ma_plot_PGS000184.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000184.png)
+![MA plot PGS000184](figure/differential_expression.Rmd/ma_plot_PGS000184.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000184.png)
 
-![MA plot PGS000185](figure/differential_expression.Rmd/ma_plot_PGS000185.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000185.png)
+![MA plot PGS000185](figure/differential_expression.Rmd/ma_plot_PGS000185.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000185.png)
 
-![MA plot PGS000186](figure/differential_expression.Rmd/ma_plot_PGS000186.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000186.png)
+![MA plot PGS000186](figure/differential_expression.Rmd/ma_plot_PGS000186.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000186.png)
 
-![MA plot PGS000187](figure/differential_expression.Rmd/ma_plot_PGS000187.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000187.png)
+![MA plot PGS000187](figure/differential_expression.Rmd/ma_plot_PGS000187.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000187.png)
 
-![MA plot PGS000188](figure/differential_expression.Rmd/ma_plot_PGS000188.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000188.png)
+![MA plot PGS000188](figure/differential_expression.Rmd/ma_plot_PGS000188.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000188.png)
 
-![MA plot PGS000189](figure/differential_expression.Rmd/ma_plot_PGS000189.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000189.png)
+![MA plot PGS000189](figure/differential_expression.Rmd/ma_plot_PGS000189.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000189.png)
 
-![MA plot PGS000190](figure/differential_expression.Rmd/ma_plot_PGS000190.png) ![](figure/differential_expression.Rmd/volcano_plot_PGS000190.png)
+![MA plot PGS000190](figure/differential_expression.Rmd/ma_plot_PGS000190.png) 
+![](figure/differential_expression.Rmd/volcano_plot_PGS000190.png)
 
-![MA plot Celiac_GCST90014442](figure/differential_expression.Rmd/ma_plot_Celiac_GCST90014442.png) ![](figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90014442.png)
+![MA plot Celiac_GCST90014442](figure/differential_expression.Rmd/ma_plot_Celiac_GCST90014442.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90014442.png)
 
-![MA plot Celiac_GCST90014442](figure/differential_expression.Rmd/ma_plot_Celiac_GCST90014442.png) ![](figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90014442.png)
+![MA plot Celiac_GCST90014442](figure/differential_expression.Rmd/ma_plot_Celiac_GCST90014442.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90014442.png)
 
-![MA plot Celiac_GCST90468120](figure/differential_expression.Rmd/ma_plot_Celiac_GCST90468120.png) ![](figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90468120.png)
+![MA plot Celiac_GCST90468120](figure/differential_expression.Rmd/ma_plot_Celiac_GCST90468120.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90468120.png)
 
-![MA plot IBD_GCST90013901](figure/differential_expression.Rmd/ma_plot_IBD_GCST90013901.png) ![](figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013901.png)
+![MA plot IBD_GCST90013901](figure/differential_expression.Rmd/ma_plot_IBD_GCST90013901.png) 
+![](figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013901.png)
 
-![MA plot IBD_GCST90013951](figure/differential_expression.Rmd/ma_plot_IBD_GCST90013951.png) ![](figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013951.png)
+![MA plot IBD_GCST90013951](figure/differential_expression.Rmd/ma_plot_IBD_GCST90013951.png) 
+![](figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013951.png)
 
-![MA plot LUPUS_GCST003156](figure/differential_expression.Rmd/ma_plot_LUPUS_GCST003156.png) ![](figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST003156.png)
+![MA plot LUPUS_GCST003156](figure/differential_expression.Rmd/ma_plot_LUPUS_GCST003156.png) 
+![](figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST003156.png)
 
-![MA plot LUPUS_GCST011096](figure/differential_expression.Rmd/ma_plot_LUPUS_GCST011096.png) ![](figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST011096.png)
+![MA plot LUPUS_GCST011096](figure/differential_expression.Rmd/ma_plot_LUPUS_GCST011096.png) 
+![](figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST011096.png)
 
-![MA plot T1D_GCST90000529](figure/differential_expression.Rmd/ma_plot_T1D_GCST90000529.png) ![](figure/differential_expression.Rmd/volcano_plot_T1D_GCST90000529.png)
+![MA plot T1D_GCST90000529](figure/differential_expression.Rmd/ma_plot_T1D_GCST90000529.png) 
+![](figure/differential_expression.Rmd/volcano_plot_T1D_GCST90000529.png)
 
-![MA plot T1D_GCST90014023](figure/differential_expression.Rmd/ma_plot_T1D_GCST90014023.png) ![](figure/differential_expression.Rmd/volcano_plot_T1D_GCST90014023.png)
+![MA plot T1D_GCST90014023](figure/differential_expression.Rmd/ma_plot_T1D_GCST90014023.png) 
+![](figure/differential_expression.Rmd/volcano_plot_T1D_GCST90014023.png)
 
