@@ -517,15 +517,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree7a5b0e4b564f2a60d2b440de79814384160f09fdtargetblank7a5b0e4a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree060c7acceea40b4cc08de64679980145f5ea4f37targetblank060c7aca">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/yixuan-chen-elisa/prs/tree/7a5b0e4b564f2a60d2b440de79814384160f09fd" target="_blank">7a5b0e4</a>
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/060c7acceea40b4cc08de64679980145f5ea4f37" target="_blank">060c7ac</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree7a5b0e4b564f2a60d2b440de79814384160f09fdtargetblank7a5b0e4a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree060c7acceea40b4cc08de64679980145f5ea4f37targetblank060c7aca"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -535,7 +535,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/yixuan-chen-elisa/prs/tree/7a5b0e4b564f2a60d2b440de79814384160f09fd" target="_blank">7a5b0e4</a>.
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/060c7acceea40b4cc08de64679980145f5ea4f37" target="_blank">060c7ac</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -621,6 +621,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/060c7acceea40b4cc08de64679980145f5ea4f37/analysis/differential_expression.Rmd" target="_blank">060c7ac</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-05-07
+</td>
+<td>
+wflow_publish("analysis/differential_expression.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/yixuan-chen-elisa/prs/d129b3e136dc67029de8b15f88711452342a73dd/docs/differential_expression.html" target="_blank">d129b3e</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-05-07
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -964,6 +998,8 @@ for (trait in colnames(traits)) {
   # print a summary of the results
   print(paste(&quot;Results for trait:&quot;, trait))
   print(summary(res))
+  
+  res &lt;- read.csv()
   
   # plot the MA-plot for the current trait
   png(paste0(&quot;ma_plot_quantile&quot;, trait, &quot;.png&quot;), width = 800, height = 600)
@@ -1699,9 +1735,6 @@ knitr::kable(results_df_continuous, caption = &quot;Continuous&quot;)</code></pr
 </tbody>
 </table>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000163.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000163.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000163.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000163.png" />
@@ -1710,9 +1743,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000163.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000163.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000164.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000164.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000164.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000164.png" />
@@ -1721,9 +1751,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000164.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000164.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000165.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000165.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000165.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000165.png" />
@@ -1732,9 +1759,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000165.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000165.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000166.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000166.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000166.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000166.png" />
@@ -1743,9 +1767,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000166.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000166.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000167.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000167.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000167.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000167.png" />
@@ -1754,9 +1775,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000167.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000167.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000168.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000168.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000168.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000168.png" />
@@ -1765,9 +1783,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000168.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000168.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000169.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000169.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000169.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000169.png" />
@@ -1776,9 +1791,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000169.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000169.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000170.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000170.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000170.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000170.png" />
@@ -1787,9 +1799,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000170.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000170.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000171.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000171.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000171.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000171.png" />
@@ -1798,9 +1807,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000171.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000171.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000172.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000172.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000172.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000172.png" />
@@ -1809,9 +1815,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000172.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000172.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000173.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000173.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000173.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000173.png" />
@@ -1820,9 +1823,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000173.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000173.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000174.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000174.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000174.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000174.png" />
@@ -1831,9 +1831,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000174.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000174.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000175.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000175.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000175.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000175.png" />
@@ -1842,9 +1839,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000175.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000175.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000176.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000176.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000176.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000176.png" />
@@ -1853,20 +1847,14 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000176.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000176.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000177.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000177.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000177.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000177.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_PGS000177.png" />
-<img
+’ <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000177.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000178.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000178.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000178.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000178.png" />
@@ -1875,9 +1863,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000178.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000178.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000179.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000179.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000179.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000179.png" />
@@ -1886,9 +1871,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000179.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000179.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000180.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000180.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000180.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000180.png" />
@@ -1897,9 +1879,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000180.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000180.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000181.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000181.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000181.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000181.png" />
@@ -1908,9 +1887,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000181.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000181.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000182.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000182.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000182.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000182.png" />
@@ -1919,9 +1895,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000182.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000182.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000183.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000183.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000183.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000183.png" />
@@ -1930,9 +1903,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000183.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000183.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000184.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000184.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000184.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000184.png" />
@@ -1941,9 +1911,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000184.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000184.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000185.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000185.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000185.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000185.png" />
@@ -1952,9 +1919,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000185.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000185.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000186.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000186.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000186.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000186.png" />
@@ -1963,9 +1927,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000186.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000186.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000187.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000187.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000187.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000187.png" />
@@ -1974,9 +1935,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000187.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000187.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000188.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000188.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000188.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000188.png" />
@@ -1985,9 +1943,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000188.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000188.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000189.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000189.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000189.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000189.png" />
@@ -1996,9 +1951,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000189.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000189.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000190.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000190.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000190.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000190.png" />
@@ -2007,9 +1959,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000190.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000190.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_PGS000191.png" /> <img
-src="figure/differential_expression.Rmd/ma_plot_quantilePGS000191.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_PGS000191.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000191.png" />
@@ -2018,10 +1967,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_PGS000191.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000191.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Celiac_GCST90014442.png" />
-<img
-src="figure/differential_expression.Rmd/ma_plot_quantileCeliac_GCST900144423.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90014442.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_Celiac_GCST90014442.png" />
@@ -2030,10 +1975,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_Celiac_GCST90014442.png"
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_Celiac_GCST90014442.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Celiac_GCST90468120.png" />
-<img
-src="figure/differential_expression.Rmd/ma_plot_quantileCeliac_GCST90468120.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90468120.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_Celiac_GCST90468120.png" />
@@ -2042,10 +1983,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_Celiac_GCST90468120.png"
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_Celiac_GCST90468120.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_IBD_GCST90013901.png" />
-<img
-src="figure/differential_expression.Rmd/ma_plot_quantileIBD_GCST90013901.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013901.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_IBD_GCST90013901.png" />
@@ -2054,10 +1991,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_IBD_GCST90013901.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_IBD_GCST90013901.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_IBD_GCST90013951.png" />
-<img
-src="figure/differential_expression.Rmd/ma_plot_quantileIBD_GCST90013951.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013951.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_IBD_GCST90013951.png" />
@@ -2066,10 +1999,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_IBD_GCST90013951.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_IBD_GCST90013951.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_LUPUS_GCST003156.png" />
-<img
-src="figure/differential_expression.Rmd/ma_plot_quantileLUPUS_GCST003156.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST003156.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_LUPUS_GCST003156.png" />
@@ -2078,10 +2007,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_LUPUS_GCST003156.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_LUPUS_GCST003156.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_LUPUS_GCST011096.png" />
-<img
-src="figure/differential_expression.Rmd/ma_plot_quantileLUPUS_GCST011096.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST011096.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_LUPUS_GCST011096.png" />
@@ -2090,10 +2015,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_LUPUS_GCST011096.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_LUPUS_GCST011096.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_T1D_GCST90000529.png" />
-<img
-src="figure/differential_expression.Rmd/ma_plot_quantileT1D_GCST90000529.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_T1D_GCST90000529.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_T1D_GCST90000529.png" />
@@ -2102,10 +2023,6 @@ src="figure/differential_expression.Rmd/enrichment_plot_T1D_GCST90000529.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_T1D_GCST90000529.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_T1D_GCST90014023.png" />
-<img
-src="figure/differential_expression.Rmd/ma_plot_quantileT1D_GCST90014023.png" />
-<img
 src="figure/differential_expression.Rmd/volcano_plot_T1D_GCST90014023.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_T1D_GCST90014023.png" />
