@@ -517,15 +517,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstreec5d5446df49e64e682e21fb9717e7bb438e267a6targetblankc5d5446a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstreea2649641c72080088cacd37821f9a5d7c7231166targetblanka264964a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/yixuan-chen-elisa/prs/tree/c5d5446df49e64e682e21fb9717e7bb438e267a6" target="_blank">c5d5446</a>
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/a2649641c72080088cacd37821f9a5d7c7231166" target="_blank">a264964</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstreec5d5446df49e64e682e21fb9717e7bb438e267a6targetblankc5d5446a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstreea2649641c72080088cacd37821f9a5d7c7231166targetblanka264964a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -535,7 +535,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/yixuan-chen-elisa/prs/tree/c5d5446df49e64e682e21fb9717e7bb438e267a6" target="_blank">c5d5446</a>.
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/a2649641c72080088cacd37821f9a5d7c7231166" target="_blank">a264964</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -567,6 +567,7 @@ Untracked files:
     Untracked:  data/Artery_Aorta.v8.covariates.txt
     Untracked:  data/GTEx_v8.bk
     Untracked:  data/GTEx_v8.rds
+    Untracked:  data/T2D_hmPOS_GRCh38.txt
     Untracked:  data/Whole_Blood.v8.covariates.txt
     Untracked:  data/blood_cell/
     Untracked:  data/gene_reads_2017-06-05_v8_artery_aorta.gct.gz
@@ -625,6 +626,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/a2649641c72080088cacd37821f9a5d7c7231166/analysis/differential_expression.Rmd" target="_blank">a264964</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-05-13
+</td>
+<td>
+workflowr::wflow_publish("analysis/differential_expression.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/yixuan-chen-elisa/prs/2b73cc36eaf2923feaccb6ca107242d45d039ad4/docs/differential_expression.html" target="_blank">2b73cc3</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-05-13
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -906,6 +941,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/2b73cc36eaf2923feaccb6ca107242d45d039ad4/docs/figure/differential_expression.Rmd/unnamed-chunk-1-1.png" target="_blank">2b73cc3</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-05-13
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/yixuan-chen-elisa/prs/blob/c4ece77e6e04279cb27efb04a88e27335aa144a4/docs/figure/differential_expression.Rmd/unnamed-chunk-1-1.png" target="_blank">c4ece77</a>
 </td>
 <td>
@@ -1102,7 +1148,7 @@ for (file in files) {
   
   gse &lt;- cbind(gse, FoldEnrich = gse$GeneRatio_num/gse$BgRatio_num)
   
-  enrich_plot &lt;- plotEnrich(gse, plot_type = &quot;dot&quot;, scale_ratio = 1.5) +
+  enrich_plot &lt;- plotEnrich(gse[1:20,], plot_type = &quot;dot&quot;, scale_ratio = 0.2) +
     labs(title = paste(&quot;Continuous: Enrichment plot for&quot;, trait)) + 
     theme(plot.title = element_text(size = 10)) 
   enrich_plot
