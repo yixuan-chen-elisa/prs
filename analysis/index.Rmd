@@ -14,13 +14,11 @@ Welcome to my research website.
 
 - [Data Description](PRS_data_info.html)
 
-# PRS Calculation
+# Differential Expression
 
 - [Obtain PRS for each trait](PRS.html)
 
-# Differential Expression
-
-- [Create Metadata (PRS + PCs + Sex)](metadata.html)
+- [Create Metadata PRS + PCs + Sex)](metadata.html)
 
 - [Normalization](expression_normalization.html)
 

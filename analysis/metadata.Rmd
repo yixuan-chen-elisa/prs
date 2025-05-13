@@ -39,6 +39,28 @@ prs_blood <- prs_blood[prs_blood$sample_id %in% matching_samples, ]
 prs_immune <- prs_immune[prs_immune$sample_id %in% matching_samples, ]
 ```
 
+# Whole blood covariates 
+```{r}
+cov_file <- "data/Whole_Blood.v8.covariates.txt"
+cov <- fread(cov_file, header = T, stringsAsFactors = FALSE)
+cov <- cov %>% filter(ID %in% c(paste0("PC", 1:5), "sex"))
+col <- cov$ID
+cov <- as.matrix(t(cov[, -1])) 
+colnames(cov) <- col
+```
+
+# Create metadata for continuous traits
+```{r}
+# continuous traits
+metadata <- cbind(cov, prs_blood[, 2:30], prs_immune[,2:9])
+rownames(metadata) <- matching_samples
+metadata$sex <- as.factor(metadata$sex)
+head(metadata)
+write.table(metadata, "analysis/metadata.txt", sep="\t", row.names = T,
+            col.names = T, quote = F)
+```
+
+
 # Stratify by PRS level (High vs Median vs Low)
 ## Blood trait
 ```{r}
@@ -53,7 +75,7 @@ for (i in 2:ncol(prs_blood)) {
   group <- ifelse(prs_trait > p75, "Top 25%", "Remaining")
 
   # Assign the group to the new column for this trait
-  prs_blood[[paste0("group_", colnames(prs_blood)[i])]] <- factor(group, 
+  prs_blood[[colnames(prs_blood)[i]]] <- factor(group, 
                                       levels = c("Remaining", "Top 25%"))
 }
 ```
@@ -71,28 +93,18 @@ for (i in 2:ncol(prs_immune)) {
   group <- ifelse(prs_trait > p75, "Top 25%", "Remaining")
 
   # Assign the group to the new column for this trait
-  prs_immune[[paste0("group_", colnames(prs_immune)[i])]] <- factor(group, 
+  prs_immune[[colnames(prs_immune)[i]]] <- factor(group, 
                                       levels = c("Remaining", "Top 25%"))
 }
 ```
 
-# Whole blood covariates 
+# Create metadata for quantile traits into top 25% & remaining
 ```{r}
-cov_file <- "data/Whole_Blood.v8.covariates.txt"
-cov <- fread(cov_file, header = T, stringsAsFactors = FALSE)
-cov <- cov %>% filter(ID %in% c(paste0("PC", 1:5), "sex"))
-col <- cov$ID
-cov <- as.matrix(t(cov[, -1])) 
-colnames(cov) <- col
-```
-
-# Combine for metadata
-```{r}
-metadata <- cbind(cov, prs_blood[, 2:30], prs_immune[,2:9], prs_blood[, 31:59], prs_immune[,10:17])
+metadata <- cbind(cov, prs_blood[, 2:30], prs_immune[,2:9])
 rownames(metadata) <- matching_samples
 metadata$sex <- as.factor(metadata$sex)
 head(metadata)
-write.table(metadata, "analysis/metadata.txt", sep="\t", row.names = T,
+write.table(metadata, "analysis/metadata_quantile.txt", sep="\t", row.names = T,
             col.names = T, quote = F)
 ```
 

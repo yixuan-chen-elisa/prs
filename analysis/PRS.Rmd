@@ -9,6 +9,7 @@ library(data.table)
 library(bigsnpr)
 library(ggplot2)
 library(corrplot)
+library(pheatmap)
 ```
 
 # Function to calculate PRS for each SNP file
@@ -209,7 +210,8 @@ head(final_prs_df)
 
 # Check the distribution of PRS for each blood cell trait
 ```{r}
-prs_blood <- fread("analysis/prs_blood_cell.txt", header = TRUE, stringsAsFactors = FALSE)
+prs_blood <- fread("analysis/prs_blood_cell.txt", header = TRUE, 
+                   stringsAsFactors = FALSE)
 head(prs_blood)
 # Summary statistics for each PRS column (trait)
 summary(prs_blood[,-1]) 
@@ -259,23 +261,17 @@ for (trait in names(prs_blood)[-1]) {  # Skip the sample_id column
 
 ```{r}
 # Calculate the correlation matrix
-cor_matrix <- cor(prs_blood[, -1], use = "complete.obs")
+cor_matrix <- cor(prs_blood[, -1], use = "pairwise.complete.obs")
 
 # Create the heatmap using corrplot
-corrplot(cor_matrix, 
-         method = "color", 
-         col = colorRampPalette(c("blue", "white", "red"))(200), 
-         addCoef.col = "black", # Add correlation coefficients to the plot
-         number.cex = 0.4, # Adjust the font size of the numbers
-         diag = FALSE, # Optionally remove diagonal (self-correlation)
-         tl.col = "black", tl.cex = 0.5) # Make the column names smaller
+pheatmap(cor_matrix,show_rownames = F, fontsize_col = 6.5, 
+         border_color = NA, angle_col = 45)
 ```
-
-The correlation plot shows that some traits are more strongly correlated than others due to two main factors: 1) Traits mapping to the same ontological category, such as PGS000169, PGS000170, PGS000189, and PGS000190, which are all associated with reticulocyte count and thus exhibit high correlation; and 2) One trait measuring count and the other measuring percentage, as seen with PGS000163 (Basophil count) and PGS000164 (Basophil percentage of white cells), which are highly correlated.
 
 # Check the distribution of PRS for each immune trait
 ```{r}
-prs_immune <- fread("analysis/prs_immune.txt", header = TRUE, stringsAsFactors = FALSE)
+prs_immune <- fread("analysis/prs_immune.txt", header = TRUE, 
+                    stringsAsFactors = FALSE)
 head(prs_immune)
 # Summary statistics for each PRS column (trait)
 summary(prs_immune[,-1]) 
@@ -330,14 +326,10 @@ Compared to other traits, LUPUS_GCST011096 and LUPUS_GCST003156 traits are more 
 cor_matrix <- cor(prs_immune[, -1], use = "complete.obs")
 
 # Create the heatmap using corrplot
-corrplot(cor_matrix, 
-         method = "color", 
-         col = colorRampPalette(c("blue", "white", "red"))(200), 
-         addCoef.col = "black", # Add correlation coefficients to the plot
-         number.cex = 0.4, # Adjust the font size of the numbers
-         diag = FALSE, # Optionally remove diagonal (self-correlation)
-         tl.col = "black", tl.cex = 0.5) # Make the column names smaller
+pheatmap(cor_matrix, show_rownames = F, fontsize_col = 7.5, 
+         border_color = NA, angle_col = 45)
 ```
 
 Similarly, PRS for the same trait is highly correlated. 
+
 
