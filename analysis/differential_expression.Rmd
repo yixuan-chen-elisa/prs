@@ -236,7 +236,7 @@ for (file in files) {
   
   gse <- cbind(gse, FoldEnrich = gse$GeneRatio_num/gse$BgRatio_num)
   
-  enrich_plot <- plotEnrich(gse, plot_type = "dot", scale_ratio = 1.5) +
+  enrich_plot <- plotEnrich(gse[1:20,], plot_type = "dot", scale_ratio = 0.2) +
     labs(title = paste("Continuous: Enrichment plot for", trait)) + 
     theme(plot.title = element_text(size = 10)) 
   enrich_plot
