@@ -386,7 +386,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-05-07
+<strong>Last updated:</strong> 2025-05-13
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -517,15 +517,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree7a5b0e4b564f2a60d2b440de79814384160f09fdtargetblank7a5b0e4a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstreec5d5446df49e64e682e21fb9717e7bb438e267a6targetblankc5d5446a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/yixuan-chen-elisa/prs/tree/7a5b0e4b564f2a60d2b440de79814384160f09fd" target="_blank">7a5b0e4</a>
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/c5d5446df49e64e682e21fb9717e7bb438e267a6" target="_blank">c5d5446</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree7a5b0e4b564f2a60d2b440de79814384160f09fdtargetblank7a5b0e4a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstreec5d5446df49e64e682e21fb9717e7bb438e267a6targetblankc5d5446a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -535,7 +535,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/yixuan-chen-elisa/prs/tree/7a5b0e4b564f2a60d2b440de79814384160f09fd" target="_blank">7a5b0e4</a>.
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/c5d5446df49e64e682e21fb9717e7bb438e267a6" target="_blank">c5d5446</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -562,11 +562,14 @@ Untracked files:
     Untracked:  analysis/metadata_quantile.txt
     Untracked:  analysis/normalized_counts.rda
     Untracked:  analysis/quantile/
+    Untracked:  analysis/validation.Rmd
     Untracked:  analysis/vst norm counts.rda
+    Untracked:  data/Artery_Aorta.v8.covariates.txt
     Untracked:  data/GTEx_v8.bk
     Untracked:  data/GTEx_v8.rds
     Untracked:  data/Whole_Blood.v8.covariates.txt
     Untracked:  data/blood_cell/
+    Untracked:  data/gene_reads_2017-06-05_v8_artery_aorta.gct.gz
     Untracked:  data/gene_reads_2017-06-05_v8_whole_blood.gct
     Untracked:  data/gene_tpm_2017-06-05_v8_whole_blood.gct.gz
     Untracked:  data/immune/
@@ -575,6 +578,7 @@ Untracked files:
 Unstaged changes:
     Deleted:    analysis/QC.Rmd
     Deleted:    analysis/normalized_counts.txt
+    Modified:   analysis/prs_blood_cell.txt
     Modified:   prs.Rproj
 
 </code></pre>
@@ -620,6 +624,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/yixuan-chen-elisa/prs/d129b3e136dc67029de8b15f88711452342a73dd/docs/metadata.html" target="_blank">d129b3e</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-05-07
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -759,62 +780,134 @@ metadata &lt;- cbind(cov, prs_blood[, 2:30], prs_immune[,2:9])
 rownames(metadata) &lt;- matching_samples
 metadata$sex &lt;- as.factor(metadata$sex)
 head(metadata)</code></pre>
-<pre><code>       PC1     PC2     PC3     PC4     PC5    sex PGS000163 PGS000164 PGS000165
-     &lt;num&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt; &lt;fctr&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;
-1:  0.0154 -0.0093  0.0107 -0.0038 -0.0083      1 0.5410653 1.0156237 -3.584264
-2:  0.0139 -0.0097  0.0067 -0.0144  0.0296      2 0.2568363 0.9157099 -4.195580
-3:  0.0145 -0.0093  0.0327  0.0056  0.0510      2 0.4498869 0.9594237 -4.354380
-4: -0.0728 -0.0077 -0.0044 -0.0146  0.0063      1 0.2381773 0.8845315 -3.847279
-5:  0.0106  0.0037 -0.0116 -0.0239 -0.0036      2 0.0698766 0.6832743 -3.697957
-6:  0.0139 -0.0056 -0.0096 -0.0022  0.0177      1 0.2181521 0.8695345 -3.709683
-   PGS000166  PGS000167 PGS000168 PGS000169 PGS000170 PGS000171  PGS000172
-       &lt;num&gt;      &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;      &lt;num&gt;
-1: -3.380372  0.0788395  1.386430  4.759111  4.850884  3.073905 -0.0895070
-2: -3.219698  0.4280533  2.024007  4.202698  4.515898  3.180095  0.1487145
-3: -3.727362 -0.3491181  1.248190  4.561965  4.653108  3.066648  0.0183342
-4: -3.262860  0.2038707  1.859773  4.206057  4.560175  2.724009 -0.0072076
-5: -3.324072  0.3378556  2.139808  4.207088  4.453233  2.500608 -0.4254034
-6: -3.616119 -0.0546889  1.734757  4.300133  4.315553  2.662584 -0.1073850
-    PGS000173 PGS000174 PGS000175 PGS000176 PGS000177  PGS000178 PGS000179
-        &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;      &lt;num&gt;     &lt;num&gt;
-1:  0.2374592  2.636155  1.632886  2.411277 2.0512947  0.9079310 0.7683186
-2:  0.2513990  2.790015  1.781026  2.681980 1.2232565  0.0900392 1.0050662
-3: -0.0272472  2.227260  1.870210  1.707190 1.2055734  0.5576229 0.5335173
-4: -0.0555840  2.433216  1.923650  1.997743 0.9881165 -0.4985315 0.9883115
-5:  0.0748983  3.202261  2.100451  2.924678 1.1199602  0.2586746 0.3808877
-6:  0.3191792  3.315746  1.901161  3.245288 1.0788232  0.1757293 0.9693893
-    PGS000180  PGS000181  PGS000182  PGS000183 PGS000184 PGS000185 PGS000186
-        &lt;num&gt;      &lt;num&gt;      &lt;num&gt;      &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;
-1: -0.6711704 -0.1915244 -0.7245853 -0.3556682  3.317813  1.995272 1.2545477
-2: -0.7286477 -0.0609871 -1.0541924 -0.5039774  2.423712  2.592336 0.6764149
-3: -0.9191123  0.0123445 -0.5928827  0.0069968  2.904152  1.301701 1.5763316
-4: -1.0593541 -0.1854266 -0.7716597 -0.1767276  3.195600  2.720634 1.2843909
-5: -0.7623533 -0.1125280 -1.1219023 -0.0572866  3.074190  2.202220 1.0326955
-6:  0.1781564  0.7304979 -1.2248109 -0.1422708  2.890912  1.622803 1.4565123
-    PGS000187 PGS000188 PGS000189 PGS000190  PGS000191 Celiac_GCST90014442
-        &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;      &lt;num&gt;               &lt;num&gt;
-1:  0.5340879 0.9369695  4.549213  4.758601 -0.5033859         -0.26979202
-2:  0.9435796 1.2345469  4.160999  4.367083 -0.8890277         -0.29874466
-3:  0.6182782 1.6481568  4.525393  4.599732 -0.6487270         -0.30873975
-4:  0.3390140 1.0718717  4.426697  4.391039 -0.4018935         -0.08861998
-5:  0.8687638 0.2488524  4.553244  4.626704 -0.9232945         -0.19971851
-6: -0.1164535 0.9978962  4.165813  4.265575 -0.9320550         -0.02010055
-   Celiac_GCST90468120 IBD_GCST90013901 IBD_GCST90013951 T1D_GCST90000529
-                 &lt;num&gt;            &lt;num&gt;            &lt;num&gt;            &lt;num&gt;
-1:           -1.664964       -0.9357205        -1.031167         -3.54534
-2:           -2.266667       -0.9111857        -1.023133        -20.04924
-3:           -2.037649       -0.9511192        -1.084680        -19.21859
-4:           -2.234620       -0.9120145        -1.027695        -24.05473
-5:           -2.091880       -0.8808438        -1.034828        -18.64035
-6:           -2.856789       -0.9944172        -1.112842        -16.68449
-   T1D_GCST90014023 LUPUS_GCST003156 LUPUS_GCST011096
-              &lt;num&gt;            &lt;num&gt;            &lt;num&gt;
-1:        -60.34438        5.0958297       5.11865538
-2:        -66.73086       -1.0720317      -1.10548637
-3:        -54.94239       -2.6333984      -2.91795672
-4:        -58.12421        0.1342057       0.04848093
-5:        -61.99394        6.5632418       7.13558573
-6:        -59.92546        1.0688929       1.10597115</code></pre>
+<pre><code>       PC1     PC2     PC3     PC4     PC5    sex Basophil count
+     &lt;num&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt; &lt;fctr&gt;          &lt;num&gt;
+1:  0.0154 -0.0093  0.0107 -0.0038 -0.0083      1      0.5410653
+2:  0.0139 -0.0097  0.0067 -0.0144  0.0296      2      0.2568363
+3:  0.0145 -0.0093  0.0327  0.0056  0.0510      2      0.4498869
+4: -0.0728 -0.0077 -0.0044 -0.0146  0.0063      1      0.2381773
+5:  0.0106  0.0037 -0.0116 -0.0239 -0.0036      2      0.0698766
+6:  0.0139 -0.0056 -0.0096 -0.0022  0.0177      1      0.2181521
+   Basophil percentage of white cells Eosinophil count
+                                &lt;num&gt;            &lt;num&gt;
+1:                          1.0156237        -3.584264
+2:                          0.9157099        -4.195580
+3:                          0.9594237        -4.354380
+4:                          0.8845315        -3.847279
+5:                          0.6832743        -3.697957
+6:                          0.8695345        -3.709683
+   Eosinophil percentage of white cells Hematocrit Hemoglobin concentration
+                                  &lt;num&gt;      &lt;num&gt;                    &lt;num&gt;
+1:                            -3.380372  0.0788395                 1.386430
+2:                            -3.219698  0.4280533                 2.024007
+3:                            -3.727362 -0.3491181                 1.248190
+4:                            -3.262860  0.2038707                 1.859773
+5:                            -3.324072  0.3378556                 2.139808
+6:                            -3.616119 -0.0546889                 1.734757
+   High light scatter reticulocyte count
+                                   &lt;num&gt;
+1:                              4.759111
+2:                              4.202698
+3:                              4.561965
+4:                              4.206057
+5:                              4.207088
+6:                              4.300133
+   High light scatter reticulocyte percentage of red cells
+                                                     &lt;num&gt;
+1:                                                4.850884
+2:                                                4.515898
+3:                                                4.653108
+4:                                                4.560175
+5:                                                4.453233
+6:                                                4.315553
+   Immature fraction of reticulocytes Lymphocyte count
+                                &lt;num&gt;            &lt;num&gt;
+1:                           3.073905       -0.0895070
+2:                           3.180095        0.1487145
+3:                           3.066648        0.0183342
+4:                           2.724009       -0.0072076
+5:                           2.500608       -0.4254034
+6:                           2.662584       -0.1073850
+   Lymphocyte percentage of white cells Mean corpuscular hemoglobin
+                                  &lt;num&gt;                       &lt;num&gt;
+1:                            0.2374592                    2.636155
+2:                            0.2513990                    2.790015
+3:                           -0.0272472                    2.227260
+4:                           -0.0555840                    2.433216
+5:                            0.0748983                    3.202261
+6:                            0.3191792                    3.315746
+   Mean corpuscular hemoglobin concentration Mean corpuscular volume
+                                       &lt;num&gt;                   &lt;num&gt;
+1:                                  1.632886                2.411277
+2:                                  1.781026                2.681980
+3:                                  1.870210                1.707190
+4:                                  1.923650                1.997743
+5:                                  2.100451                2.924678
+6:                                  1.901161                3.245288
+   Monocyte count Monocyte percentage of white cells Mean platelet volume
+            &lt;num&gt;                              &lt;num&gt;                &lt;num&gt;
+1:      2.0512947                          0.9079310            0.7683186
+2:      1.2232565                          0.0900392            1.0050662
+3:      1.2055734                          0.5576229            0.5335173
+4:      0.9881165                         -0.4985315            0.9883115
+5:      1.1199602                          0.2586746            0.3808877
+6:      1.0788232                          0.1757293            0.9693893
+   Mean reticulocyte volume Mean sphered corpuscular volume Neutrophil count
+                      &lt;num&gt;                           &lt;num&gt;            &lt;num&gt;
+1:               -0.6711704                      -0.1915244       -0.7245853
+2:               -0.7286477                      -0.0609871       -1.0541924
+3:               -0.9191123                       0.0123445       -0.5928827
+4:               -1.0593541                      -0.1854266       -0.7716597
+5:               -0.7623533                      -0.1125280       -1.1219023
+6:                0.1781564                       0.7304979       -1.2248109
+   Neutrophil percentage of white cells Platelet crit
+                                  &lt;num&gt;         &lt;num&gt;
+1:                           -0.3556682      3.317813
+2:                           -0.5039774      2.423712
+3:                            0.0069968      2.904152
+4:                           -0.1767276      3.195600
+5:                           -0.0572866      3.074190
+6:                           -0.1422708      2.890912
+   Platelet distribution width Platelet count Red blood cell count
+                         &lt;num&gt;          &lt;num&gt;                &lt;num&gt;
+1:                    1.995272      1.2545477            0.5340879
+2:                    2.592336      0.6764149            0.9435796
+3:                    1.301701      1.5763316            0.6182782
+4:                    2.720634      1.2843909            0.3390140
+5:                    2.202220      1.0326955            0.8687638
+6:                    1.622803      1.4565123           -0.1164535
+   Red cell distribution width Reticulocyte count
+                         &lt;num&gt;              &lt;num&gt;
+1:                   0.9369695           4.549213
+2:                   1.2345469           4.160999
+3:                   1.6481568           4.525393
+4:                   1.0718717           4.426697
+5:                   0.2488524           4.553244
+6:                   0.9978962           4.165813
+   Reticulocyte fraction of red cells White blood cell count
+                                &lt;num&gt;                  &lt;num&gt;
+1:                           4.758601             -0.5033859
+2:                           4.367083             -0.8890277
+3:                           4.599732             -0.6487270
+4:                           4.391039             -0.4018935
+5:                           4.626704             -0.9232945
+6:                           4.265575             -0.9320550
+   Celiac_GCST90014442 Celiac_GCST90468120 IBD_GCST90013901 IBD_GCST90013951
+                 &lt;num&gt;               &lt;num&gt;            &lt;num&gt;            &lt;num&gt;
+1:         -0.26979202           -1.664964       -0.9357205        -1.031167
+2:         -0.29874466           -2.266667       -0.9111857        -1.023133
+3:         -0.30873975           -2.037649       -0.9511192        -1.084680
+4:         -0.08861998           -2.234620       -0.9120145        -1.027695
+5:         -0.19971851           -2.091880       -0.8808438        -1.034828
+6:         -0.02010055           -2.856789       -0.9944172        -1.112842
+   T1D_GCST90000529 T1D_GCST90014023 LUPUS_GCST003156 LUPUS_GCST011096
+              &lt;num&gt;            &lt;num&gt;            &lt;num&gt;            &lt;num&gt;
+1:         -3.54534        -60.34438        5.0958297       5.11865538
+2:        -20.04924        -66.73086       -1.0720317      -1.10548637
+3:        -19.21859        -54.94239       -2.6333984      -2.91795672
+4:        -24.05473        -58.12421        0.1342057       0.04848093
+5:        -18.64035        -61.99394        6.5632418       7.13558573
+6:        -16.68449        -59.92546        1.0688929       1.10597115</code></pre>
 <pre class="r"><code>write.table(metadata, &quot;analysis/metadata.txt&quot;, sep=&quot;\t&quot;, row.names = T,
             col.names = T, quote = F)</code></pre>
 </div>
@@ -864,62 +957,134 @@ remaining</h1>
 rownames(metadata) &lt;- matching_samples
 metadata$sex &lt;- as.factor(metadata$sex)
 head(metadata)</code></pre>
-<pre><code>       PC1     PC2     PC3     PC4     PC5    sex PGS000163 PGS000164 PGS000165
-     &lt;num&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt; &lt;fctr&gt;    &lt;fctr&gt;    &lt;fctr&gt;    &lt;fctr&gt;
-1:  0.0154 -0.0093  0.0107 -0.0038 -0.0083      1   Top 25%   Top 25%   Top 25%
-2:  0.0139 -0.0097  0.0067 -0.0144  0.0296      2 Remaining Remaining Remaining
-3:  0.0145 -0.0093  0.0327  0.0056  0.0510      2   Top 25% Remaining Remaining
-4: -0.0728 -0.0077 -0.0044 -0.0146  0.0063      1 Remaining Remaining Remaining
-5:  0.0106  0.0037 -0.0116 -0.0239 -0.0036      2 Remaining Remaining   Top 25%
-6:  0.0139 -0.0056 -0.0096 -0.0022  0.0177      1 Remaining Remaining   Top 25%
-   PGS000166 PGS000167 PGS000168 PGS000169 PGS000170 PGS000171 PGS000172
-      &lt;fctr&gt;    &lt;fctr&gt;    &lt;fctr&gt;    &lt;fctr&gt;    &lt;fctr&gt;    &lt;fctr&gt;    &lt;fctr&gt;
-1: Remaining Remaining Remaining   Top 25%   Top 25%   Top 25% Remaining
-2: Remaining   Top 25%   Top 25% Remaining Remaining   Top 25%   Top 25%
-3: Remaining Remaining Remaining   Top 25%   Top 25%   Top 25% Remaining
-4: Remaining   Top 25%   Top 25% Remaining Remaining Remaining Remaining
-5: Remaining   Top 25%   Top 25% Remaining Remaining Remaining Remaining
-6: Remaining Remaining Remaining Remaining Remaining Remaining Remaining
-   PGS000173 PGS000174 PGS000175 PGS000176 PGS000177 PGS000178 PGS000179
-      &lt;fctr&gt;    &lt;fctr&gt;    &lt;fctr&gt;    &lt;fctr&gt;    &lt;fctr&gt;    &lt;fctr&gt;    &lt;fctr&gt;
-1:   Top 25% Remaining Remaining Remaining   Top 25%   Top 25% Remaining
-2:   Top 25% Remaining Remaining Remaining Remaining Remaining Remaining
-3: Remaining Remaining Remaining Remaining Remaining   Top 25% Remaining
-4: Remaining Remaining Remaining Remaining Remaining Remaining Remaining
-5: Remaining   Top 25%   Top 25%   Top 25% Remaining Remaining Remaining
-6:   Top 25%   Top 25% Remaining   Top 25% Remaining Remaining Remaining
-   PGS000180 PGS000181 PGS000182 PGS000183 PGS000184 PGS000185 PGS000186
-      &lt;fctr&gt;    &lt;fctr&gt;    &lt;fctr&gt;    &lt;fctr&gt;    &lt;fctr&gt;    &lt;fctr&gt;    &lt;fctr&gt;
-1: Remaining Remaining Remaining Remaining   Top 25% Remaining   Top 25%
-2: Remaining Remaining Remaining Remaining Remaining   Top 25% Remaining
-3: Remaining Remaining   Top 25% Remaining Remaining Remaining   Top 25%
-4: Remaining Remaining Remaining Remaining   Top 25%   Top 25%   Top 25%
-5: Remaining Remaining Remaining Remaining   Top 25% Remaining Remaining
-6:   Top 25%   Top 25% Remaining Remaining Remaining Remaining   Top 25%
-   PGS000187 PGS000188 PGS000189 PGS000190 PGS000191 Celiac_GCST90014442
-      &lt;fctr&gt;    &lt;fctr&gt;    &lt;fctr&gt;    &lt;fctr&gt;    &lt;fctr&gt;              &lt;fctr&gt;
-1: Remaining Remaining   Top 25%   Top 25% Remaining           Remaining
-2:   Top 25%   Top 25% Remaining Remaining Remaining           Remaining
-3: Remaining   Top 25%   Top 25% Remaining Remaining           Remaining
-4: Remaining Remaining Remaining Remaining   Top 25%             Top 25%
-5:   Top 25% Remaining   Top 25% Remaining Remaining           Remaining
-6: Remaining Remaining Remaining Remaining Remaining             Top 25%
-   Celiac_GCST90468120 IBD_GCST90013901 IBD_GCST90013951 T1D_GCST90000529
-                &lt;fctr&gt;           &lt;fctr&gt;           &lt;fctr&gt;           &lt;fctr&gt;
-1:             Top 25%        Remaining          Top 25%          Top 25%
-2:           Remaining          Top 25%          Top 25%        Remaining
-3:           Remaining        Remaining        Remaining        Remaining
-4:           Remaining          Top 25%          Top 25%        Remaining
-5:           Remaining          Top 25%          Top 25%        Remaining
-6:           Remaining        Remaining        Remaining        Remaining
-   T1D_GCST90014023 LUPUS_GCST003156 LUPUS_GCST011096
-             &lt;fctr&gt;           &lt;fctr&gt;           &lt;fctr&gt;
-1:        Remaining          Top 25%          Top 25%
-2:        Remaining        Remaining        Remaining
-3:          Top 25%        Remaining        Remaining
-4:        Remaining        Remaining        Remaining
-5:        Remaining          Top 25%          Top 25%
-6:        Remaining        Remaining        Remaining</code></pre>
+<pre><code>       PC1     PC2     PC3     PC4     PC5    sex Basophil count
+     &lt;num&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt; &lt;fctr&gt;         &lt;fctr&gt;
+1:  0.0154 -0.0093  0.0107 -0.0038 -0.0083      1        Top 25%
+2:  0.0139 -0.0097  0.0067 -0.0144  0.0296      2      Remaining
+3:  0.0145 -0.0093  0.0327  0.0056  0.0510      2        Top 25%
+4: -0.0728 -0.0077 -0.0044 -0.0146  0.0063      1      Remaining
+5:  0.0106  0.0037 -0.0116 -0.0239 -0.0036      2      Remaining
+6:  0.0139 -0.0056 -0.0096 -0.0022  0.0177      1      Remaining
+   Basophil percentage of white cells Eosinophil count
+                               &lt;fctr&gt;           &lt;fctr&gt;
+1:                            Top 25%          Top 25%
+2:                          Remaining        Remaining
+3:                          Remaining        Remaining
+4:                          Remaining        Remaining
+5:                          Remaining          Top 25%
+6:                          Remaining          Top 25%
+   Eosinophil percentage of white cells Hematocrit Hemoglobin concentration
+                                 &lt;fctr&gt;     &lt;fctr&gt;                   &lt;fctr&gt;
+1:                            Remaining  Remaining                Remaining
+2:                            Remaining    Top 25%                  Top 25%
+3:                            Remaining  Remaining                Remaining
+4:                            Remaining    Top 25%                  Top 25%
+5:                            Remaining    Top 25%                  Top 25%
+6:                            Remaining  Remaining                Remaining
+   High light scatter reticulocyte count
+                                  &lt;fctr&gt;
+1:                               Top 25%
+2:                             Remaining
+3:                               Top 25%
+4:                             Remaining
+5:                             Remaining
+6:                             Remaining
+   High light scatter reticulocyte percentage of red cells
+                                                    &lt;fctr&gt;
+1:                                                 Top 25%
+2:                                               Remaining
+3:                                                 Top 25%
+4:                                               Remaining
+5:                                               Remaining
+6:                                               Remaining
+   Immature fraction of reticulocytes Lymphocyte count
+                               &lt;fctr&gt;           &lt;fctr&gt;
+1:                            Top 25%        Remaining
+2:                            Top 25%          Top 25%
+3:                            Top 25%        Remaining
+4:                          Remaining        Remaining
+5:                          Remaining        Remaining
+6:                          Remaining        Remaining
+   Lymphocyte percentage of white cells Mean corpuscular hemoglobin
+                                 &lt;fctr&gt;                      &lt;fctr&gt;
+1:                              Top 25%                   Remaining
+2:                              Top 25%                   Remaining
+3:                            Remaining                   Remaining
+4:                            Remaining                   Remaining
+5:                            Remaining                     Top 25%
+6:                              Top 25%                     Top 25%
+   Mean corpuscular hemoglobin concentration Mean corpuscular volume
+                                      &lt;fctr&gt;                  &lt;fctr&gt;
+1:                                 Remaining               Remaining
+2:                                 Remaining               Remaining
+3:                                 Remaining               Remaining
+4:                                 Remaining               Remaining
+5:                                   Top 25%                 Top 25%
+6:                                 Remaining                 Top 25%
+   Monocyte count Monocyte percentage of white cells Mean platelet volume
+           &lt;fctr&gt;                             &lt;fctr&gt;               &lt;fctr&gt;
+1:        Top 25%                            Top 25%            Remaining
+2:      Remaining                          Remaining            Remaining
+3:      Remaining                            Top 25%            Remaining
+4:      Remaining                          Remaining            Remaining
+5:      Remaining                          Remaining            Remaining
+6:      Remaining                          Remaining            Remaining
+   Mean reticulocyte volume Mean sphered corpuscular volume Neutrophil count
+                     &lt;fctr&gt;                          &lt;fctr&gt;           &lt;fctr&gt;
+1:                Remaining                       Remaining        Remaining
+2:                Remaining                       Remaining        Remaining
+3:                Remaining                       Remaining          Top 25%
+4:                Remaining                       Remaining        Remaining
+5:                Remaining                       Remaining        Remaining
+6:                  Top 25%                         Top 25%        Remaining
+   Neutrophil percentage of white cells Platelet crit
+                                 &lt;fctr&gt;        &lt;fctr&gt;
+1:                            Remaining       Top 25%
+2:                            Remaining     Remaining
+3:                            Remaining     Remaining
+4:                            Remaining       Top 25%
+5:                            Remaining       Top 25%
+6:                            Remaining     Remaining
+   Platelet distribution width Platelet count Red blood cell count
+                        &lt;fctr&gt;         &lt;fctr&gt;               &lt;fctr&gt;
+1:                   Remaining        Top 25%            Remaining
+2:                     Top 25%      Remaining              Top 25%
+3:                   Remaining        Top 25%            Remaining
+4:                     Top 25%        Top 25%            Remaining
+5:                   Remaining      Remaining              Top 25%
+6:                   Remaining        Top 25%            Remaining
+   Red cell distribution width Reticulocyte count
+                        &lt;fctr&gt;             &lt;fctr&gt;
+1:                   Remaining            Top 25%
+2:                     Top 25%          Remaining
+3:                     Top 25%            Top 25%
+4:                   Remaining          Remaining
+5:                   Remaining            Top 25%
+6:                   Remaining          Remaining
+   Reticulocyte fraction of red cells White blood cell count
+                               &lt;fctr&gt;                 &lt;fctr&gt;
+1:                            Top 25%              Remaining
+2:                          Remaining              Remaining
+3:                          Remaining              Remaining
+4:                          Remaining                Top 25%
+5:                          Remaining              Remaining
+6:                          Remaining              Remaining
+   Celiac_GCST90014442 Celiac_GCST90468120 IBD_GCST90013901 IBD_GCST90013951
+                &lt;fctr&gt;              &lt;fctr&gt;           &lt;fctr&gt;           &lt;fctr&gt;
+1:           Remaining             Top 25%        Remaining          Top 25%
+2:           Remaining           Remaining          Top 25%          Top 25%
+3:           Remaining           Remaining        Remaining        Remaining
+4:             Top 25%           Remaining          Top 25%          Top 25%
+5:           Remaining           Remaining          Top 25%          Top 25%
+6:             Top 25%           Remaining        Remaining        Remaining
+   T1D_GCST90000529 T1D_GCST90014023 LUPUS_GCST003156 LUPUS_GCST011096
+             &lt;fctr&gt;           &lt;fctr&gt;           &lt;fctr&gt;           &lt;fctr&gt;
+1:          Top 25%        Remaining          Top 25%          Top 25%
+2:        Remaining        Remaining        Remaining        Remaining
+3:        Remaining          Top 25%        Remaining        Remaining
+4:        Remaining        Remaining        Remaining        Remaining
+5:        Remaining        Remaining          Top 25%          Top 25%
+6:        Remaining        Remaining        Remaining        Remaining</code></pre>
 <pre class="r"><code>write.table(metadata, &quot;analysis/metadata_quantile.txt&quot;, sep=&quot;\t&quot;, row.names = T,
             col.names = T, quote = F)</code></pre>
 <br>

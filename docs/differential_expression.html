@@ -386,7 +386,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-05-07
+<strong>Last updated:</strong> 2025-05-13
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -517,15 +517,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree060c7acceea40b4cc08de64679980145f5ea4f37targetblank060c7aca">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstreec5d5446df49e64e682e21fb9717e7bb438e267a6targetblankc5d5446a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/yixuan-chen-elisa/prs/tree/060c7acceea40b4cc08de64679980145f5ea4f37" target="_blank">060c7ac</a>
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/c5d5446df49e64e682e21fb9717e7bb438e267a6" target="_blank">c5d5446</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree060c7acceea40b4cc08de64679980145f5ea4f37targetblank060c7aca"
+id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstreec5d5446df49e64e682e21fb9717e7bb438e267a6targetblankc5d5446a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -535,7 +535,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/yixuan-chen-elisa/prs/tree/060c7acceea40b4cc08de64679980145f5ea4f37" target="_blank">060c7ac</a>.
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/c5d5446df49e64e682e21fb9717e7bb438e267a6" target="_blank">c5d5446</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -562,11 +562,14 @@ Untracked files:
     Untracked:  analysis/metadata_quantile.txt
     Untracked:  analysis/normalized_counts.rda
     Untracked:  analysis/quantile/
+    Untracked:  analysis/validation.Rmd
     Untracked:  analysis/vst norm counts.rda
+    Untracked:  data/Artery_Aorta.v8.covariates.txt
     Untracked:  data/GTEx_v8.bk
     Untracked:  data/GTEx_v8.rds
     Untracked:  data/Whole_Blood.v8.covariates.txt
     Untracked:  data/blood_cell/
+    Untracked:  data/gene_reads_2017-06-05_v8_artery_aorta.gct.gz
     Untracked:  data/gene_reads_2017-06-05_v8_whole_blood.gct
     Untracked:  data/gene_tpm_2017-06-05_v8_whole_blood.gct.gz
     Untracked:  data/immune/
@@ -575,6 +578,7 @@ Untracked files:
 Unstaged changes:
     Deleted:    analysis/QC.Rmd
     Deleted:    analysis/normalized_counts.txt
+    Modified:   analysis/prs_blood_cell.txt
     Modified:   prs.Rproj
 
 </code></pre>
@@ -621,6 +625,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/c5d5446df49e64e682e21fb9717e7bb438e267a6/analysis/differential_expression.Rmd" target="_blank">c5d5446</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-05-13
+</td>
+<td>
+workflowr::wflow_publish(c("analysis/PRS.Rmd", "analysis/index.Rmd",
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/yixuan-chen-elisa/prs/daf51702f2cac8c4b52ef591cbd56d264c0595dc/docs/differential_expression.html" target="_blank">daf5170</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-05-07
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -815,8 +853,9 @@ workflowr::wflow_publish(c("analysis/differential_expression.Rmd",
 </div>
 </div>
 </div>
-<div id="correlation-between-prs-pcs" class="section level1">
-<h1>Correlation between PRS &amp; PCs</h1>
+<div id="correlation-between-prs-expression-pcs-whole-blood"
+class="section level1">
+<h1>Correlation between PRS &amp; expression PCs (whole blood)</h1>
 <pre class="r"><code># load prs &amp; pcs
 metadata_file &lt;- &quot;analysis/metadata.txt&quot;
 metadata &lt;- read.csv(metadata_file, header = T, sep = &quot;\t&quot;, stringsAsFactors = T)
@@ -839,7 +878,7 @@ corrplot(correlation_matrix, method = &quot;color&quot;,
          tl.col = &quot;black&quot;, # text label color
          tl.srt = 90, # rotate text labels
          tl.cex = 0.5, 
-         title = &quot;Correlation between Traits and PCs&quot;, 
+         title = &quot;Correlation between Traits and expression PCs&quot;, 
          mar = c(0, 0, 1, 0)
 )</code></pre>
 <p><img src="figure/differential_expression.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -905,8 +944,8 @@ colnames(raw_count) &lt;- sub(&quot;^(GTEX-[^-.]+).*&quot;, &quot;\\1&quot;, col
 matching_samples &lt;- intersect(rownames(metadata), colnames(raw_count))
 final_count &lt;- raw_count[ , ..matching_samples]
 
-# prefilter: keep only rows that have a count of at least 10 across at least 50 samples
-keep_genes &lt;- rowSums(final_count &gt;= 10) &gt;= 50
+# prefilter: keep only rows that have a count of at least 10
+keep_genes &lt;- rowSums(final_count &gt;= 10) &gt; 0
 final_count &lt;- final_count[keep_genes, ]
 id &lt;- id[keep_genes]
 dim(final_count)
@@ -944,7 +983,7 @@ for (trait in colnames(traits)) {
   
   # plot the MA-plot for the current trait
   png(paste0(&quot;ma_plot_&quot;, trait, &quot;.png&quot;), width = 800, height = 600)
-  plotMA(res, main = paste(&quot;MA Plot for&quot;, trait))
+  plotMA(res, main = paste(&quot;Continuous: MA Plot for&quot;, trait))
   dev.off()
   
   # volcano plot
@@ -957,7 +996,7 @@ for (trait in colnames(traits)) {
   volcano_plot &lt;- ggplot(res_tableOE, aes(x = log2FoldChange, y = -log10(padj))) +
     geom_point(aes(colour = threshold_OE)) +
     geom_text_repel(aes(label = genelabels)) +
-    ggtitle(paste(&quot;Volcano Plot for&quot;, trait)) +
+    ggtitle(paste(&quot;Continuous: Volcano Plot for&quot;, trait)) +
     xlab(&quot;log2 fold change&quot;) + 
     ylab(&quot;-log10 adjusted p-value&quot;) +
     theme(legend.position = &quot;none&quot;,
@@ -993,23 +1032,22 @@ for (trait in colnames(traits)) {
   res &lt;- results(dds)
   
   # Save the results to a file
-  write.csv(res, paste0(&quot;differential_expression_&quot;, trait, &quot;quantile_results.csv&quot;))
+  write.csv(res, paste0(&quot;differential_expression_&quot;, trait, &quot;_quantile_results.csv&quot;))
   
   # print a summary of the results
   print(paste(&quot;Results for trait:&quot;, trait))
   print(summary(res))
   
-  res &lt;- read.csv()
-  
   # plot the MA-plot for the current trait
-  png(paste0(&quot;ma_plot_quantile&quot;, trait, &quot;.png&quot;), width = 800, height = 600)
+  png(paste0(&quot;ma_plot_quantile_&quot;, trait, &quot;.png&quot;), width = 800, height = 600)
   plotMA(res, main = paste(&quot;Quantile: MA Plot for&quot;, trait))
   dev.off()
   
   # volcano plot
   res_tableOE &lt;- as.data.frame(res)
   res_tableOE$gene_name &lt;- raw_count_df$Description[keep_genes]
-  res_tableOE &lt;- mutate(res_tableOE, threshold_OE = padj &lt; 0.1)
+  res_tableOE &lt;- mutate(res_tableOE, threshold_OE = padj &lt; 0.1 &amp; 
+                          abs(log2FoldChange) &gt;= 0.5)
   res_tableOE &lt;- res_tableOE %&gt;% arrange(padj) %&gt;% mutate(genelabels = &quot;&quot;)
   res_tableOE$genelabels[1:10] &lt;- res_tableOE$gene_name[1:10]
   
@@ -1024,57 +1062,85 @@ for (trait in colnames(traits)) {
           axis.title = element_text(size = rel(1.25)))
   
   # Save the volcano plot
-  png(paste0(&quot;volcano_plot_quantile&quot;, trait, &quot;.png&quot;), width = 800, height = 600)
+  png(paste0(&quot;volcano_plot_quantile_&quot;, trait, &quot;.png&quot;), width = 800, height = 600)
   print(volcano_plot)
   dev.off()
 }</code></pre>
 </div>
 <div id="gene-enrichment-analysis" class="section level1">
 <h1>Gene enrichment Analysis</h1>
+<p>BgRatio: Number of all genes in specific GO term / Number of
+universal genes</p>
+<p>GeneRatio: Number of genes enriched in specific term / Number of
+input genes</p>
+<p>FoldEnrichment: GeneRatio / BgRatio</p>
 <pre class="r"><code># continous
 dir_path &lt;- &quot;analysis/continuous&quot;
 files &lt;- list.files(dir_path, pattern = &quot;differential_expression_.*_results.csv&quot;, full.names = TRUE)
 
 for (file in files) {
   trait &lt;- gsub(&quot;differential_expression_(.*)_results.csv&quot;, &quot;\\1&quot;, basename(file))
-  
+  trait
   res_tableOE &lt;- read.csv(file, header = T, row.names = 1)
   
-  deGenes &lt;- res_tableOE[res_tableOE$padj &lt; 0.1, ]
+  deGenes &lt;- res_tableOE[res_tableOE$padj &lt; 0.1 &amp; 
+                           abs(res_tableOE$log2FoldChange) &gt;= 0.5, ]
   deGenes$gene_id &lt;- gsub(&quot;\\.\\d+$&quot;, &quot;&quot;, rownames(deGenes))
   
   gse &lt;- enrichGO(gene = deGenes$gene_id, ont = &quot;BP&quot;, 
-                OrgDb =&quot;org.Hs.eg.db&quot;, keyType = &quot;ENSEMBL&quot;, pAdjustMethod = &quot;BH&quot;,
-                qvalueCutoff = 0.05)
+                OrgDb =&quot;org.Hs.eg.db&quot;, keyType = &quot;ENSEMBL&quot;)
   
   write.csv(as.data.frame(gse), file = paste0(&quot;GO_enrichment_&quot;, trait, &quot;_results.csv&quot;))
   
-  summary(gse)
+  gse &lt;- as.data.frame(gse)
+  gse$GeneRatio_num &lt;- as.numeric(sapply(strsplit(gse$GeneRatio, &quot;/&quot;), 
+                                         function(x) x[1])) /
+                     as.numeric(sapply(strsplit(gse$GeneRatio, &quot;/&quot;), function(x) x[2]))
+
+  gse$BgRatio_num &lt;- as.numeric(sapply(strsplit(gse$BgRatio, &quot;/&quot;), function(x) x[1])) / 
+                     as.numeric(sapply(strsplit(gse$BgRatio, &quot;/&quot;), function(x) x[2]))
   
-  enrich_plot &lt;- dotplot(gse, showCategory=10, title = paste(&quot;Enrichment plot for&quot;, trait))
+  gse &lt;- cbind(gse, FoldEnrich = gse$GeneRatio_num/gse$BgRatio_num)
+  
+  enrich_plot &lt;- plotEnrich(gse, plot_type = &quot;dot&quot;, scale_ratio = 1.5) +
+    labs(title = paste(&quot;Continuous: Enrichment plot for&quot;, trait)) + 
+    theme(plot.title = element_text(size = 10)) 
+  enrich_plot
   ggsave(paste0(&quot;enrichment_plot_&quot;, trait, &quot;.png&quot;), plot = enrich_plot, width = 8, height = 6)
 }</code></pre>
 <pre class="r"><code># quantile
 dir_path &lt;- &quot;analysis/quantile&quot;
-files &lt;- list.files(dir_path, pattern = &quot;differential_expression_.*_quantile_results.csv&quot;, full.names = TRUE)
+files &lt;- list.files(dir_path, pattern = &quot;differential_expression_.*_quantile_results.csv&quot;,
+                    full.names = TRUE)
 
 for (file in files) {
   trait &lt;- gsub(&quot;differential_expression_(.*)_quantile_results.csv&quot;, &quot;\\1&quot;, basename(file))
-  
+  trait
   res_tableOE &lt;- read.csv(file, header = T, row.names = 1)
   
-  deGenes &lt;- res_tableOE[res_tableOE$padj &lt; 0.1, ]
+  deGenes &lt;- res_tableOE[res_tableOE$padj &lt; 0.1 &amp; 
+                           abs(res_tableOE$log2FoldChange) &gt;= 0.5, ]
   deGenes$gene_id &lt;- gsub(&quot;\\.\\d+$&quot;, &quot;&quot;, rownames(deGenes))
   
   gse &lt;- enrichGO(gene = deGenes$gene_id, ont = &quot;BP&quot;, 
-                OrgDb =&quot;org.Hs.eg.db&quot;, keyType = &quot;ENSEMBL&quot;, pAdjustMethod = &quot;BH&quot;,
-                qvalueCutoff = 0.05)
+                OrgDb =&quot;org.Hs.eg.db&quot;, keyType = &quot;ENSEMBL&quot;)
   
   write.csv(as.data.frame(gse), file = paste0(&quot;GO_enrichment_quantile_&quot;, trait, &quot;_results.csv&quot;))
   
-  summary(gse)
+  gse &lt;- as.data.frame(gse)
+  gse$GeneRatio_num &lt;- as.numeric(sapply(strsplit(gse$GeneRatio, &quot;/&quot;), 
+                                         function(x) x[1])) /
+                     as.numeric(sapply(strsplit(gse$GeneRatio, &quot;/&quot;), function(x) x[2]))
+
+  gse$BgRatio_num &lt;- as.numeric(sapply(strsplit(gse$BgRatio, &quot;/&quot;), function(x) x[1])) / 
+                     as.numeric(sapply(strsplit(gse$BgRatio, &quot;/&quot;), function(x) x[2]))
   
-  enrich_plot &lt;- dotplot(gse, showCategory=10, title = paste(&quot;Quantile: Enrichment plot for&quot;, trait))
+  gse &lt;- cbind(gse, FoldEnrich = gse$GeneRatio_num/gse$BgRatio_num)
+  
+  enrich_plot &lt;- plotEnrich(gse[1:20,], plot_type = &quot;dot&quot;, scale_ratio = 0.3) +
+    labs(title = paste(&quot;Quantile: Enrichment plot for&quot;, trait)) + 
+    theme(plot.title = element_text(size = 10)) 
+  enrich_plot
   ggsave(paste0(&quot;enrichment_plot_quantile_&quot;, trait, &quot;.png&quot;), plot = enrich_plot, width = 8, height = 6)
 }</code></pre>
 </div>
@@ -1112,17 +1178,17 @@ results_df_quantile &lt;- data.frame(trait = character(),
 # Function to extract significant DE genes and GO enriched pathways
 extract_results &lt;- function(de_file, go_file, analysis_type) {
   # Load the differential expression results
-  res &lt;- read.csv(de_file)
+  res &lt;- read.csv(de_file, header = T, row.names = 1)
   
   # Filter for significant DE genes (padj &lt; 0.1)
-  significant_de &lt;- res[res$padj &lt; 0.1, ]
+  significant_de &lt;- res[!is.na(res$padj) &amp; res$padj &lt; 0.1, ]
   
   # Count number of upregulated and downregulated genes
   upregulated &lt;- sum(significant_de$log2FoldChange &gt; 0)
   downregulated &lt;- sum(significant_de$log2FoldChange &lt; 0)
   
   # Load the GO enrichment results
-  go_res &lt;- read.csv(go_file)
+  go_res &lt;- read.csv(go_file, header = T, row.names = 1)
   
   # Count the number of enriched GO pathways (adjusted p-value &lt; 0.05)
   enriched_go &lt;- sum(go_res$p.adjust &lt; 0.05)
@@ -1176,11 +1242,11 @@ knitr::kable(results_df_continuous, caption = &quot;Continuous&quot;)</code></pr
 <table>
 <caption>Continuous</caption>
 <colgroup>
-<col width="19%" />
-<col width="39%" />
+<col width="40%" />
+<col width="29%" />
 <col width="3%" />
-<col width="4%" />
-<col width="32%" />
+<col width="3%" />
+<col width="23%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -1193,263 +1259,264 @@ knitr::kable(results_df_continuous, caption = &quot;Continuous&quot;)</code></pr
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Celiac_GCST90014442</td>
-<td align="right">81</td>
-<td align="right">45</td>
-<td align="right">36</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td align="left">Celiac_GCST90468120</td>
-<td align="right">350</td>
-<td align="right">20</td>
-<td align="right">330</td>
-<td align="right">171</td>
-</tr>
-<tr class="odd">
-<td align="left">IBD_GCST90013901</td>
-<td align="right">482</td>
-<td align="right">446</td>
-<td align="right">36</td>
-<td align="right">198</td>
-</tr>
-<tr class="even">
-<td align="left">IBD_GCST90013951</td>
-<td align="right">322</td>
-<td align="right">285</td>
-<td align="right">37</td>
-<td align="right">326</td>
-</tr>
-<tr class="odd">
-<td align="left">LUPUS_GCST003156</td>
-<td align="right">101</td>
-<td align="right">66</td>
-<td align="right">35</td>
-<td align="right">102</td>
-</tr>
-<tr class="even">
-<td align="left">LUPUS_GCST011096</td>
-<td align="right">111</td>
-<td align="right">76</td>
-<td align="right">35</td>
-<td align="right">129</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000163</td>
-<td align="right">306</td>
-<td align="right">275</td>
-<td align="right">31</td>
-<td align="right">85</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000164</td>
-<td align="right">165</td>
-<td align="right">63</td>
-<td align="right">102</td>
-<td align="right">204</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000165</td>
-<td align="right">307</td>
-<td align="right">114</td>
-<td align="right">193</td>
-<td align="right">102</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000166</td>
-<td align="right">169</td>
-<td align="right">61</td>
-<td align="right">108</td>
-<td align="right">77</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000167</td>
-<td align="right">219</td>
-<td align="right">43</td>
-<td align="right">176</td>
-<td align="right">75</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000168</td>
-<td align="right">107</td>
-<td align="right">49</td>
-<td align="right">58</td>
-<td align="right">17</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000169</td>
-<td align="right">214</td>
-<td align="right">40</td>
-<td align="right">174</td>
-<td align="right">185</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000170</td>
-<td align="right">270</td>
-<td align="right">67</td>
-<td align="right">203</td>
-<td align="right">151</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000171</td>
-<td align="right">251</td>
-<td align="right">115</td>
-<td align="right">136</td>
-<td align="right">259</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000172</td>
-<td align="right">536</td>
-<td align="right">270</td>
-<td align="right">266</td>
-<td align="right">126</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000173</td>
-<td align="right">676</td>
-<td align="right">239</td>
-<td align="right">437</td>
-<td align="right">95</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000174</td>
-<td align="right">339</td>
-<td align="right">20</td>
-<td align="right">319</td>
-<td align="right">188</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000175</td>
-<td align="right">571</td>
-<td align="right">61</td>
-<td align="right">510</td>
-<td align="right">307</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000176</td>
-<td align="right">144</td>
-<td align="right">20</td>
-<td align="right">124</td>
-<td align="right">71</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000177</td>
-<td align="right">293</td>
-<td align="right">152</td>
-<td align="right">141</td>
-<td align="right">84</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000178</td>
-<td align="right">144</td>
-<td align="right">37</td>
-<td align="right">107</td>
-<td align="right">32</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000179</td>
-<td align="right">126</td>
-<td align="right">25</td>
-<td align="right">101</td>
-<td align="right">71</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000180</td>
-<td align="right">254</td>
-<td align="right">133</td>
-<td align="right">121</td>
-<td align="right">147</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000181</td>
-<td align="right">372</td>
-<td align="right">62</td>
-<td align="right">310</td>
-<td align="right">55</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000182</td>
-<td align="right">946</td>
-<td align="right">865</td>
-<td align="right">81</td>
-<td align="right">266</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000183</td>
-<td align="right">281</td>
-<td align="right">225</td>
-<td align="right">56</td>
-<td align="right">59</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000184</td>
-<td align="right">88</td>
-<td align="right">64</td>
-<td align="right">24</td>
-<td align="right">22</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000185</td>
-<td align="right">86</td>
-<td align="right">28</td>
-<td align="right">58</td>
-<td align="right">41</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000186</td>
-<td align="right">75</td>
-<td align="right">51</td>
-<td align="right">24</td>
-<td align="right">49</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000187</td>
-<td align="right">114</td>
-<td align="right">71</td>
-<td align="right">43</td>
+<td align="left">Basophil.count</td>
+<td align="right">402</td>
+<td align="right">363</td>
+<td align="right">39</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="left">PGS000188</td>
-<td align="right">740</td>
-<td align="right">333</td>
-<td align="right">407</td>
+<td align="left">Basophil.percentage.of.white.cells</td>
+<td align="right">200</td>
+<td align="right">89</td>
+<td align="right">111</td>
+<td align="right">109</td>
+</tr>
+<tr class="odd">
+<td align="left">Celiac_GCST90014442</td>
+<td align="right">97</td>
+<td align="right">55</td>
+<td align="right">42</td>
+<td align="right">8</td>
+</tr>
+<tr class="even">
+<td align="left">Celiac_GCST90468120</td>
+<td align="right">493</td>
+<td align="right">25</td>
+<td align="right">468</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Eosinophil.count</td>
+<td align="right">338</td>
+<td align="right">128</td>
+<td align="right">210</td>
+<td align="right">75</td>
+</tr>
+<tr class="even">
+<td align="left">Eosinophil.percentage.of.white.cells</td>
+<td align="right">209</td>
+<td align="right">85</td>
+<td align="right">124</td>
+<td align="right">13</td>
+</tr>
+<tr class="odd">
+<td align="left">Hematocrit</td>
+<td align="right">337</td>
+<td align="right">57</td>
+<td align="right">280</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">Hemoglobin.concentration</td>
+<td align="right">132</td>
+<td align="right">57</td>
+<td align="right">75</td>
+<td align="right">12</td>
+</tr>
+<tr class="odd">
+<td align="left">High.light.scatter.reticulocyte.count</td>
+<td align="right">239</td>
+<td align="right">52</td>
+<td align="right">187</td>
+<td align="right">73</td>
+</tr>
+<tr class="even">
+<td
+align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
+<td align="right">325</td>
+<td align="right">94</td>
+<td align="right">231</td>
+<td align="right">146</td>
+</tr>
+<tr class="odd">
+<td align="left">IBD_GCST90013901</td>
+<td align="right">559</td>
+<td align="right">522</td>
+<td align="right">37</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">IBD_GCST90013951</td>
+<td align="right">380</td>
+<td align="right">338</td>
+<td align="right">42</td>
+<td align="right">192</td>
+</tr>
+<tr class="odd">
+<td align="left">Immature.fraction.of.reticulocytes</td>
+<td align="right">288</td>
+<td align="right">134</td>
+<td align="right">154</td>
+<td align="right">71</td>
+</tr>
+<tr class="even">
+<td align="left">LUPUS_GCST003156</td>
+<td align="right">119</td>
+<td align="right">79</td>
+<td align="right">40</td>
+<td align="right">48</td>
+</tr>
+<tr class="odd">
+<td align="left">LUPUS_GCST011096</td>
+<td align="right">131</td>
+<td align="right">89</td>
+<td align="right">42</td>
+<td align="right">85</td>
+</tr>
+<tr class="even">
+<td align="left">Lymphocyte.count</td>
+<td align="right">729</td>
+<td align="right">347</td>
+<td align="right">382</td>
+<td align="right">59</td>
+</tr>
+<tr class="odd">
+<td align="left">Lymphocyte.percentage.of.white.cells</td>
+<td align="right">927</td>
+<td align="right">305</td>
+<td align="right">622</td>
+<td align="right">31</td>
+</tr>
+<tr class="even">
+<td align="left">Mean.corpuscular.hemoglobin</td>
+<td align="right">402</td>
+<td align="right">22</td>
+<td align="right">380</td>
+<td align="right">55</td>
+</tr>
+<tr class="odd">
+<td align="left">Mean.corpuscular.hemoglobin.concentration</td>
+<td align="right">788</td>
+<td align="right">69</td>
+<td align="right">719</td>
+<td align="right">189</td>
+</tr>
+<tr class="even">
+<td align="left">Mean.corpuscular.volume</td>
+<td align="right">162</td>
+<td align="right">22</td>
+<td align="right">140</td>
+<td align="right">44</td>
+</tr>
+<tr class="odd">
+<td align="left">Mean.platelet.volume</td>
+<td align="right">146</td>
+<td align="right">30</td>
+<td align="right">116</td>
+<td align="right">22</td>
+</tr>
+<tr class="even">
+<td align="left">Mean.reticulocyte.volume</td>
+<td align="right">312</td>
+<td align="right">148</td>
+<td align="right">164</td>
+<td align="right">99</td>
+</tr>
+<tr class="odd">
+<td align="left">Mean.sphered.corpuscular.volume</td>
+<td align="right">533</td>
+<td align="right">81</td>
+<td align="right">452</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Monocyte.count</td>
+<td align="right">348</td>
+<td align="right">180</td>
+<td align="right">168</td>
+<td align="right">35</td>
+</tr>
+<tr class="odd">
+<td align="left">Monocyte.percentage.of.white.cells</td>
+<td align="right">179</td>
+<td align="right">42</td>
+<td align="right">137</td>
+<td align="right">11</td>
+</tr>
+<tr class="even">
+<td align="left">Neutrophil.count</td>
+<td align="right">1358</td>
+<td align="right">1260</td>
+<td align="right">98</td>
+<td align="right">46</td>
+</tr>
+<tr class="odd">
+<td align="left">Neutrophil.percentage.of.white.cells</td>
+<td align="right">421</td>
+<td align="right">357</td>
+<td align="right">64</td>
+<td align="right">20</td>
+</tr>
+<tr class="even">
+<td align="left">Platelet.count</td>
+<td align="right">78</td>
+<td align="right">51</td>
+<td align="right">27</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Platelet.crit</td>
+<td align="right">113</td>
+<td align="right">82</td>
+<td align="right">31</td>
+<td align="right">8</td>
+</tr>
+<tr class="even">
+<td align="left">Platelet.distribution.width</td>
+<td align="right">105</td>
+<td align="right">32</td>
+<td align="right">73</td>
+<td align="right">22</td>
+</tr>
+<tr class="odd">
+<td align="left">Red.blood.cell.count</td>
+<td align="right">130</td>
+<td align="right">81</td>
+<td align="right">49</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Red.cell.distribution.width</td>
+<td align="right">999</td>
+<td align="right">396</td>
+<td align="right">603</td>
+<td align="right">18</td>
+</tr>
+<tr class="odd">
+<td align="left">Reticulocyte.count</td>
+<td align="right">140</td>
+<td align="right">60</td>
+<td align="right">80</td>
+<td align="right">30</td>
+</tr>
+<tr class="even">
+<td align="left">Reticulocyte.fraction.of.red.cells</td>
+<td align="right">225</td>
+<td align="right">122</td>
+<td align="right">103</td>
 <td align="right">28</td>
 </tr>
 <tr class="odd">
-<td align="left">PGS000189</td>
-<td align="right">133</td>
-<td align="right">56</td>
-<td align="right">77</td>
-<td align="right">100</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000190</td>
-<td align="right">202</td>
-<td align="right">102</td>
-<td align="right">100</td>
-<td align="right">139</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000191</td>
-<td align="right">997</td>
-<td align="right">831</td>
-<td align="right">166</td>
-<td align="right">107</td>
-</tr>
-<tr class="even">
 <td align="left">T1D_GCST90000529</td>
-<td align="right">441</td>
-<td align="right">379</td>
-<td align="right">62</td>
-<td align="right">242</td>
+<td align="right">618</td>
+<td align="right">540</td>
+<td align="right">78</td>
+<td align="right">30</td>
+</tr>
+<tr class="even">
+<td align="left">T1D_GCST90014023</td>
+<td align="right">205</td>
+<td align="right">135</td>
+<td align="right">70</td>
+<td align="right">2</td>
 </tr>
 <tr class="odd">
-<td align="left">T1D_GCST90014023</td>
-<td align="right">170</td>
-<td align="right">104</td>
-<td align="right">66</td>
-<td align="right">55</td>
+<td align="left">White.blood.cell.count</td>
+<td align="right">1314</td>
+<td align="right">1118</td>
+<td align="right">196</td>
+<td align="right">34</td>
 </tr>
 </tbody>
 </table>
@@ -1457,11 +1524,11 @@ knitr::kable(results_df_continuous, caption = &quot;Continuous&quot;)</code></pr
 <table>
 <caption>Quantile (Stratify trait into top 25% and remaining)</caption>
 <colgroup>
-<col width="19%" />
-<col width="39%" />
-<col width="4%" />
-<col width="4%" />
-<col width="31%" />
+<col width="40%" />
+<col width="29%" />
+<col width="3%" />
+<col width="3%" />
+<col width="23%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -1474,499 +1541,619 @@ knitr::kable(results_df_continuous, caption = &quot;Continuous&quot;)</code></pr
 </thead>
 <tbody>
 <tr class="odd">
+<td align="left">Basophil.count</td>
+<td align="right">712</td>
+<td align="right">685</td>
+<td align="right">27</td>
+<td align="right">157</td>
+</tr>
+<tr class="even">
+<td align="left">Basophil.percentage.of.white.cells</td>
+<td align="right">184</td>
+<td align="right">64</td>
+<td align="right">120</td>
+<td align="right">75</td>
+</tr>
+<tr class="odd">
 <td align="left">Celiac_GCST90014442</td>
-<td align="right">302</td>
-<td align="right">112</td>
-<td align="right">190</td>
-<td align="right">286</td>
+<td align="right">336</td>
+<td align="right">124</td>
+<td align="right">212</td>
+<td align="right">301</td>
 </tr>
 <tr class="even">
 <td align="left">Celiac_GCST90468120</td>
-<td align="right">188</td>
-<td align="right">36</td>
+<td align="right">212</td>
+<td align="right">42</td>
+<td align="right">170</td>
+<td align="right">35</td>
+</tr>
+<tr class="odd">
+<td align="left">Eosinophil.count</td>
+<td align="right">507</td>
+<td align="right">197</td>
+<td align="right">310</td>
 <td align="right">152</td>
-<td align="right">68</td>
+</tr>
+<tr class="even">
+<td align="left">Eosinophil.percentage.of.white.cells</td>
+<td align="right">431</td>
+<td align="right">218</td>
+<td align="right">213</td>
+<td align="right">120</td>
+</tr>
+<tr class="odd">
+<td align="left">Hematocrit</td>
+<td align="right">269</td>
+<td align="right">118</td>
+<td align="right">151</td>
+<td align="right">87</td>
+</tr>
+<tr class="even">
+<td align="left">Hemoglobin.concentration</td>
+<td align="right">160</td>
+<td align="right">37</td>
+<td align="right">123</td>
+<td align="right">62</td>
+</tr>
+<tr class="odd">
+<td align="left">High.light.scatter.reticulocyte.count</td>
+<td align="right">225</td>
+<td align="right">93</td>
+<td align="right">132</td>
+<td align="right">113</td>
+</tr>
+<tr class="even">
+<td
+align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
+<td align="right">312</td>
+<td align="right">141</td>
+<td align="right">171</td>
+<td align="right">170</td>
 </tr>
 <tr class="odd">
 <td align="left">IBD_GCST90013901</td>
-<td align="right">235</td>
-<td align="right">171</td>
-<td align="right">64</td>
-<td align="right">122</td>
+<td align="right">272</td>
+<td align="right">204</td>
+<td align="right">68</td>
+<td align="right">177</td>
 </tr>
 <tr class="even">
 <td align="left">IBD_GCST90013951</td>
-<td align="right">292</td>
-<td align="right">215</td>
-<td align="right">77</td>
-<td align="right">178</td>
+<td align="right">346</td>
+<td align="right">256</td>
+<td align="right">90</td>
+<td align="right">186</td>
 </tr>
 <tr class="odd">
-<td align="left">LUPUS_GCST003156</td>
-<td align="right">148</td>
-<td align="right">75</td>
-<td align="right">73</td>
-<td align="right">17</td>
+<td align="left">Immature.fraction.of.reticulocytes</td>
+<td align="right">473</td>
+<td align="right">128</td>
+<td align="right">345</td>
+<td align="right">200</td>
 </tr>
 <tr class="even">
+<td align="left">LUPUS_GCST003156</td>
+<td align="right">205</td>
+<td align="right">96</td>
+<td align="right">109</td>
+<td align="right">21</td>
+</tr>
+<tr class="odd">
 <td align="left">LUPUS_GCST011096</td>
-<td align="right">367</td>
-<td align="right">41</td>
-<td align="right">326</td>
+<td align="right">493</td>
+<td align="right">52</td>
+<td align="right">441</td>
+<td align="right">179</td>
+</tr>
+<tr class="even">
+<td align="left">Lymphocyte.count</td>
+<td align="right">1456</td>
+<td align="right">852</td>
+<td align="right">604</td>
+<td align="right">207</td>
+</tr>
+<tr class="odd">
+<td align="left">Lymphocyte.percentage.of.white.cells</td>
+<td align="right">532</td>
+<td align="right">289</td>
+<td align="right">243</td>
+<td align="right">129</td>
+</tr>
+<tr class="even">
+<td align="left">Mean.corpuscular.hemoglobin</td>
+<td align="right">410</td>
+<td align="right">23</td>
+<td align="right">387</td>
+<td align="right">89</td>
+</tr>
+<tr class="odd">
+<td align="left">Mean.corpuscular.hemoglobin.concentration</td>
+<td align="right">317</td>
+<td align="right">86</td>
+<td align="right">231</td>
+<td align="right">292</td>
+</tr>
+<tr class="even">
+<td align="left">Mean.corpuscular.volume</td>
+<td align="right">453</td>
+<td align="right">58</td>
+<td align="right">395</td>
+<td align="right">149</td>
+</tr>
+<tr class="odd">
+<td align="left">Mean.platelet.volume</td>
+<td align="right">209</td>
+<td align="right">85</td>
+<td align="right">124</td>
+<td align="right">90</td>
+</tr>
+<tr class="even">
+<td align="left">Mean.reticulocyte.volume</td>
+<td align="right">406</td>
+<td align="right">115</td>
+<td align="right">291</td>
+<td align="right">123</td>
+</tr>
+<tr class="odd">
+<td align="left">Mean.sphered.corpuscular.volume</td>
+<td align="right">355</td>
+<td align="right">76</td>
+<td align="right">279</td>
+<td align="right">66</td>
+</tr>
+<tr class="even">
+<td align="left">Monocyte.count</td>
+<td align="right">1175</td>
+<td align="right">845</td>
+<td align="right">330</td>
+<td align="right">138</td>
+</tr>
+<tr class="odd">
+<td align="left">Monocyte.percentage.of.white.cells</td>
+<td align="right">566</td>
+<td align="right">50</td>
+<td align="right">516</td>
+<td align="right">90</td>
+</tr>
+<tr class="even">
+<td align="left">Neutrophil.count</td>
+<td align="right">806</td>
+<td align="right">736</td>
+<td align="right">70</td>
+<td align="right">99</td>
+</tr>
+<tr class="odd">
+<td align="left">Neutrophil.percentage.of.white.cells</td>
+<td align="right">1451</td>
+<td align="right">1330</td>
+<td align="right">121</td>
+<td align="right">385</td>
+</tr>
+<tr class="even">
+<td align="left">Platelet.count</td>
+<td align="right">248</td>
+<td align="right">59</td>
+<td align="right">189</td>
+<td align="right">114</td>
+</tr>
+<tr class="odd">
+<td align="left">Platelet.crit</td>
+<td align="right">314</td>
+<td align="right">100</td>
+<td align="right">214</td>
+<td align="right">116</td>
+</tr>
+<tr class="even">
+<td align="left">Platelet.distribution.width</td>
+<td align="right">469</td>
+<td align="right">149</td>
+<td align="right">320</td>
+<td align="right">126</td>
+</tr>
+<tr class="odd">
+<td align="left">Red.blood.cell.count</td>
+<td align="right">291</td>
+<td align="right">157</td>
+<td align="right">134</td>
+<td align="right">81</td>
+</tr>
+<tr class="even">
+<td align="left">Red.cell.distribution.width</td>
+<td align="right">399</td>
+<td align="right">287</td>
+<td align="right">112</td>
+<td align="right">45</td>
+</tr>
+<tr class="odd">
+<td align="left">Reticulocyte.count</td>
+<td align="right">170</td>
+<td align="right">74</td>
+<td align="right">96</td>
 <td align="right">88</td>
 </tr>
-<tr class="odd">
-<td align="left">PGS000163</td>
-<td align="right">479</td>
-<td align="right">456</td>
-<td align="right">23</td>
-<td align="right">133</td>
-</tr>
 <tr class="even">
-<td align="left">PGS000164</td>
-<td align="right">144</td>
-<td align="right">47</td>
-<td align="right">97</td>
-<td align="right">92</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000165</td>
-<td align="right">449</td>
-<td align="right">187</td>
-<td align="right">262</td>
-<td align="right">145</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000166</td>
-<td align="right">378</td>
-<td align="right">188</td>
-<td align="right">190</td>
-<td align="right">111</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000167</td>
-<td align="right">199</td>
-<td align="right">107</td>
-<td align="right">92</td>
-<td align="right">105</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000168</td>
-<td align="right">137</td>
-<td align="right">34</td>
-<td align="right">103</td>
-<td align="right">46</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000169</td>
-<td align="right">179</td>
-<td align="right">64</td>
-<td align="right">115</td>
-<td align="right">102</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000170</td>
-<td align="right">260</td>
-<td align="right">111</td>
-<td align="right">149</td>
-<td align="right">132</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000171</td>
-<td align="right">369</td>
-<td align="right">101</td>
-<td align="right">268</td>
-<td align="right">231</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000172</td>
-<td align="right">1361</td>
-<td align="right">809</td>
-<td align="right">552</td>
-<td align="right">94</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000173</td>
-<td align="right">419</td>
-<td align="right">248</td>
+<td align="left">Reticulocyte.fraction.of.red.cells</td>
+<td align="right">517</td>
+<td align="right">458</td>
+<td align="right">59</td>
 <td align="right">171</td>
-<td align="right">107</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000174</td>
-<td align="right">320</td>
-<td align="right">20</td>
-<td align="right">300</td>
-<td align="right">99</td>
 </tr>
 <tr class="odd">
-<td align="left">PGS000175</td>
-<td align="right">266</td>
-<td align="right">67</td>
-<td align="right">199</td>
-<td align="right">277</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000176</td>
-<td align="right">371</td>
-<td align="right">51</td>
-<td align="right">320</td>
-<td align="right">119</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000177</td>
-<td align="right">894</td>
-<td align="right">602</td>
-<td align="right">292</td>
-<td align="right">134</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000178</td>
-<td align="right">406</td>
-<td align="right">42</td>
-<td align="right">364</td>
-<td align="right">127</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000179</td>
-<td align="right">146</td>
-<td align="right">70</td>
-<td align="right">76</td>
-<td align="right">52</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000180</td>
-<td align="right">277</td>
-<td align="right">96</td>
-<td align="right">181</td>
-<td align="right">109</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000181</td>
-<td align="right">254</td>
-<td align="right">62</td>
-<td align="right">192</td>
-<td align="right">86</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000182</td>
-<td align="right">526</td>
-<td align="right">476</td>
-<td align="right">50</td>
-<td align="right">139</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000183</td>
-<td align="right">1120</td>
-<td align="right">1020</td>
-<td align="right">100</td>
-<td align="right">587</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000184</td>
-<td align="right">224</td>
-<td align="right">80</td>
-<td align="right">144</td>
-<td align="right">96</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000185</td>
-<td align="right">389</td>
-<td align="right">123</td>
-<td align="right">266</td>
-<td align="right">176</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000186</td>
-<td align="right">189</td>
-<td align="right">53</td>
-<td align="right">136</td>
-<td align="right">104</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000187</td>
-<td align="right">225</td>
-<td align="right">126</td>
-<td align="right">99</td>
-<td align="right">68</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000188</td>
-<td align="right">346</td>
-<td align="right">266</td>
-<td align="right">80</td>
-<td align="right">38</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000189</td>
-<td align="right">142</td>
-<td align="right">64</td>
-<td align="right">78</td>
-<td align="right">86</td>
-</tr>
-<tr class="even">
-<td align="left">PGS000190</td>
-<td align="right">439</td>
-<td align="right">385</td>
-<td align="right">54</td>
-<td align="right">289</td>
-</tr>
-<tr class="odd">
-<td align="left">PGS000191</td>
-<td align="right">914</td>
-<td align="right">803</td>
-<td align="right">111</td>
-<td align="right">132</td>
-</tr>
-<tr class="even">
 <td align="left">T1D_GCST90000529</td>
-<td align="right">1193</td>
-<td align="right">1098</td>
-<td align="right">95</td>
-<td align="right">346</td>
+<td align="right">1559</td>
+<td align="right">1438</td>
+<td align="right">121</td>
+<td align="right">300</td>
+</tr>
+<tr class="even">
+<td align="left">T1D_GCST90014023</td>
+<td align="right">575</td>
+<td align="right">504</td>
+<td align="right">71</td>
+<td align="right">87</td>
 </tr>
 <tr class="odd">
-<td align="left">T1D_GCST90014023</td>
-<td align="right">349</td>
-<td align="right">292</td>
-<td align="right">57</td>
-<td align="right">66</td>
+<td align="left">White.blood.cell.count</td>
+<td align="right">1216</td>
+<td align="right">1082</td>
+<td align="right">134</td>
+<td align="right">154</td>
 </tr>
 </tbody>
 </table>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000163.png" />
+src="figure/differential_expression.Rmd/ma_plot_Basophil.count.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000163.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Basophil.count.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000163.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Basophil.count.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000163.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Basophil.count.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Basophil.count.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Basophil.count.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000164.png" />
+src="figure/differential_expression.Rmd/ma_plot_Basophil.percentage.of.white.cells.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000164.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Basophil.percentage.of.white.cells.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000164.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Basophil.percentage.of.white.cells.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000164.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Basophil.percentage.of.white.cells.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Basophil.percentage.of.white.cells.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Basophil.percentage.of.white.cells.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000165.png" />
+src="figure/differential_expression.Rmd/ma_plot_Eosinophil.count.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000165.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Eosinophil.count.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000165.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Eosinophil.count.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000165.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Eosinophil.count.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Eosinophil.count.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Eosinophil.count.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000166.png" />
+src="figure/differential_expression.Rmd/ma_plot_Eosinophil.percentage.of.white.cells.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000166.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Eosinophil.percentage.of.white.cells.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000166.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Eosinophil.percentage.of.white.cells.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000166.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Eosinophil.percentage.of.white.cells.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Eosinophil.percentage.of.white.cells.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Eosinophil.percentage.of.white.cells.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000167.png" />
+src="figure/differential_expression.Rmd/ma_plot_Hematocrit.png" /> <img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Hematocrit.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000167.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Hematocrit.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000167.png" />
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Hematocrit.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000167.png" /></p>
+src="figure/differential_expression.Rmd/enrichment_plot_Hematocrit.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Hematocrit.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000168.png" />
+src="figure/differential_expression.Rmd/ma_plot_Hemoglobin.concentration.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000168.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Hemoglobin.concentration.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000168.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Hemoglobin.concentration.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000168.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Hemoglobin.concentration.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Hemoglobin.concentration.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Hemoglobin.concentration.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000169.png" />
+src="figure/differential_expression.Rmd/ma_plot_High.light.scatter.reticulocyte.count.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000169.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_High.light.scatter.reticulocyte.count.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000169.png" />
+src="figure/differential_expression.Rmd/volcano_plot_High.light.scatter.reticulocyte.count.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000169.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_High.light.scatter.reticulocyte.count.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_High.light.scatter.reticulocyte.count.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_High.light.scatter.reticulocyte.count.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000170.png" />
+src="figure/differential_expression.Rmd/ma_plot_High.light.scatter.reticulocyte.percentage.of.red.cells.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000170.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000170.png" />
+src="figure/differential_expression.Rmd/volcano_plot_High.light.scatter.reticulocyte.percentage.of.red.cells.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000170.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_High.light.scatter.reticulocyte.percentage.of.red.cells.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000171.png" />
+src="figure/differential_expression.Rmd/ma_plot_Immature.fraction.of.reticulocytes.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000171.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Immature.fraction.of.reticulocytes.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000171.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Immature.fraction.of.reticulocytes.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000171.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Immature.fraction.of.reticulocytes.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Immature.fraction.of.reticulocytes.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Immature.fraction.of.reticulocytes.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000172.png" />
+src="figure/differential_expression.Rmd/ma_plot_Lymphocyte.count.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000172.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Lymphocyte.count.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000172.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Lymphocyte.count.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000172.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Lymphocyte.count.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Lymphocyte.count.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Lymphocyte.count.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000173.png" />
+src="figure/differential_expression.Rmd/ma_plot_Lymphocyte.percentage.of.white.cells.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000173.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Lymphocyte.percentage.of.white.cells.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000173.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Lymphocyte.percentage.of.white.cells.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000173.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Lymphocyte.percentage.of.white.cells.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Lymphocyte.percentage.of.white.cells.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Lymphocyte.percentage.of.white.cells.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000174.png" />
+src="figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.hemoglobin.concentration.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000174.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.hemoglobin.concentration.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000174.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.hemoglobin.concentration.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000174.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.hemoglobin.concentration.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.hemoglobin.concentration.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.hemoglobin.concentration.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000175.png" />
+src="figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.hemoglobin.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000175.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.hemoglobin.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000175.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.hemoglobin.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000175.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.hemoglobin.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.hemoglobin.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.hemoglobin.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000176.png" />
+src="figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.volume.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000176.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.volume.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000176.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.volume.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000176.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.volume.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.volume.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.volume.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000177.png" />
+src="figure/differential_expression.Rmd/ma_plot_Mean.platelet.volume.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000177.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Mean.platelet.volume.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000177.png" />
-’ <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000177.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_Mean.platelet.volume.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Mean.platelet.volume.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Mean.platelet.volume.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.platelet.volume.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000178.png" />
+src="figure/differential_expression.Rmd/ma_plot_Mean.reticulocyte.volume.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000178.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Mean.reticulocyte.volume.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000178.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Mean.reticulocyte.volume.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000178.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Mean.reticulocyte.volume.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Mean.reticulocyte.volume.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.reticulocyte.volume.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000179.png" />
+src="figure/differential_expression.Rmd/ma_plot_Mean.sphered.corpuscular.volume.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000179.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Mean.sphered.corpuscular.volume.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000179.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Mean.sphered.corpuscular.volume.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000179.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Mean.sphered.corpuscular.volume.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Mean.sphered.corpuscular.volume.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.sphered.corpuscular.volume.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000180.png" />
+src="figure/differential_expression.Rmd/ma_plot_Monocyte.count.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000180.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Monocyte.count.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000180.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Monocyte.count.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000180.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Monocyte.count.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Monocyte.count.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Monocyte.count.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000181.png" />
+src="figure/differential_expression.Rmd/ma_plot_Monocyte.percentage.of.white.cells.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000181.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Monocyte.percentage.of.white.cells.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000181.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Monocyte.percentage.of.white.cells.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000181.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Monocyte.percentage.of.white.cells.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Monocyte.percentage.of.white.cells.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Monocyte.percentage.of.white.cells.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000182.png" />
+src="figure/differential_expression.Rmd/ma_plot_Neutrophil.count.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000182.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Neutrophil.count.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000182.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Neutrophil.count.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000182.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Neutrophil.count.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Neutrophil.count.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Neutrophil.count.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000183.png" />
+src="figure/differential_expression.Rmd/ma_plot_Neutrophil.percentage.of.white.cells.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000183.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Neutrophil.percentage.of.white.cells.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000183.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Neutrophil.percentage.of.white.cells.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000183.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Neutrophil.percentage.of.white.cells.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Neutrophil.percentage.of.white.cells.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Neutrophil.percentage.of.white.cells.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000184.png" />
+src="figure/differential_expression.Rmd/ma_plot_Platelet.count.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000184.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Platelet.count.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000184.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Platelet.count.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000184.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.count.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Platelet.count.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.count.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000185.png" />
+src="figure/differential_expression.Rmd/ma_plot_Platelet.crit.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000185.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Platelet.crit.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000185.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Platelet.crit.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000185.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.crit.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Platelet.crit.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.crit.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000186.png" />
+src="figure/differential_expression.Rmd/ma_plot_Platelet.distribution.width.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000186.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Platelet.distribution.width.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000186.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Platelet.distribution.width.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000186.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.distribution.width.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Platelet.distribution.width.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.distribution.width.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000187.png" />
+src="figure/differential_expression.Rmd/ma_plot_Red.blood.cell.count.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000187.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Red.blood.cell.count.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000187.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Red.blood.cell.count.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000187.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Red.blood.cell.count.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Red.blood.cell.count.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Red.blood.cell.count.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000188.png" />
+src="figure/differential_expression.Rmd/ma_plot_Red.cell.distribution.width.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000188.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Red.cell.distribution.width.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000188.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Red.cell.distribution.width.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000188.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Red.cell.distribution.width.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Red.cell.distribution.width.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Red.cell.distribution.width.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000189.png" />
+src="figure/differential_expression.Rmd/ma_plot_Reticulocyte.count.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000189.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Reticulocyte.count.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000189.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Reticulocyte.count.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000189.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Reticulocyte.count.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Reticulocyte.count.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Reticulocyte.count.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000190.png" />
+src="figure/differential_expression.Rmd/ma_plot_Reticulocyte.fraction.of.red.cells.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000190.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_Reticulocyte.fraction.of.red.cells.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000190.png" />
+src="figure/differential_expression.Rmd/volcano_plot_Reticulocyte.fraction.of.red.cells.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000190.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Reticulocyte.fraction.of.red.cells.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Reticulocyte.fraction.of.red.cells.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Reticulocyte.fraction.of.red.cells.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/volcano_plot_PGS000191.png" />
+src="figure/differential_expression.Rmd/ma_plot_White.blood.cell.count.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_PGS000191.png" />
+src="figure/differential_expression.Rmd/ma_plot_quantile_White.blood.cell.count.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_PGS000191.png" />
+src="figure/differential_expression.Rmd/volcano_plot_White.blood.cell.count.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_PGS000191.png" /></p>
+src="figure/differential_expression.Rmd/volcano_plot_quantile_White.blood.cell.count.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_White.blood.cell.count.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_White.blood.cell.count.png" /></p>
 <p><img
+src="figure/differential_expression.Rmd/ma_plot_Celiac_GCST90014442.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Celiac_GCST90014442.png" />
+<img
 src="figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90014442.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_Celiac_GCST90014442.png" />
@@ -1975,6 +2162,10 @@ src="figure/differential_expression.Rmd/enrichment_plot_Celiac_GCST90014442.png"
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_Celiac_GCST90014442.png" /></p>
 <p><img
+src="figure/differential_expression.Rmd/ma_plot_Celiac_GCST90468120.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Celiac_GCST90468120.png" />
+<img
 src="figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90468120.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_Celiac_GCST90468120.png" />
@@ -1983,6 +2174,10 @@ src="figure/differential_expression.Rmd/enrichment_plot_Celiac_GCST90468120.png"
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_Celiac_GCST90468120.png" /></p>
 <p><img
+src="figure/differential_expression.Rmd/ma_plot_IBD_GCST90013901.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_IBD_GCST90013901.png" />
+<img
 src="figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013901.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_IBD_GCST90013901.png" />
@@ -1991,6 +2186,10 @@ src="figure/differential_expression.Rmd/enrichment_plot_IBD_GCST90013901.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_IBD_GCST90013901.png" /></p>
 <p><img
+src="figure/differential_expression.Rmd/ma_plot_IBD_GCST90013951.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_IBD_GCST90013951.png" />
+<img
 src="figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013951.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_IBD_GCST90013951.png" />
@@ -1999,6 +2198,10 @@ src="figure/differential_expression.Rmd/enrichment_plot_IBD_GCST90013951.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_IBD_GCST90013951.png" /></p>
 <p><img
+src="figure/differential_expression.Rmd/ma_plot_LUPUS_GCST003156.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_LUPUS_GCST003156.png" />
+<img
 src="figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST003156.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_LUPUS_GCST003156.png" />
@@ -2007,6 +2210,10 @@ src="figure/differential_expression.Rmd/enrichment_plot_LUPUS_GCST003156.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_LUPUS_GCST003156.png" /></p>
 <p><img
+src="figure/differential_expression.Rmd/ma_plot_LUPUS_GCST011096.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_LUPUS_GCST011096.png" />
+<img
 src="figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST011096.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_LUPUS_GCST011096.png" />
@@ -2015,6 +2222,10 @@ src="figure/differential_expression.Rmd/enrichment_plot_LUPUS_GCST011096.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_LUPUS_GCST011096.png" /></p>
 <p><img
+src="figure/differential_expression.Rmd/ma_plot_T1D_GCST90000529.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_T1D_GCST90000529.png" />
+<img
 src="figure/differential_expression.Rmd/volcano_plot_T1D_GCST90000529.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_T1D_GCST90000529.png" />
@@ -2023,6 +2234,10 @@ src="figure/differential_expression.Rmd/enrichment_plot_T1D_GCST90000529.png" />
 <img
 src="figure/differential_expression.Rmd/enrichment_plot_quantile_T1D_GCST90000529.png" /></p>
 <p><img
+src="figure/differential_expression.Rmd/ma_plot_T1D_GCST90014023.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_T1D_GCST90014023.png" />
+<img
 src="figure/differential_expression.Rmd/volcano_plot_T1D_GCST90014023.png" />
 <img
 src="figure/differential_expression.Rmd/volcano_plot_quantile_T1D_GCST90014023.png" />
@@ -2055,58 +2270,66 @@ attached base packages:
 [8] base     
 
 other attached packages:
- [1] org.Hs.eg.db_3.16.0         AnnotationDbi_1.60.2       
- [3] enrichplot_1.18.4           clusterProfiler_4.6.2      
- [5] ggrepel_0.9.6               BiocParallel_1.32.6        
- [7] DESeq2_1.38.3               SummarizedExperiment_1.28.0
- [9] Biobase_2.58.0              MatrixGenerics_1.10.0      
-[11] matrixStats_1.2.0           GenomicRanges_1.50.2       
-[13] GenomeInfoDb_1.34.9         IRanges_2.32.0             
-[15] S4Vectors_0.36.2            BiocGenerics_0.44.0        
-[17] corrplot_0.95               ggplot2_3.5.1              
-[19] dplyr_1.1.4                 data.table_1.16.4          
-[21] workflowr_1.7.1            
+ [1] clusterProfiler_4.6.2       enrichplot_1.18.4          
+ [3] org.Hs.eg.db_3.16.0         AnnotationDbi_1.60.2       
+ [5] genekitr_1.2.8              ggrepel_0.9.6              
+ [7] BiocParallel_1.32.6         DESeq2_1.38.3              
+ [9] SummarizedExperiment_1.28.0 Biobase_2.58.0             
+[11] MatrixGenerics_1.10.0       matrixStats_1.2.0          
+[13] GenomicRanges_1.50.2        GenomeInfoDb_1.34.9        
+[15] IRanges_2.32.0              S4Vectors_0.36.2           
+[17] BiocGenerics_0.44.0         corrplot_0.95              
+[19] ggplot2_3.5.1               dplyr_1.1.4                
+[21] data.table_1.16.4           workflowr_1.7.1            
 
 loaded via a namespace (and not attached):
-  [1] ggtree_3.6.2           fgsea_1.24.0           colorspace_2.1-1      
-  [4] gson_0.1.0             rprojroot_2.0.4        qvalue_2.30.0         
-  [7] XVector_0.38.0         fs_1.6.5               aplot_0.2.4           
- [10] rstudioapi_0.17.1      farver_2.1.2           graphlayouts_1.0.1    
- [13] bit64_4.6.0-1          scatterpie_0.2.4       codetools_0.2-20      
- [16] splines_4.2.2          cachem_1.1.0           GOSemSim_2.24.0       
- [19] geneplotter_1.76.0     knitr_1.49             polyclip_1.10-7       
- [22] jsonlite_1.8.9         annotate_1.76.0        GO.db_3.16.0          
- [25] png_0.1-8              ggforce_0.4.1          compiler_4.2.2        
- [28] httr_1.4.7             lazyeval_0.2.2         Matrix_1.5-1          
- [31] fastmap_1.2.0          cli_3.6.3              later_1.4.1           
- [34] tweenr_2.0.3           htmltools_0.5.8.1      tools_4.2.2           
- [37] igraph_1.5.1           gtable_0.3.6           glue_1.8.0            
- [40] GenomeInfoDbData_1.2.9 reshape2_1.4.4         fastmatch_1.1-6       
- [43] Rcpp_1.0.14            jquerylib_0.1.4        vctrs_0.6.5           
- [46] Biostrings_2.66.0      nlme_3.1-160           ape_5.7-1             
- [49] ggraph_2.1.0           xfun_0.50              stringr_1.5.1         
- [52] ps_1.8.1               lifecycle_1.0.4        XML_3.99-0.18         
- [55] DOSE_3.24.2            getPass_0.2-4          zlibbioc_1.44.0       
- [58] MASS_7.3-58.1          scales_1.3.0           tidygraph_1.3.0       
- [61] promises_1.3.2         parallel_4.2.2         RColorBrewer_1.1-3    
- [64] yaml_2.3.10            gridExtra_2.3          memoise_2.0.1         
- [67] ggfun_0.1.8            downloader_0.4         HDO.db_0.99.1         
- [70] yulab.utils_0.2.0      sass_0.4.9             stringi_1.8.4         
- [73] RSQLite_2.3.9          tidytree_0.4.6         rlang_1.1.5           
- [76] pkgconfig_2.0.3        bitops_1.0-9           evaluate_1.0.3        
- [79] lattice_0.22-6         purrr_1.0.2            treeio_1.22.0         
- [82] patchwork_1.3.0        shadowtext_0.1.4       cowplot_1.1.3         
- [85] bit_4.5.0.1            processx_3.8.5         tidyselect_1.2.1      
- [88] plyr_1.8.9             magrittr_2.0.3         R6_2.5.1              
- [91] generics_0.1.3         DelayedArray_0.24.0    DBI_1.2.3             
- [94] pillar_1.10.1          whisker_0.4.1          withr_3.0.2           
- [97] KEGGREST_1.38.0        RCurl_1.98-1.16        tibble_3.2.1          
-[100] crayon_1.5.3           rmarkdown_2.29         viridis_0.6.5         
-[103] locfit_1.5-9.8         grid_4.2.2             blob_1.2.4            
-[106] callr_3.7.6            git2r_0.33.0           digest_0.6.37         
-[109] xtable_1.8-4           tidyr_1.3.1            httpuv_1.6.15         
-[112] gridGraphics_0.5-1     munsell_0.5.1          ggplotify_0.1.2       
-[115] viridisLite_0.4.2      bslib_0.9.0           </code></pre>
+  [1] shadowtext_0.1.4       fastmatch_1.1-6        plyr_1.8.9            
+  [4] igraph_1.5.1           lazyeval_0.2.2         splines_4.2.2         
+  [7] usethis_3.1.0          urltools_1.7.3         digest_0.6.37         
+ [10] yulab.utils_0.2.0      htmltools_0.5.8.1      GOSemSim_2.24.0       
+ [13] viridis_0.6.5          GO.db_3.16.0           magrittr_2.0.3        
+ [16] memoise_2.0.1          remotes_2.5.0          openxlsx_4.2.5.2      
+ [19] Biostrings_2.66.0      annotate_1.76.0        graphlayouts_1.0.1    
+ [22] prettyunits_1.2.0      colorspace_2.1-1       blob_1.2.4            
+ [25] xfun_0.50              callr_3.7.6            crayon_1.5.3          
+ [28] RCurl_1.98-1.16        jsonlite_1.8.9         scatterpie_0.2.4      
+ [31] ape_5.7-1              glue_1.8.0             polyclip_1.10-7       
+ [34] gtable_0.3.6           zlibbioc_1.44.0        XVector_0.38.0        
+ [37] DelayedArray_0.24.0    pkgbuild_1.4.6         scales_1.3.0          
+ [40] DOSE_3.24.2            DBI_1.2.3              miniUI_0.1.1.1        
+ [43] Rcpp_1.0.14            viridisLite_0.4.2      xtable_1.8-4          
+ [46] progress_1.2.3         gridGraphics_0.5-1     tidytree_0.4.6        
+ [49] bit_4.5.0.1            europepmc_0.4.3        profvis_0.4.0         
+ [52] htmlwidgets_1.6.4      httr_1.4.7             fgsea_1.24.0          
+ [55] RColorBrewer_1.1-3     ellipsis_0.3.2         urlchecker_1.0.1      
+ [58] pkgconfig_2.0.3        XML_3.99-0.18          farver_2.1.2          
+ [61] sass_0.4.9             locfit_1.5-9.8         ggplotify_0.1.2       
+ [64] tidyselect_1.2.1       rlang_1.1.5            reshape2_1.4.4        
+ [67] later_1.4.1            munsell_0.5.1          tools_4.2.2           
+ [70] cachem_1.1.0           downloader_0.4         cli_3.6.3             
+ [73] generics_0.1.3         RSQLite_2.3.9          gson_0.1.0            
+ [76] devtools_2.4.5         evaluate_1.0.3         stringr_1.5.1         
+ [79] fastmap_1.2.0          yaml_2.3.10            ggtree_3.6.2          
+ [82] processx_3.8.5         knitr_1.49             bit64_4.6.0-1         
+ [85] fs_1.6.5               tidygraph_1.3.0        zip_2.3.2             
+ [88] purrr_1.0.2            KEGGREST_1.38.0        ggraph_2.1.0          
+ [91] nlme_3.1-160           mime_0.12              whisker_0.4.1         
+ [94] aplot_0.2.4            ggvenn_0.1.10          xml2_1.3.6            
+ [97] compiler_4.2.2         rstudioapi_0.17.1      png_0.1-8             
+[100] treeio_1.22.0          tibble_3.2.1           tweenr_2.0.3          
+[103] geneplotter_1.76.0     bslib_0.9.0            stringi_1.8.4         
+[106] ps_1.8.1               lattice_0.22-6         Matrix_1.5-1          
+[109] vctrs_0.6.5            pillar_1.10.1          lifecycle_1.0.4       
+[112] triebeard_0.4.1        jquerylib_0.1.4        cowplot_1.1.3         
+[115] bitops_1.0-9           httpuv_1.6.15          patchwork_1.3.0       
+[118] qvalue_2.30.0          R6_2.5.1               promises_1.3.2        
+[121] gridExtra_2.3          sessioninfo_1.2.2      codetools_0.2-20      
+[124] pkgload_1.4.0          MASS_7.3-58.1          rprojroot_2.0.4       
+[127] withr_3.0.2            GenomeInfoDbData_1.2.9 parallel_4.2.2        
+[130] hms_1.1.3              grid_4.2.2             ggfun_0.1.8           
+[133] tidyr_1.3.1            HDO.db_0.99.1          rmarkdown_2.29        
+[136] git2r_0.33.0           getPass_0.2-4          ggforce_0.4.1         
+[139] shiny_1.10.0           geneset_0.2.7         </code></pre>
 </div>
 </div>
 </div>

@@ -386,7 +386,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-04-24
+<strong>Last updated:</strong> 2025-05-13
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -517,15 +517,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree077b30f4f57d3617d14cf5187a9fb610e1b2f7b8targetblank077b30fa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstreec5d5446df49e64e682e21fb9717e7bb438e267a6targetblankc5d5446a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/yixuan-chen-elisa/prs/tree/077b30f4f57d3617d14cf5187a9fb610e1b2f7b8" target="_blank">077b30f</a>
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/c5d5446df49e64e682e21fb9717e7bb438e267a6" target="_blank">c5d5446</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree077b30f4f57d3617d14cf5187a9fb610e1b2f7b8targetblank077b30fa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstreec5d5446df49e64e682e21fb9717e7bb438e267a6targetblankc5d5446a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -535,7 +535,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/yixuan-chen-elisa/prs/tree/077b30f4f57d3617d14cf5187a9fb610e1b2f7b8" target="_blank">077b30f</a>.
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/c5d5446df49e64e682e21fb9717e7bb438e267a6" target="_blank">c5d5446</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -557,21 +557,28 @@ Ignored files:
     Ignored:    data/.DS_Store
 
 Untracked files:
-    Untracked:  analysis/dds.rda
-    Untracked:  analysis/differential_expression.Rmd
+    Untracked:  analysis/continuous/
     Untracked:  analysis/metadata.txt
+    Untracked:  analysis/metadata_quantile.txt
     Untracked:  analysis/normalized_counts.rda
+    Untracked:  analysis/quantile/
+    Untracked:  analysis/validation.Rmd
     Untracked:  analysis/vst norm counts.rda
+    Untracked:  data/Artery_Aorta.v8.covariates.txt
     Untracked:  data/GTEx_v8.bk
     Untracked:  data/GTEx_v8.rds
     Untracked:  data/Whole_Blood.v8.covariates.txt
     Untracked:  data/blood_cell/
+    Untracked:  data/gene_reads_2017-06-05_v8_artery_aorta.gct.gz
     Untracked:  data/gene_reads_2017-06-05_v8_whole_blood.gct
     Untracked:  data/gene_tpm_2017-06-05_v8_whole_blood.gct.gz
     Untracked:  data/immune/
+    Untracked:  data/protein-coding_gene.txt
 
 Unstaged changes:
+    Deleted:    analysis/QC.Rmd
     Deleted:    analysis/normalized_counts.txt
+    Modified:   analysis/prs_blood_cell.txt
     Modified:   prs.Rproj
 
 </code></pre>
@@ -616,6 +623,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/c5d5446df49e64e682e21fb9717e7bb438e267a6/analysis/PRS.Rmd" target="_blank">c5d5446</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-05-13
+</td>
+<td>
+workflowr::wflow_publish(c("analysis/PRS.Rmd", "analysis/index.Rmd",
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/yixuan-chen-elisa/prs/eba00c6d3101277098bd14531b587973a17071ca/docs/PRS.html" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -855,106 +896,206 @@ head(final_prs_df)
 <div id="check-the-distribution-of-prs-for-each-blood-cell-trait"
 class="section level1">
 <h1>Check the distribution of PRS for each blood cell trait</h1>
-<pre class="r"><code>prs_blood &lt;- fread(&quot;analysis/prs_blood_cell.txt&quot;, header = TRUE, stringsAsFactors = FALSE)
+<pre class="r"><code>prs_blood &lt;- fread(&quot;analysis/prs_blood_cell.txt&quot;, header = TRUE, 
+                   stringsAsFactors = FALSE)
 head(prs_blood)</code></pre>
-<pre><code>    sample_id PGS000163 PGS000164 PGS000165 PGS000166  PGS000167 PGS000168
-       &lt;char&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;      &lt;num&gt;     &lt;num&gt;
-1: GTEX-1117F 0.3806469 0.8780380 -3.713591 -3.229141  0.4163683  2.136815
-2: GTEX-111CU 0.2064739 0.7548888 -3.949216 -3.695229  0.2869358  1.723604
-3: GTEX-111FC 0.1510253 0.8561732 -3.837647 -3.134617 -0.3309690  1.225690
-4: GTEX-111VG 0.0782434 0.7029858 -3.875660 -3.109327  0.1998405  1.925761
-5: GTEX-111YS 0.5410653 1.0156237 -3.584264 -3.380372  0.0788395  1.386430
-6: GTEX-1122O 0.2568363 0.9157099 -4.195580 -3.219698  0.4280533  2.024007
-   PGS000169 PGS000170 PGS000171  PGS000172  PGS000173 PGS000174 PGS000175
-       &lt;num&gt;     &lt;num&gt;     &lt;num&gt;      &lt;num&gt;      &lt;num&gt;     &lt;num&gt;     &lt;num&gt;
-1:  4.434960  4.372898  2.883154  0.2446934  0.3569089  2.661169  1.801754
-2:  4.130046  4.525788  2.628253 -0.0900860 -0.0592994  2.500414  2.050340
-3:  4.412963  4.595019  3.133287 -0.2846926 -0.1086845  2.878752  1.960197
-4:  3.979648  4.393256  2.745925 -0.0435285  0.0491368  2.840849  1.805051
-5:  4.759111  4.850884  3.073905 -0.0895070  0.2374592  2.636155  1.632886
-6:  4.202698  4.515898  3.180095  0.1487145  0.2513990  2.790015  1.781026
-   PGS000176 PGS000177 PGS000178  PGS000179  PGS000180  PGS000181  PGS000182
-       &lt;num&gt;     &lt;num&gt;     &lt;num&gt;      &lt;num&gt;      &lt;num&gt;      &lt;num&gt;      &lt;num&gt;
-1:  2.324056  1.567493 0.8574966  0.9338375 -0.7149604 -0.1537221 -0.9485420
-2:  1.866515  1.623798 0.7156781  0.8308186 -0.5291329 -0.2985605 -1.0259112
-3:  2.545554  1.544912 0.4508785 -0.1097440 -0.1745706 -0.3416134 -0.8944093
-4:  2.547886  1.427934 0.1186987  0.4256803 -1.1218271 -0.4094764 -1.0032017
-5:  2.411277  2.051295 0.9079310  0.7683186 -0.6711704 -0.1915244 -0.7245853
-6:  2.681980  1.223256 0.0900392  1.0050662 -0.7286477 -0.0609871 -1.0541924
-    PGS000183 PGS000184 PGS000185 PGS000186 PGS000187 PGS000188 PGS000189
-        &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;
-1: -0.4955733  3.032858  1.691766 0.7397075 0.9214347 0.8427240  4.219304
-2: -0.4303846  1.943666  2.212776 0.0984095 0.6143391 0.9863121  4.268113
-3: -0.1609818  2.499798  2.318054 1.2521282 0.3350280 0.8855678  4.558498
-4: -0.3787154  2.717517  2.059975 1.2534249 1.0891001 0.1868042  4.283260
-5: -0.3556682  3.317813  1.995272 1.2545477 0.5340879 0.9369695  4.549213
-6: -0.5039774  2.423712  2.592336 0.6764149 0.9435796 1.2345469  4.160999
-   PGS000190  PGS000191
-       &lt;num&gt;      &lt;num&gt;
-1:  4.218706 -0.4845900
-2:  4.450465 -0.9142476
-3:  4.505412 -0.5593480
-4:  4.648625 -1.0679006
-5:  4.758601 -0.5033859
-6:  4.367083 -0.8890277</code></pre>
+<pre><code>    sample_id Basophil count Basophil percentage of white cells
+       &lt;char&gt;          &lt;num&gt;                              &lt;num&gt;
+1: GTEX-1117F      0.3806469                          0.8780380
+2: GTEX-111CU      0.2064739                          0.7548888
+3: GTEX-111FC      0.1510253                          0.8561732
+4: GTEX-111VG      0.0782434                          0.7029858
+5: GTEX-111YS      0.5410653                          1.0156237
+6: GTEX-1122O      0.2568363                          0.9157099
+   Eosinophil count Eosinophil percentage of white cells Hematocrit
+              &lt;num&gt;                                &lt;num&gt;      &lt;num&gt;
+1:        -3.713591                            -3.229141  0.4163683
+2:        -3.949216                            -3.695229  0.2869358
+3:        -3.837647                            -3.134617 -0.3309690
+4:        -3.875660                            -3.109327  0.1998405
+5:        -3.584264                            -3.380372  0.0788395
+6:        -4.195580                            -3.219698  0.4280533
+   Hemoglobin concentration High light scatter reticulocyte count
+                      &lt;num&gt;                                 &lt;num&gt;
+1:                 2.136815                              4.434960
+2:                 1.723604                              4.130046
+3:                 1.225690                              4.412963
+4:                 1.925761                              3.979648
+5:                 1.386430                              4.759111
+6:                 2.024007                              4.202698
+   High light scatter reticulocyte percentage of red cells
+                                                     &lt;num&gt;
+1:                                                4.372898
+2:                                                4.525788
+3:                                                4.595019
+4:                                                4.393256
+5:                                                4.850884
+6:                                                4.515898
+   Immature fraction of reticulocytes Lymphocyte count
+                                &lt;num&gt;            &lt;num&gt;
+1:                           2.883154        0.2446934
+2:                           2.628253       -0.0900860
+3:                           3.133287       -0.2846926
+4:                           2.745925       -0.0435285
+5:                           3.073905       -0.0895070
+6:                           3.180095        0.1487145
+   Lymphocyte percentage of white cells Mean corpuscular hemoglobin
+                                  &lt;num&gt;                       &lt;num&gt;
+1:                            0.3569089                    2.661169
+2:                           -0.0592994                    2.500414
+3:                           -0.1086845                    2.878752
+4:                            0.0491368                    2.840849
+5:                            0.2374592                    2.636155
+6:                            0.2513990                    2.790015
+   Mean corpuscular hemoglobin concentration Mean corpuscular volume
+                                       &lt;num&gt;                   &lt;num&gt;
+1:                                  1.801754                2.324056
+2:                                  2.050340                1.866515
+3:                                  1.960197                2.545554
+4:                                  1.805051                2.547886
+5:                                  1.632886                2.411277
+6:                                  1.781026                2.681980
+   Monocyte count Monocyte percentage of white cells Mean platelet volume
+            &lt;num&gt;                              &lt;num&gt;                &lt;num&gt;
+1:       1.567493                          0.8574966            0.9338375
+2:       1.623798                          0.7156781            0.8308186
+3:       1.544912                          0.4508785           -0.1097440
+4:       1.427934                          0.1186987            0.4256803
+5:       2.051295                          0.9079310            0.7683186
+6:       1.223256                          0.0900392            1.0050662
+   Mean reticulocyte volume Mean sphered corpuscular volume Neutrophil count
+                      &lt;num&gt;                           &lt;num&gt;            &lt;num&gt;
+1:               -0.7149604                      -0.1537221       -0.9485420
+2:               -0.5291329                      -0.2985605       -1.0259112
+3:               -0.1745706                      -0.3416134       -0.8944093
+4:               -1.1218271                      -0.4094764       -1.0032017
+5:               -0.6711704                      -0.1915244       -0.7245853
+6:               -0.7286477                      -0.0609871       -1.0541924
+   Neutrophil percentage of white cells Platelet crit
+                                  &lt;num&gt;         &lt;num&gt;
+1:                           -0.4955733      3.032858
+2:                           -0.4303846      1.943666
+3:                           -0.1609818      2.499798
+4:                           -0.3787154      2.717517
+5:                           -0.3556682      3.317813
+6:                           -0.5039774      2.423712
+   Platelet distribution width Platelet count Red blood cell count
+                         &lt;num&gt;          &lt;num&gt;                &lt;num&gt;
+1:                    1.691766      0.7397075            0.9214347
+2:                    2.212776      0.0984095            0.6143391
+3:                    2.318054      1.2521282            0.3350280
+4:                    2.059975      1.2534249            1.0891001
+5:                    1.995272      1.2545477            0.5340879
+6:                    2.592336      0.6764149            0.9435796
+   Red cell distribution width Reticulocyte count
+                         &lt;num&gt;              &lt;num&gt;
+1:                   0.8427240           4.219304
+2:                   0.9863121           4.268113
+3:                   0.8855678           4.558498
+4:                   0.1868042           4.283260
+5:                   0.9369695           4.549213
+6:                   1.2345469           4.160999
+   Reticulocyte fraction of red cells White blood cell count
+                                &lt;num&gt;                  &lt;num&gt;
+1:                           4.218706             -0.4845900
+2:                           4.450465             -0.9142476
+3:                           4.505412             -0.5593480
+4:                           4.648625             -1.0679006
+5:                           4.758601             -0.5033859
+6:                           4.367083             -0.8890277</code></pre>
 <pre class="r"><code># Summary statistics for each PRS column (trait)
 summary(prs_blood[,-1]) </code></pre>
-<pre><code>   PGS000163         PGS000164        PGS000165        PGS000166     
- Min.   :-0.1760   Min.   :0.4462   Min.   :-4.994   Min.   :-4.403  
- 1st Qu.: 0.2311   1st Qu.:0.8050   1st Qu.:-4.179   1st Qu.:-3.561  
- Median : 0.3183   Median :0.8891   Median :-3.982   Median :-3.372  
- Mean   : 0.3258   Mean   :0.8893   Mean   :-3.979   Mean   :-3.379  
- 3rd Qu.: 0.4144   3rd Qu.:0.9760   3rd Qu.:-3.775   3rd Qu.:-3.193  
- Max.   : 0.7381   Max.   :1.2485   Max.   :-2.938   Max.   :-2.418  
-   PGS000167          PGS000168        PGS000169       PGS000170    
- Min.   :-0.72700   Min.   :0.8813   Min.   :3.042   Min.   :3.165  
- 1st Qu.:-0.08874   1st Qu.:1.5474   1st Qu.:3.961   1st Qu.:4.151  
- Median : 0.06276   Median :1.7022   Median :4.175   Median :4.373  
- Mean   : 0.05916   Mean   :1.6976   Mean   :4.166   Mean   :4.363  
- 3rd Qu.: 0.20001   3rd Qu.:1.8530   3rd Qu.:4.392   3rd Qu.:4.566  
- Max.   : 0.72360   Max.   :2.4055   Max.   :5.231   Max.   :5.383  
-   PGS000171       PGS000172         PGS000173           PGS000174    
- Min.   :1.420   Min.   :-0.8853   Min.   :-0.829929   Min.   :1.431  
- 1st Qu.:2.501   1st Qu.:-0.3249   1st Qu.:-0.150182   1st Qu.:2.484  
- Median :2.683   Median :-0.1443   Median : 0.009484   Median :2.749  
- Mean   :2.685   Mean   :-0.1461   Mean   : 0.002973   Mean   :2.737  
- 3rd Qu.:2.889   3rd Qu.: 0.0352   3rd Qu.: 0.154690   3rd Qu.:3.020  
- Max.   :3.499   Max.   : 0.7415   Max.   : 0.537481   Max.   :3.869  
-   PGS000175       PGS000176       PGS000177       PGS000178      
- Min.   :1.265   Min.   :1.105   Min.   :0.269   Min.   :-0.8200  
- 1st Qu.:1.742   1st Qu.:2.244   1st Qu.:1.211   1st Qu.: 0.1258  
- Median :1.878   Median :2.508   Median :1.439   Median : 0.3566  
- Mean   :1.871   Mean   :2.518   Mean   :1.433   Mean   : 0.3448  
- 3rd Qu.:2.003   3rd Qu.:2.796   3rd Qu.:1.680   3rd Qu.: 0.5725  
- Max.   :2.353   Max.   :3.719   Max.   :2.502   Max.   : 1.4235  
-   PGS000179         PGS000180         PGS000181         PGS000182       
- Min.   :-0.7994   Min.   :-1.8701   Min.   :-1.2291   Min.   :-1.68032  
- 1st Qu.: 0.4226   1st Qu.:-0.8858   1st Qu.:-0.1601   1st Qu.:-1.02547  
- Median : 0.6984   Median :-0.6414   Median : 0.1272   Median :-0.85999  
- Mean   : 0.7046   Mean   :-0.6423   Mean   : 0.1203   Mean   :-0.85693  
- 3rd Qu.: 1.0185   3rd Qu.:-0.3736   3rd Qu.: 0.4164   3rd Qu.:-0.70218  
- Max.   : 1.9150   Max.   : 0.7296   Max.   : 1.3974   Max.   :-0.06296  
-   PGS000183          PGS000184       PGS000185       PGS000186      
- Min.   :-0.77535   Min.   :1.642   Min.   :1.016   Min.   :-0.2803  
- 1st Qu.:-0.28186   1st Qu.:2.533   1st Qu.:2.037   1st Qu.: 0.6965  
- Median :-0.12743   Median :2.751   Median :2.277   Median : 0.9104  
- Mean   :-0.12193   Mean   :2.764   Mean   :2.261   Mean   : 0.9262  
- 3rd Qu.: 0.02156   3rd Qu.:3.015   3rd Qu.:2.510   3rd Qu.: 1.1664  
- Max.   : 0.55981   Max.   :3.956   Max.   :3.382   Max.   : 2.1380  
-   PGS000187         PGS000188         PGS000189       PGS000190    
- Min.   :-0.4268   Min.   :-0.1191   Min.   :3.102   Min.   :3.319  
- 1st Qu.: 0.3940   1st Qu.: 0.7155   1st Qu.:4.069   1st Qu.:4.300  
- Median : 0.6050   Median : 0.9247   Median :4.274   Median :4.505  
- Mean   : 0.6038   Mean   : 0.9134   Mean   :4.270   Mean   :4.487  
- 3rd Qu.: 0.8104   3rd Qu.: 1.1168   3rd Qu.:4.450   3rd Qu.:4.689  
- Max.   : 1.6088   Max.   : 1.8368   Max.   :5.408   Max.   :5.483  
-   PGS000191      
- Min.   :-1.4839  
- 1st Qu.:-0.8319  
- Median :-0.6528  
- Mean   :-0.6482  
- 3rd Qu.:-0.4644  
- Max.   : 0.2692  </code></pre>
+<pre><code> Basophil count    Basophil percentage of white cells Eosinophil count
+ Min.   :-0.1760   Min.   :0.4462                     Min.   :-4.994  
+ 1st Qu.: 0.2311   1st Qu.:0.8050                     1st Qu.:-4.179  
+ Median : 0.3183   Median :0.8891                     Median :-3.982  
+ Mean   : 0.3258   Mean   :0.8893                     Mean   :-3.979  
+ 3rd Qu.: 0.4144   3rd Qu.:0.9760                     3rd Qu.:-3.775  
+ Max.   : 0.7381   Max.   :1.2485                     Max.   :-2.938  
+ Eosinophil percentage of white cells   Hematocrit      
+ Min.   :-4.403                       Min.   :-0.72700  
+ 1st Qu.:-3.561                       1st Qu.:-0.08874  
+ Median :-3.372                       Median : 0.06276  
+ Mean   :-3.379                       Mean   : 0.05916  
+ 3rd Qu.:-3.193                       3rd Qu.: 0.20001  
+ Max.   :-2.418                       Max.   : 0.72360  
+ Hemoglobin concentration High light scatter reticulocyte count
+ Min.   :0.8813           Min.   :3.042                        
+ 1st Qu.:1.5474           1st Qu.:3.961                        
+ Median :1.7022           Median :4.175                        
+ Mean   :1.6976           Mean   :4.166                        
+ 3rd Qu.:1.8530           3rd Qu.:4.392                        
+ Max.   :2.4055           Max.   :5.231                        
+ High light scatter reticulocyte percentage of red cells
+ Min.   :3.165                                          
+ 1st Qu.:4.151                                          
+ Median :4.373                                          
+ Mean   :4.363                                          
+ 3rd Qu.:4.566                                          
+ Max.   :5.383                                          
+ Immature fraction of reticulocytes Lymphocyte count 
+ Min.   :1.420                      Min.   :-0.8853  
+ 1st Qu.:2.501                      1st Qu.:-0.3249  
+ Median :2.683                      Median :-0.1443  
+ Mean   :2.685                      Mean   :-0.1461  
+ 3rd Qu.:2.889                      3rd Qu.: 0.0352  
+ Max.   :3.499                      Max.   : 0.7415  
+ Lymphocyte percentage of white cells Mean corpuscular hemoglobin
+ Min.   :-0.829929                    Min.   :1.431              
+ 1st Qu.:-0.150182                    1st Qu.:2.484              
+ Median : 0.009484                    Median :2.749              
+ Mean   : 0.002973                    Mean   :2.737              
+ 3rd Qu.: 0.154690                    3rd Qu.:3.020              
+ Max.   : 0.537481                    Max.   :3.869              
+ Mean corpuscular hemoglobin concentration Mean corpuscular volume
+ Min.   :1.265                             Min.   :1.105          
+ 1st Qu.:1.742                             1st Qu.:2.244          
+ Median :1.878                             Median :2.508          
+ Mean   :1.871                             Mean   :2.518          
+ 3rd Qu.:2.003                             3rd Qu.:2.796          
+ Max.   :2.353                             Max.   :3.719          
+ Monocyte count  Monocyte percentage of white cells Mean platelet volume
+ Min.   :0.269   Min.   :-0.8200                    Min.   :-0.7994     
+ 1st Qu.:1.211   1st Qu.: 0.1258                    1st Qu.: 0.4226     
+ Median :1.439   Median : 0.3566                    Median : 0.6984     
+ Mean   :1.433   Mean   : 0.3448                    Mean   : 0.7046     
+ 3rd Qu.:1.680   3rd Qu.: 0.5725                    3rd Qu.: 1.0185     
+ Max.   :2.502   Max.   : 1.4235                    Max.   : 1.9150     
+ Mean reticulocyte volume Mean sphered corpuscular volume Neutrophil count  
+ Min.   :-1.8701          Min.   :-1.2291                 Min.   :-1.68032  
+ 1st Qu.:-0.8858          1st Qu.:-0.1601                 1st Qu.:-1.02547  
+ Median :-0.6414          Median : 0.1272                 Median :-0.85999  
+ Mean   :-0.6423          Mean   : 0.1203                 Mean   :-0.85693  
+ 3rd Qu.:-0.3736          3rd Qu.: 0.4164                 3rd Qu.:-0.70218  
+ Max.   : 0.7296          Max.   : 1.3974                 Max.   :-0.06296  
+ Neutrophil percentage of white cells Platelet crit  
+ Min.   :-0.77535                     Min.   :1.642  
+ 1st Qu.:-0.28186                     1st Qu.:2.533  
+ Median :-0.12743                     Median :2.751  
+ Mean   :-0.12193                     Mean   :2.764  
+ 3rd Qu.: 0.02156                     3rd Qu.:3.015  
+ Max.   : 0.55981                     Max.   :3.956  
+ Platelet distribution width Platelet count    Red blood cell count
+ Min.   :1.016               Min.   :-0.2803   Min.   :-0.4268     
+ 1st Qu.:2.037               1st Qu.: 0.6965   1st Qu.: 0.3940     
+ Median :2.277               Median : 0.9104   Median : 0.6050     
+ Mean   :2.261               Mean   : 0.9262   Mean   : 0.6038     
+ 3rd Qu.:2.510               3rd Qu.: 1.1664   3rd Qu.: 0.8104     
+ Max.   :3.382               Max.   : 2.1380   Max.   : 1.6088     
+ Red cell distribution width Reticulocyte count
+ Min.   :-0.1191             Min.   :3.102     
+ 1st Qu.: 0.7155             1st Qu.:4.069     
+ Median : 0.9247             Median :4.274     
+ Mean   : 0.9134             Mean   :4.270     
+ 3rd Qu.: 1.1168             3rd Qu.:4.450     
+ Max.   : 1.8368             Max.   :5.408     
+ Reticulocyte fraction of red cells White blood cell count
+ Min.   :3.319                      Min.   :-1.4839       
+ 1st Qu.:4.300                      1st Qu.:-0.8319       
+ Median :4.505                      Median :-0.6528       
+ Mean   :4.487                      Mean   :-0.6482       
+ 3rd Qu.:4.689                      3rd Qu.:-0.4644       
+ Max.   :5.483                      Max.   : 0.2692       </code></pre>
 <pre class="r"><code># Loop through each PRS trait
 for (trait in names(prs_blood)[-1]) {  # Skip the sample_id column
   
@@ -994,32 +1135,1158 @@ for (trait in names(prs_blood)[-1]) {  # Skip the sample_id column
   # Print the plot for the current trait
   print(p)
 }</code></pre>
-<p><img src="figure/PRS.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-8.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-9.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-10.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-11.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-12.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-13.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-14.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-15.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-16.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-17.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-18.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-19.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-20.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-21.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-22.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-23.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-24.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-25.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-26.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-27.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-28.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-7-29.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
+Past versions of unnamed-chunk-7-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-1.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-2">
+Past versions of unnamed-chunk-7-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-2.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-3">
+Past versions of unnamed-chunk-7-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-3.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-4">
+Past versions of unnamed-chunk-7-4.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-4.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-5.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-5">
+Past versions of unnamed-chunk-7-5.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-5.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-6.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-6">
+Past versions of unnamed-chunk-7-6.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-6.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-7.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-7">
+Past versions of unnamed-chunk-7-7.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-7" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-7.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-8.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-8">
+Past versions of unnamed-chunk-7-8.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-8" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-8.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-9.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-9">
+Past versions of unnamed-chunk-7-9.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-9" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-9.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-10.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-10">
+Past versions of unnamed-chunk-7-10.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-10" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-10.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-11.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-11">
+Past versions of unnamed-chunk-7-11.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-11" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-11.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-12.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-12">
+Past versions of unnamed-chunk-7-12.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-12" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-12.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-13.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-13">
+Past versions of unnamed-chunk-7-13.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-13" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-13.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-14.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-14">
+Past versions of unnamed-chunk-7-14.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-14" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-14.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-15.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-15">
+Past versions of unnamed-chunk-7-15.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-15" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-15.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-16.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-16">
+Past versions of unnamed-chunk-7-16.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-16" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-16.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-17.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-17">
+Past versions of unnamed-chunk-7-17.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-17" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-17.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-18.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-18">
+Past versions of unnamed-chunk-7-18.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-18" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-18.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-19.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-19">
+Past versions of unnamed-chunk-7-19.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-19" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-19.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-20.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-20">
+Past versions of unnamed-chunk-7-20.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-20" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-20.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-21.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-21">
+Past versions of unnamed-chunk-7-21.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-21" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-21.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-22.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-22">
+Past versions of unnamed-chunk-7-22.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-22" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-22.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-23.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-23">
+Past versions of unnamed-chunk-7-23.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-23" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-23.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-24.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-24">
+Past versions of unnamed-chunk-7-24.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-24" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-24.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-25.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-25">
+Past versions of unnamed-chunk-7-25.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-25" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-25.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-26.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-26">
+Past versions of unnamed-chunk-7-26.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-26" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-26.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-27.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-27">
+Past versions of unnamed-chunk-7-27.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-27" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-27.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-28.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-28">
+Past versions of unnamed-chunk-7-28.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-28" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-28.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-7-29.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-29">
+Past versions of unnamed-chunk-7-29.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-29" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-7-29.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Calculate the correlation matrix
-cor_matrix &lt;- cor(prs_blood[, -1], use = &quot;complete.obs&quot;)
+cor_matrix &lt;- cor(prs_blood[, -1], use = &quot;pairwise.complete.obs&quot;)
 
 # Create the heatmap using corrplot
-corrplot(cor_matrix, 
-         method = &quot;color&quot;, 
-         col = colorRampPalette(c(&quot;blue&quot;, &quot;white&quot;, &quot;red&quot;))(200), 
-         addCoef.col = &quot;black&quot;, # Add correlation coefficients to the plot
-         number.cex = 0.4, # Adjust the font size of the numbers
-         diag = FALSE, # Optionally remove diagonal (self-correlation)
-         tl.col = &quot;black&quot;, tl.cex = 0.5) # Make the column names smaller</code></pre>
+pheatmap(cor_matrix,show_rownames = F, fontsize_col = 6.5, 
+         border_color = NA, angle_col = 45)</code></pre>
 <p><img src="figure/PRS.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>The correlation plot shows that some traits are more strongly
-correlated than others due to two main factors: 1) Traits mapping to the
-same ontological category, such as PGS000169, PGS000170, PGS000189, and
-PGS000190, which are all associated with reticulocyte count and thus
-exhibit high correlation; and 2) One trait measuring count and the other
-measuring percentage, as seen with PGS000163 (Basophil count) and
-PGS000164 (Basophil percentage of white cells), which are highly
-correlated.</p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
+Past versions of unnamed-chunk-8-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-8-1.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="check-the-distribution-of-prs-for-each-immune-trait"
 class="section level1">
 <h1>Check the distribution of PRS for each immune trait</h1>
-<pre class="r"><code>prs_immune &lt;- fread(&quot;analysis/prs_immune.txt&quot;, header = TRUE, stringsAsFactors = FALSE)
+<pre class="r"><code>prs_immune &lt;- fread(&quot;analysis/prs_immune.txt&quot;, header = TRUE, 
+                    stringsAsFactors = FALSE)
 head(prs_immune)</code></pre>
 <pre><code>    sample_id Celiac_GCST90014442 Celiac_GCST90468120 IBD_GCST90013901
        &lt;char&gt;               &lt;num&gt;               &lt;num&gt;            &lt;num&gt;
@@ -1100,7 +2367,310 @@ for (trait in names(prs_immune)[-1]) {  # Skip the sample_id column
   # Print the plot for the current trait
   print(p)
 }</code></pre>
-<p><img src="figure/PRS.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-10-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-10-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-10-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-10-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-10-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-10-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/PRS.Rmd/unnamed-chunk-10-8.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
+Past versions of unnamed-chunk-10-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-10-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-10-1.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-10-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-2">
+Past versions of unnamed-chunk-10-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-10-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-10-2.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-10-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-3">
+Past versions of unnamed-chunk-10-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-10-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-10-3.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-10-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-4">
+Past versions of unnamed-chunk-10-4.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-10-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-10-4.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-10-5.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-5">
+Past versions of unnamed-chunk-10-5.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-10-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-10-5.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-10-6.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-6">
+Past versions of unnamed-chunk-10-6.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-10-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-10-6.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-10-7.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-7">
+Past versions of unnamed-chunk-10-7.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-10-7" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-10-7.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PRS.Rmd/unnamed-chunk-10-8.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-8">
+Past versions of unnamed-chunk-10-8.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-10-8" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-10-8.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Compared to other traits, LUPUS_GCST011096 and LUPUS_GCST003156
 traits are more sensitive to population substructures. The
 LUPUS_GCST011096 and LUPUS_GCST003156 traits show a bimodal distribution
@@ -1113,14 +2683,46 @@ PRS.</p>
 cor_matrix &lt;- cor(prs_immune[, -1], use = &quot;complete.obs&quot;)
 
 # Create the heatmap using corrplot
-corrplot(cor_matrix, 
-         method = &quot;color&quot;, 
-         col = colorRampPalette(c(&quot;blue&quot;, &quot;white&quot;, &quot;red&quot;))(200), 
-         addCoef.col = &quot;black&quot;, # Add correlation coefficients to the plot
-         number.cex = 0.4, # Adjust the font size of the numbers
-         diag = FALSE, # Optionally remove diagonal (self-correlation)
-         tl.col = &quot;black&quot;, tl.cex = 0.5) # Make the column names smaller</code></pre>
+pheatmap(cor_matrix, show_rownames = F, fontsize_col = 7.5, 
+         border_color = NA, angle_col = 45)</code></pre>
 <p><img src="figure/PRS.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-1">
+Past versions of unnamed-chunk-11-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-11-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/eba00c6d3101277098bd14531b587973a17071ca/docs/figure/PRS.Rmd/unnamed-chunk-11-1.png" target="_blank">eba00c6</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-04-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Similarly, PRS for the same trait is highly correlated.</p>
 <br>
 <p>
@@ -1146,27 +2748,27 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] corrplot_0.95     ggplot2_3.5.1     bigsnpr_1.12.2    bigstatsr_1.5.12 
-[5] data.table_1.16.4 workflowr_1.7.1  
+[1] pheatmap_1.0.12   corrplot_0.95     ggplot2_3.5.1     bigsnpr_1.12.2   
+[5] bigstatsr_1.5.12  data.table_1.16.4 workflowr_1.7.1  
 
 loaded via a namespace (and not attached):
  [1] tidyselect_1.2.1   xfun_0.50          bslib_0.9.0        lattice_0.22-6    
  [5] bigassertr_0.1.6   colorspace_2.1-1   vctrs_0.6.5        generics_0.1.3    
  [9] htmltools_0.5.8.1  yaml_2.3.10        rlang_1.1.5        jquerylib_0.1.4   
 [13] later_1.4.1        pillar_1.10.1      withr_3.0.2        glue_1.8.0        
-[17] rngtools_1.5.2     doRNG_1.8.6.1      foreach_1.5.2      lifecycle_1.0.4   
-[21] stringr_1.5.1      munsell_0.5.1      gtable_0.3.6       codetools_0.2-20  
-[25] evaluate_1.0.3     labeling_0.4.3     knitr_1.49         callr_3.7.6       
-[29] fastmap_1.2.0      doParallel_1.0.17  httpuv_1.6.15      ps_1.8.1          
-[33] parallel_4.2.2     Rcpp_1.0.14        promises_1.3.2     scales_1.3.0      
-[37] cachem_1.1.0       bigsparser_0.7.3   jsonlite_1.8.9     farver_2.1.2      
-[41] fs_1.6.5           digest_0.6.37      stringi_1.8.4      bigparallelr_0.3.2
-[45] processx_3.8.5     dplyr_1.1.4        getPass_0.2-4      cowplot_1.1.3     
-[49] rprojroot_2.0.4    grid_4.2.2         cli_3.6.3          tools_4.2.2       
-[53] magrittr_2.0.3     sass_0.4.9         tibble_3.2.1       whisker_0.4.1     
-[57] pkgconfig_2.0.3    Matrix_1.5-1       rmarkdown_2.29     httr_1.4.7        
-[61] rstudioapi_0.17.1  iterators_1.0.14   rmio_0.4.0         R6_2.5.1          
-[65] flock_0.7          git2r_0.33.0       compiler_4.2.2    </code></pre>
+[17] RColorBrewer_1.1-3 rngtools_1.5.2     doRNG_1.8.6.1      foreach_1.5.2     
+[21] lifecycle_1.0.4    stringr_1.5.1      munsell_0.5.1      gtable_0.3.6      
+[25] codetools_0.2-20   evaluate_1.0.3     labeling_0.4.3     knitr_1.49        
+[29] callr_3.7.6        fastmap_1.2.0      doParallel_1.0.17  httpuv_1.6.15     
+[33] ps_1.8.1           parallel_4.2.2     Rcpp_1.0.14        promises_1.3.2    
+[37] scales_1.3.0       cachem_1.1.0       bigsparser_0.7.3   jsonlite_1.8.9    
+[41] farver_2.1.2       fs_1.6.5           digest_0.6.37      stringi_1.8.4     
+[45] bigparallelr_0.3.2 processx_3.8.5     dplyr_1.1.4        getPass_0.2-4     
+[49] cowplot_1.1.3      rprojroot_2.0.4    grid_4.2.2         cli_3.6.3         
+[53] tools_4.2.2        magrittr_2.0.3     sass_0.4.9         tibble_3.2.1      
+[57] whisker_0.4.1      pkgconfig_2.0.3    Matrix_1.5-1       rmarkdown_2.29    
+[61] httr_1.4.7         rstudioapi_0.17.1  iterators_1.0.14   rmio_0.4.0        
+[65] R6_2.5.1           flock_0.7          git2r_0.33.0       compiler_4.2.2    </code></pre>
 </div>
 </div>
 </div>

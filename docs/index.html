@@ -310,7 +310,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-05-07
+<strong>Last updated:</strong> 2025-05-13
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -357,15 +357,15 @@ results.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree7a5b0e4b564f2a60d2b440de79814384160f09fdtargetblank7a5b0e4a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstreec5d5446df49e64e682e21fb9717e7bb438e267a6targetblankc5d5446a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/yixuan-chen-elisa/prs/tree/7a5b0e4b564f2a60d2b440de79814384160f09fd" target="_blank">7a5b0e4</a>
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/c5d5446df49e64e682e21fb9717e7bb438e267a6" target="_blank">c5d5446</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree7a5b0e4b564f2a60d2b440de79814384160f09fdtargetblank7a5b0e4a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstreec5d5446df49e64e682e21fb9717e7bb438e267a6targetblankc5d5446a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -375,7 +375,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/yixuan-chen-elisa/prs/tree/7a5b0e4b564f2a60d2b440de79814384160f09fd" target="_blank">7a5b0e4</a>.
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/c5d5446df49e64e682e21fb9717e7bb438e267a6" target="_blank">c5d5446</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -402,11 +402,14 @@ Untracked files:
     Untracked:  analysis/metadata_quantile.txt
     Untracked:  analysis/normalized_counts.rda
     Untracked:  analysis/quantile/
+    Untracked:  analysis/validation.Rmd
     Untracked:  analysis/vst norm counts.rda
+    Untracked:  data/Artery_Aorta.v8.covariates.txt
     Untracked:  data/GTEx_v8.bk
     Untracked:  data/GTEx_v8.rds
     Untracked:  data/Whole_Blood.v8.covariates.txt
     Untracked:  data/blood_cell/
+    Untracked:  data/gene_reads_2017-06-05_v8_artery_aorta.gct.gz
     Untracked:  data/gene_reads_2017-06-05_v8_whole_blood.gct
     Untracked:  data/gene_tpm_2017-06-05_v8_whole_blood.gct.gz
     Untracked:  data/immune/
@@ -415,6 +418,7 @@ Untracked files:
 Unstaged changes:
     Deleted:    analysis/QC.Rmd
     Deleted:    analysis/normalized_counts.txt
+    Modified:   analysis/prs_blood_cell.txt
     Modified:   prs.Rproj
 
 </code></pre>
@@ -459,6 +463,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/c5d5446df49e64e682e21fb9717e7bb438e267a6/analysis/index.Rmd" target="_blank">c5d5446</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-05-13
+</td>
+<td>
+workflowr::wflow_publish(c("analysis/PRS.Rmd", "analysis/index.Rmd",
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/yixuan-chen-elisa/prs/d129b3e136dc67029de8b15f88711452342a73dd/docs/index.html" target="_blank">d129b3e</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-05-07
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -576,16 +614,11 @@ Start workflowr project.
 <li><a href="PRS_data_info.html">Data Description</a></li>
 </ul>
 </div>
-<div id="prs-calculation" class="section level1">
-<h1>PRS Calculation</h1>
-<ul>
-<li><a href="PRS.html">Obtain PRS for each trait</a></li>
-</ul>
-</div>
 <div id="differential-expression" class="section level1">
 <h1>Differential Expression</h1>
 <ul>
-<li><p><a href="metadata.html">Create Metadata (PRS + PCs +
+<li><p><a href="PRS.html">Obtain PRS for each trait</a></p></li>
+<li><p><a href="metadata.html">Create Metadata PRS + PCs +
 Sex)</a></p></li>
 <li><p><a
 href="expression_normalization.html">Normalization</a></p></li>
