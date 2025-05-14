@@ -24,3 +24,5 @@ Welcome to my research website.
 
 - [Differential gene expression](differential_expression.html)
 
+- [Validation](validation.html)
+

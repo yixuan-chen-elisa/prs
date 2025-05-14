@@ -1,0 +1,664 @@
+---
+title: "Validation"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(data.table)
+library(dplyr)
+library(ggplot2)
+library(corrplot)
+library(DESeq2)
+library(SummarizedExperiment)
+library(BiocParallel)
+library(ggrepel)
+library(genekitr)
+library(org.Hs.eg.db)
+library(enrichplot)
+library(clusterProfiler)
+```
+
+# Artery Aorta Validation
+
+## Correlation between PRS & expression PCs
+
+```{r}
+# load prs & pcs
+metadata_file <- "analysis/metadata_artery.txt"
+metadata <- read.csv(metadata_file, header = T, sep = "\t", stringsAsFactors = T)
+metadata$sex <- as.factor(metadata$sex)
+
+traits <- metadata[, 7:43]
+pc <- metadata[, 1:5]
+
+# Calculate the correlation between each trait and each PC
+correlation_matrix <- cor(traits, pc)
+range(correlation_matrix)
+correlation_matrix <- t(correlation_matrix)
+
+# Create the heatmap using corrplot
+corrplot(correlation_matrix, method = "color", 
+         col = colorRampPalette(c("blue", "white", "red"))(200), # color palette
+         addCoef.col = "black", # Add correlation coefficients to the plot
+         number.cex = 0.4, # Adjust the font size of the numbers
+         tl.col = "black", # text label color
+         tl.srt = 90, # rotate text labels
+         tl.cex = 0.5, 
+         title = "Correlation between Traits and expression PCs", 
+         mar = c(0, 0, 1, 0)
+)
+```
+
+## Perform DESeq2 differential expression analysis for each trait
+
+```{r, warning=FALSE, eval=FALSE}
+# Load the gene expression data
+gene_expr_file <- "data/gene_reads_2017-06-05_v8_artery_aorta.gct"
+raw_count_df <- fread(gene_expr_file, header = TRUE, sep = "\t", drop = "id")
+
+# load protein_coding list
+protein_coding <- fread("data/protein-coding_gene.txt", sep = "\t")
+protein_coding <- protein_coding[, c("symbol", "ensembl_gene_id")]
+
+# keep only protein-coding genes
+raw_count_df <- raw_count_df[raw_count_df$Description %in% protein_coding$symbol, ]
+
+id <- raw_count_df$Name
+raw_count <- raw_count_df[, -c(1:2)]
+
+# modify GTEx sample names matching names used in PRS data
+colnames(raw_count) <- sub("^(GTEX-[^-.]+).*", "\\1", colnames(raw_count))
+
+matching_samples <- intersect(rownames(metadata), colnames(raw_count))
+final_count <- raw_count[ , ..matching_samples]
+
+# prefilter: keep only rows that have a count of at least 10
+keep_genes <- rowSums(final_count >= 10) > 0
+final_count <- final_count[keep_genes, ]
+id <- id[keep_genes]
+dim(final_count)
+
+# Loop through each trait and run DESeq2
+for (trait in colnames(traits)) {
+  
+  # Standardize PRS for the current trait
+  prs_trait <- traits[,trait]
+  prs_trait <- scale(prs_trait) # Standardize PRS to mean = 0, sd = 1
+    
+  # Add the standardized PRS to the metadata for continuous trait
+  metadata[,trait] <- prs_trait
+  
+  # Create the DESeqDataSet for the current trait
+  dds <- DESeqDataSetFromMatrix(
+    countData = as.matrix(final_count),  # Raw counts
+    colData = metadata[, c(1:6, which(colnames(metadata) == trait))],
+    design = as.formula(paste("~ PC1 + PC2 + PC3 + PC4 + PC5 + sex +", trait))
+  )
+  rownames(dds) <- id
+  
+  # Run DESeq2 analysis
+  dds <- DESeq(dds, parallel = TRUE, BPPARAM = MulticoreParam(4))
+  
+  # Get the results for the current trait
+  res <- results(dds)
+  
+  # Save the results to a file
+  write.csv(res, paste0("differential_expression_", trait, "_results_artery_validation.csv"))
+  
+  # print a summary of the results
+  print(paste("Results for trait:", trait))
+  print(summary(res))
+  
+  # plot the MA-plot for the current trait
+  png(paste0("ma_plot_", trait, "_artery_validation.png"), width = 800, height = 600)
+  plotMA(res, main = paste("Continuous (Artery validation): MA Plot for", trait))
+  dev.off()
+  
+  # volcano plot
+  res_tableOE <- as.data.frame(res)
+  res_tableOE$gene_name <- raw_count_df$Description[keep_genes]
+  res_tableOE <- mutate(res_tableOE, threshold_OE = padj < 0.1)
+  res_tableOE <- res_tableOE %>% arrange(padj) %>% mutate(genelabels = "")
+  res_tableOE$genelabels[1:10] <- res_tableOE$gene_name[1:10]
+  
+  volcano_plot <- ggplot(res_tableOE, aes(x = log2FoldChange, y = -log10(padj))) +
+    geom_point(aes(colour = threshold_OE)) +
+    geom_text_repel(aes(label = genelabels)) +
+    ggtitle(label = paste("Continuous: Volcano Plot for", trait), 
+            subtitle = "Artery Aorta validation") +
+    xlab("log2 fold change") + 
+    ylab("-log10 adjusted p-value") +
+    theme(legend.position = "none",
+          plot.title = element_text(size = rel(1.5), hjust = 0.5),
+          axis.title = element_text(size = rel(1.25)))
+  
+  # Save the volcano plot
+  png(paste0("volcano_plot_", trait, "_artery_validation.png"), width = 800, 
+      height = 600)
+  print(volcano_plot)
+  dev.off()
+}
+```
+
+```{r, warning=FALSE, eval=FALSE}
+metadata_file <- "analysis/metadata_artery_quantile.txt"
+metadata <- read.csv(metadata_file, header = T, sep = "\t", stringsAsFactors = T)
+metadata$sex <- as.factor(metadata$sex)
+
+traits <- metadata[, 7:43]
+
+# Loop through each trait and run DESeq2
+for (trait in colnames(traits)) {
+  
+  # Create the DESeqDataSet for the current trait
+  dds <- DESeqDataSetFromMatrix(
+    countData = as.matrix(final_count),  # Raw counts
+    colData = metadata[, c(1:6, which(colnames(metadata) == trait))],
+    design = as.formula(paste("~ PC1 + PC2 + PC3 + PC4 + PC5 + sex +", trait))
+  )
+  rownames(dds) <- id
+  
+  # Run DESeq2 analysis
+  dds <- DESeq(dds, parallel = TRUE, BPPARAM = MulticoreParam(4))
+  
+  # Get the results for the current trait
+  res <- results(dds)
+  
+  # Save the results to a file
+  write.csv(res, paste0("differential_expression_", trait, "_quantile_results_artery_validation.csv"))
+  
+  # print a summary of the results
+  print(paste("Results for trait:", trait))
+  print(summary(res))
+  
+  # plot the MA-plot for the current trait
+  png(paste0("ma_plot_quantile_", trait, "_artery_validation.png"), width = 800, height = 600)
+  plotMA(res, main = paste("Quantile (Artery Validation): MA Plot for", trait))
+  dev.off()
+  
+  # volcano plot
+  res_tableOE <- as.data.frame(res)
+  res_tableOE$gene_name <- raw_count_df$Description[keep_genes]
+  res_tableOE <- mutate(res_tableOE, threshold_OE = padj < 0.1 & 
+                          abs(log2FoldChange) >= 0.5)
+  res_tableOE <- res_tableOE %>% arrange(padj) %>% mutate(genelabels = "")
+  res_tableOE$genelabels[1:10] <- res_tableOE$gene_name[1:10]
+  
+  volcano_plot <- ggplot(res_tableOE, aes(x = log2FoldChange, y = -log10(padj))) +
+    geom_point(aes(colour = threshold_OE)) +
+    geom_text_repel(aes(label = genelabels)) +
+    ggtitle(paste("Quantile:Volcano Plot for", trait), 
+            subtitle = "Artery Aorta validation") +
+    xlab("log2 fold change") + 
+    ylab("-log10 adjusted p-value") +
+    theme(legend.position = "none",
+          plot.title = element_text(size = rel(1.5), hjust = 0.5),
+          axis.title = element_text(size = rel(1.25)))
+  
+  # Save the volcano plot
+  png(paste0("volcano_plot_quantile_", trait, "_artery_validation.png"), width = 800, height = 600)
+  print(volcano_plot)
+  dev.off()
+}
+```
+
+## Gene enrichment Analysis
+
+BgRatio: Number of all genes in specific GO term / Number of universal
+genes
+
+GeneRatio: Number of genes enriched in specific term / Number of input
+genes
+
+FoldEnrichment: GeneRatio / BgRatio
+
+```{r, warning=FALSE, eval=FALSE}
+# continous
+dir_path <- "analysis/continuous_artery"
+files <- list.files(dir_path, pattern = "differential_expression_.*_results_artery_validation.csv", full.names = TRUE)
+
+for (file in files) {
+  trait <- gsub("differential_expression_(.*)_results_artery_validation.csv", "\\1", basename(file))
+  trait
+  res_tableOE <- read.csv(file, header = T, row.names = 1)
+  
+  deGenes <- res_tableOE[res_tableOE$padj < 0.1 & 
+                           abs(res_tableOE$log2FoldChange) >= 0.5, ]
+  deGenes$gene_id <- gsub("\\.\\d+$", "", rownames(deGenes))
+  
+  gse <- enrichGO(gene = deGenes$gene_id, ont = "BP", 
+                OrgDb ="org.Hs.eg.db", keyType = "ENSEMBL")
+  
+  write.csv(as.data.frame(gse), file = paste0("GO_enrichment_", trait, "_results_artery_validation.csv"))
+  
+  gse <- as.data.frame(gse)
+  gse$GeneRatio_num <- as.numeric(sapply(strsplit(gse$GeneRatio, "/"), 
+                                         function(x) x[1])) /
+                     as.numeric(sapply(strsplit(gse$GeneRatio, "/"), function(x) x[2]))
+
+  gse$BgRatio_num <- as.numeric(sapply(strsplit(gse$BgRatio, "/"), function(x) x[1])) / 
+                     as.numeric(sapply(strsplit(gse$BgRatio, "/"), function(x) x[2]))
+  
+  gse <- cbind(gse, FoldEnrich = gse$GeneRatio_num/gse$BgRatio_num)
+  
+  if (nrow(gse) >= 20) {
+    enrich_plot <- plotEnrich(gse[1:20,], plot_type = "dot", scale_ratio = 0.5) +
+    labs(title = paste("Continuous: Enrichment plot for", trait), 
+         subtitle = "Artery Aorta validation") + 
+    theme(plot.title = element_text(size = 10)) 
+  }else{
+    enrich_plot <- plotEnrich(gse, plot_type = "dot", scale_ratio = 0.5) +
+    labs(title = paste("Continuous: Enrichment plot for", trait), 
+         subtitle = "Artery Aorta validation") + 
+    theme(plot.title = element_text(size = 10)) 
+  }
+  ggsave(paste0("enrichment_plot_", trait, "_artery_validation.png"), plot = enrich_plot, width = 8, height = 6)
+}
+```
+
+```{r, warning=FALSE, eval=FALSE}
+# quantile
+dir_path <- "analysis/quantile_artery"
+files <- list.files(dir_path, pattern = "differential_expression_.*_quantile_results_artery_validation.csv",
+                    full.names = TRUE)
+
+for (file in files) {
+  trait <- gsub("differential_expression_(.*)_quantile_results_artery_validation.csv", "\\1", basename(file))
+  trait
+  res_tableOE <- read.csv(file, header = T, row.names = 1)
+  
+  deGenes <- res_tableOE[res_tableOE$padj < 0.1 & 
+                           abs(res_tableOE$log2FoldChange) >= 0.5, ]
+  deGenes$gene_id <- gsub("\\.\\d+$", "", rownames(deGenes))
+  
+  gse <- enrichGO(gene = deGenes$gene_id, ont = "BP", 
+                OrgDb ="org.Hs.eg.db", keyType = "ENSEMBL")
+  
+  write.csv(as.data.frame(gse), file = paste0("GO_enrichment_quantile_", trait, "_results_artery_validation.csv"))
+  
+  gse <- as.data.frame(gse)
+  gse$GeneRatio_num <- as.numeric(sapply(strsplit(gse$GeneRatio, "/"), 
+                                         function(x) x[1])) /
+                     as.numeric(sapply(strsplit(gse$GeneRatio, "/"), function(x) x[2]))
+
+  gse$BgRatio_num <- as.numeric(sapply(strsplit(gse$BgRatio, "/"), function(x) x[1])) / 
+                     as.numeric(sapply(strsplit(gse$BgRatio, "/"), function(x) x[2]))
+  
+  gse <- cbind(gse, FoldEnrich = gse$GeneRatio_num/gse$BgRatio_num)
+  
+  if (nrow(gse) >= 20) {
+    enrich_plot <- plotEnrich(gse[1:20,], plot_type = "dot", scale_ratio = 0.5) +
+    labs(title = paste("Quantile: Enrichment plot for", trait), 
+         subtitle = "Artery Aorta validation") + 
+    theme(plot.title = element_text(size = 10)) 
+  }else{
+    enrich_plot <- plotEnrich(gse, plot_type = "dot", scale_ratio = 0.5) +
+    labs(title = paste("Quantile: Enrichment plot for", trait), 
+         subtitle = "Artery Aorta validation") + 
+    theme(plot.title = element_text(size = 10)) 
+  }
+  ggsave(paste0("enrichment_plot_quantile_", trait, "_artery_validation.png"), plot = enrich_plot, width = 8, height = 6)
+}
+```
+
+## Result
+
+```{r}
+continuous_dir <- "analysis/continuous_artery"
+quantile_dir <- "analysis/quantile_artery"
+
+# Get the list of differential expression results and GO enrichment results
+de_files_continuous <- list.files(continuous_dir, pattern = "differential_expression_.*_results_artery_validation.csv", 
+                                  full.names = TRUE)
+go_files_continuous <- list.files(continuous_dir, pattern = "GO_enrichment_.*_results_artery_validation.csv", 
+                                  full.names = TRUE)
+
+de_files_quantile <- list.files(quantile_dir, pattern = "differential_expression_.*_quantile_results_artery_validation.csv", 
+                                full.names = TRUE)
+go_files_quantile <- list.files(quantile_dir, pattern = "GO_enrichment_quantile_.*_results_artery_validation.csv", 
+                                full.names = TRUE)
+
+# Initialize a data frame to store the results
+results_df_continuous <- data.frame(trait = character(),
+                                    num_significant_de = integer(),
+                                    upregulated = integer(),
+                                    downregulated = integer(),
+                                    num_enriched_go = integer(),
+                                    stringsAsFactors = FALSE)
+
+results_df_quantile <- data.frame(trait = character(),
+                                  num_significant_de = integer(),
+                                  upregulated = integer(),
+                                  downregulated = integer(),
+                                  num_enriched_go = integer(),
+                                  stringsAsFactors = FALSE)
+
+# Function to extract significant DE genes and GO enriched pathways
+extract_results <- function(de_file, go_file, analysis_type) {
+  # Load the differential expression results
+  res <- read.csv(de_file, header = T, row.names = 1)
+  
+  # Filter for significant DE genes (padj < 0.1)
+  significant_de <- res[!is.na(res$padj) & res$padj < 0.1, ]
+  
+  # Count number of upregulated and downregulated genes
+  upregulated <- sum(significant_de$log2FoldChange > 0)
+  downregulated <- sum(significant_de$log2FoldChange < 0)
+  
+  # Load the GO enrichment results
+  go_res <- read.csv(go_file, header = T, row.names = 1)
+  
+  # Count the number of enriched GO pathways (adjusted p-value < 0.05)
+  enriched_go <- sum(go_res$p.adjust < 0.05)
+  
+  if (analysis_type == "continuous"){
+    # Extract trait name from the file name
+    trait_name <- gsub("differential_expression_|_results.csv", "", basename(de_file))
+    
+    # Create a row for this trait and add it to the results data frame
+    results_df_continuous <<- rbind(results_df_continuous, 
+                                    data.frame(trait = trait_name,
+                                               num_significant_de = nrow(significant_de),
+                                               upregulated = upregulated,
+                                              downregulated = downregulated,
+                                              num_enriched_go = enriched_go))
+  }else if (analysis_type == "quantile") {
+    # Extract trait name from the file name
+    trait_name <- gsub("differential_expression_|_quantile_results.csv", "", basename(de_file))
+    
+    # Create a row for this trait and add it to the results data frame
+    results_df_quantile <<- rbind(
+      results_df_quantile,
+      data.frame(
+        trait = trait_name,
+        num_significant_de = nrow(significant_de),
+        upregulated = upregulated,
+        downregulated = downregulated,
+        num_enriched_go = enriched_go
+      )
+    )
+  }
+}
+
+# Loop through the continuous files and extract results
+for (i in seq_along(de_files_continuous)) {
+  extract_results(de_files_continuous[i], go_files_continuous[i], "continuous")
+}
+
+# Loop through the quantile files and extract results
+for (i in seq_along(de_files_quantile)) {
+  extract_results(de_files_quantile[i], go_files_quantile[i], "quantile")
+}
+
+colnames(results_df_continuous) <- c("Trait",
+                          "Significant differential expressed genes", 
+                          "Up", "Down", "Significant GO enriched pathways")
+colnames(results_df_quantile) <- c("Trait",
+                          "Significant differential expressed genes", 
+                          "Up", "Down", "Significant GO enriched pathways")
+knitr::kable(results_df_continuous, caption = "Continuous")
+knitr::kable(results_df_quantile, caption = "Quantile (Stratify trait into top 25% and remaining)")
+```
+
+![](figure/validation.Rmd/ma_plot_Basophil.count_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Basophil.count_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Basophil.count_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Basophil.count_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Basophil.count_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Basophil.count_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Basophil.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Basophil.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Basophil.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Basophil.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Basophil.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Basophil.percentage.of.white.cells_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Eosinophil.count_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Eosinophil.count_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Eosinophil.count_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Eosinophil.count_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Eosinophil.count_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Eosinophil.count_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Eosinophil.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Eosinophil.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Eosinophil.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Eosinophil.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Eosinophil.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Eosinophil.percentage.of.white.cells_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Hematocrit_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Hematocrit_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Hematocrit_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Hematocrit_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Hematocrit_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Hematocrit_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Hemoglobin.concentration_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Hemoglobin.concentration_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Hemoglobin.concentration_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Hemoglobin.concentration_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Hemoglobin.concentration_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Hemoglobin.concentration_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_High.light.scatter.reticulocyte.count_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_High.light.scatter.reticulocyte.count_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_High.light.scatter.reticulocyte.count_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_High.light.scatter.reticulocyte.count_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_High.light.scatter.reticulocyte.count_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_High.light.scatter.reticulocyte.count_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Immature.fraction.of.reticulocytes_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Immature.fraction.of.reticulocytes_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Immature.fraction.of.reticulocytes_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Immature.fraction.of.reticulocytes_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Immature.fraction.of.reticulocytes_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Immature.fraction.of.reticulocytes_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Lymphocyte.count_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Lymphocyte.count_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Lymphocyte.count_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Lymphocyte.count_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Lymphocyte.count_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Lymphocyte.count_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Lymphocyte.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Lymphocyte.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Lymphocyte.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Lymphocyte.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Lymphocyte.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Lymphocyte.percentage.of.white.cells_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.hemoglobin.concentration_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.hemoglobin.concentration_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.hemoglobin.concentration_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.hemoglobin.concentration_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.hemoglobin.concentration_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.hemoglobin.concentration_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.hemoglobin_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.hemoglobin_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.hemoglobin_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.hemoglobin_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.hemoglobin_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.hemoglobin_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.volume_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.volume_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.volume_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.volume_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.volume_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.volume_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Mean.platelet.volume_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.platelet.volume_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Mean.platelet.volume_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.platelet.volume_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Mean.platelet.volume_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.platelet.volume_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Mean.reticulocyte.volume_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.reticulocyte.volume_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Mean.reticulocyte.volume_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.reticulocyte.volume_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Mean.reticulocyte.volume_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.reticulocyte.volume_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Mean.sphered.corpuscular.volume_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.sphered.corpuscular.volume_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Mean.sphered.corpuscular.volume_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.sphered.corpuscular.volume_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Mean.sphered.corpuscular.volume_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.sphered.corpuscular.volume_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Monocyte.count_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Monocyte.count_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Monocyte.count_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Monocyte.count_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Monocyte.count_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Monocyte.count_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Monocyte.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Monocyte.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Monocyte.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Monocyte.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Monocyte.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Monocyte.percentage.of.white.cells_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Neutrophil.count_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Neutrophil.count_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Neutrophil.count_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Neutrophil.count_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Neutrophil.count_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Neutrophil.count_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Neutrophil.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Neutrophil.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Neutrophil.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Neutrophil.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Neutrophil.percentage.of.white.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Neutrophil.percentage.of.white.cells_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Platelet.count_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Platelet.count_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Platelet.count_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.count_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Platelet.count_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.count_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Platelet.crit_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Platelet.crit_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Platelet.crit_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.crit_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Platelet.crit_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.crit_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Platelet.distribution.width_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Platelet.distribution.width_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Platelet.distribution.width_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.distribution.width_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Platelet.distribution.width_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.distribution.width_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Red.blood.cell.count_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Red.blood.cell.count_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Red.blood.cell.count_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Red.blood.cell.count_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Red.blood.cell.count_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Red.blood.cell.count_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Red.cell.distribution.width_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Red.cell.distribution.width_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Red.cell.distribution.width_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Red.cell.distribution.width_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Red.cell.distribution.width_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Red.cell.distribution.width_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Reticulocyte.count_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Reticulocyte.count_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Reticulocyte.count_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Reticulocyte.count_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Reticulocyte.count_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Reticulocyte.count_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Reticulocyte.fraction.of.red.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Reticulocyte.fraction.of.red.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Reticulocyte.fraction.of.red.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Reticulocyte.fraction.of.red.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Reticulocyte.fraction.of.red.cells_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Reticulocyte.fraction.of.red.cells_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_White.blood.cell.count_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_White.blood.cell.count_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_White.blood.cell.count_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_White.blood.cell.count_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_White.blood.cell.count_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_White.blood.cell.count_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Celiac_GCST90014442_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Celiac_GCST90014442_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90014442_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Celiac_GCST90014442_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Celiac_GCST90014442_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Celiac_GCST90014442_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Celiac_GCST90468120_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_Celiac_GCST90468120_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90468120_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Celiac_GCST90468120_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_Celiac_GCST90468120_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Celiac_GCST90468120_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_IBD_GCST90013901_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_IBD_GCST90013901_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013901_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_IBD_GCST90013901_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_IBD_GCST90013901_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_IBD_GCST90013901_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_IBD_GCST90013951_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_IBD_GCST90013951_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013951_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_IBD_GCST90013951_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_IBD_GCST90013951_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_IBD_GCST90013951_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_LUPUS_GCST003156_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_LUPUS_GCST003156_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST003156_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_LUPUS_GCST003156_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_LUPUS_GCST003156_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_LUPUS_GCST003156_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_LUPUS_GCST011096_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_LUPUS_GCST011096_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST011096_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_LUPUS_GCST011096_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_LUPUS_GCST011096_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_LUPUS_GCST011096_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_T1D_GCST90000529_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_T1D_GCST90000529_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_T1D_GCST90000529_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_T1D_GCST90000529_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_T1D_GCST90000529_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_T1D_GCST90000529_artery_validation.png)
+
+![](figure/differential_expression.Rmd/ma_plot_T1D_GCST90014023_artery_validation.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_T1D_GCST90014023_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_T1D_GCST90014023_artery_validation.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_T1D_GCST90014023_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_T1D_GCST90014023_artery_validation.png)
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_T1D_GCST90014023_artery_validation.png)
