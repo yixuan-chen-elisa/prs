@@ -205,7 +205,7 @@ BgRatio: Number of all genes in specific GO term / Number of universal genes
 
 GeneRatio: Number of genes enriched in specific term / Number of input genes
 
-FoldEnrichment: GeneRatio / BgRatio
+FoldEnrichment: GeneRatio / BgRatio (i.e. how much more enriched a term is in your genes of interest compared to the total gene set). 
 
 ```{r, warning=FALSE, eval=FALSE}
 # continous
@@ -285,8 +285,8 @@ for (file in files) {
 # Result table
 
 ```{r}
-continuous_dir <- "analysis/continuous"
-quantile_dir <- "analysis/quantile"
+continuous_dir <- "analysis/continuous_wb"
+quantile_dir <- "analysis/quantile_wb"
 
 # Get the list of differential expression results and GO enrichment results
 de_files_continuous <- list.files(continuous_dir, pattern = "differential_expression_.*_results.csv", 
@@ -380,6 +380,14 @@ colnames(results_df_quantile) <- c("Trait",
 knitr::kable(results_df_continuous, caption = "Continuous")
 knitr::kable(results_df_quantile, caption = "Quantile (Stratify trait into top 25% and remaining)")
 ```
+
+**Interpretation:** 
+
+In the quantile analysis, the number of significant differential expressed genes is generally higher compared to the continuous analysis, which suggests that stratifying by PRS (top 25%) may identify more genes with stronger associations to the traits.
+
+The GO enrichment analysis provides additional insights into the biological pathways and processes that are potentially involved in these traits. BgRatio is the ratio of the total number of genes in a specific pathway (GO term) to the total number of genes. GeneRatio is the ratio of the number of genes enriched in specific pathway to the number of genes that were tested in the analysis. FoldEnrichment is the ratio of GeneRatio to BgRatio, showing how much more enriched a pathway is in your genes of interest compared to the total gene set. Higher FoldEnrichment values indicate that a particular GO term is overrepresented in your gene set compared to the general gene pool, suggesting it may be biologically relevant for the trait. Some traits show higher pathway enrichment in the quantile analysis, indicating that stratification by PRS may provide more biologically meaningful results.
+
+We are able to detect some (not all) overlapping top DEGs between continuous or quantile PRS. For example, SAA1, SAA2, ALDH1A3 are both detected and known to be involved in immune response and inflammation. For highly correlated traits, they tend to share similar GO enriched pathways. For example, mean corpuscular hemoglobin and mean corpucular volume are both involved in read blood cell biology, so it's expected that their GO enrichment would point to similar biological processes, such as hemoglobin metabolism, iron homeostasis and erythropoiesis.
 
 ![](figure/differential_expression.Rmd/ma_plot_Basophil.count.png) 
 ![](figure/differential_expression.Rmd/ma_plot_quantile_Basophil.count.png) 
