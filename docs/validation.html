@@ -517,15 +517,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstreeb2c577cda9abb77611dce60ec0f70d86540eb74ctargetblankb2c577ca">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree0591bd80827f6b0f1edb51f1a7a397b1afb68d66targetblank0591bd8a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/yixuan-chen-elisa/prs/tree/b2c577cda9abb77611dce60ec0f70d86540eb74c" target="_blank">b2c577c</a>
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/0591bd80827f6b0f1edb51f1a7a397b1afb68d66" target="_blank">0591bd8</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstreeb2c577cda9abb77611dce60ec0f70d86540eb74ctargetblankb2c577ca"
+id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree0591bd80827f6b0f1edb51f1a7a397b1afb68d66targetblank0591bd8a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -535,7 +535,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/yixuan-chen-elisa/prs/tree/b2c577cda9abb77611dce60ec0f70d86540eb74c" target="_blank">b2c577c</a>.
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/0591bd80827f6b0f1edb51f1a7a397b1afb68d66" target="_blank">0591bd8</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -633,6 +633,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/0591bd80827f6b0f1edb51f1a7a397b1afb68d66/analysis/validation.Rmd" target="_blank">0591bd8</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-05-14
+</td>
+<td>
+workflowr::wflow_publish(c("analysis/differential_expression.Rmd",
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/yixuan-chen-elisa/prs/8aa2b83323d6605f0759f9f8e33b0964df76ebc4/docs/validation.html" target="_blank">8aa2b83</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-05-14
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/yixuan-chen-elisa/prs/blob/b2c577cda9abb77611dce60ec0f70d86540eb74c/analysis/validation.Rmd" target="_blank">b2c577c</a>
 </td>
 <td>
@@ -682,6 +716,43 @@ corrplot(correlation_matrix, method = &quot;color&quot;,
          mar = c(0, 0, 1, 0)
 )</code></pre>
 <p><img src="figure/validation.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-1">
+Past versions of unnamed-chunk-1-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/8aa2b83323d6605f0759f9f8e33b0964df76ebc4/docs/figure/validation.Rmd/unnamed-chunk-1-1.png" target="_blank">8aa2b83</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-05-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="perform-deseq2-differential-expression-analysis-for-each-trait"
 class="section level2">
@@ -737,7 +808,7 @@ for (trait in colnames(traits)) {
   res &lt;- results(dds)
   
   # Save the results to a file
-  write.csv(res, paste0(&quot;differential_expression_&quot;, trait, &quot;_results_artery_validation.csv&quot;))
+  write.csv(res, paste0(&quot;validation_&quot;, trait, &quot;_results_artery_validation.csv&quot;))
   
   # print a summary of the results
   print(paste(&quot;Results for trait:&quot;, trait))
@@ -796,7 +867,7 @@ for (trait in colnames(traits)) {
   res &lt;- results(dds)
   
   # Save the results to a file
-  write.csv(res, paste0(&quot;differential_expression_&quot;, trait, &quot;_quantile_results_artery_validation.csv&quot;))
+  write.csv(res, paste0(&quot;validation_&quot;, trait, &quot;_quantile_results_artery_validation.csv&quot;))
   
   # print a summary of the results
   print(paste(&quot;Results for trait:&quot;, trait))
@@ -1636,447 +1707,447 @@ align="left">White.blood.cell.count_quantile_results_artery_validation.csv</td>
 <p><img
 src="figure/validation.Rmd/ma_plot_Basophil.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Basophil.count_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Basophil.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Basophil.count_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Basophil.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Basophil.count_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Basophil.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Basophil.count_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Basophil.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Basophil.count_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Basophil.count_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Basophil.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Basophil.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Basophil.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Basophil.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Basophil.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Basophil.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Basophil.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Basophil.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Basophil.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Basophil.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Basophil.percentage.of.white.cells_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Basophil.percentage.of.white.cells_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Eosinophil.count_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Eosinophil.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Eosinophil.count_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Eosinophil.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Eosinophil.count_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Eosinophil.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Eosinophil.count_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Eosinophil.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Eosinophil.count_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Eosinophil.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Eosinophil.count_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Eosinophil.count_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Eosinophil.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Eosinophil.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Eosinophil.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Eosinophil.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Eosinophil.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Eosinophil.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Eosinophil.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Eosinophil.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Eosinophil.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Eosinophil.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Eosinophil.percentage.of.white.cells_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Eosinophil.percentage.of.white.cells_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Hematocrit_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Hematocrit_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Hematocrit_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Hematocrit_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Hematocrit_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Hematocrit_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Hematocrit_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Hematocrit_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Hematocrit_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Hematocrit_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Hematocrit_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Hematocrit_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Hemoglobin.concentration_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Hemoglobin.concentration_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Hemoglobin.concentration_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Hemoglobin.concentration_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Hemoglobin.concentration_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Hemoglobin.concentration_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Hemoglobin.concentration_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Hemoglobin.concentration_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Hemoglobin.concentration_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Hemoglobin.concentration_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Hemoglobin.concentration_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Hemoglobin.concentration_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_High.light.scatter.reticulocyte.count_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_High.light.scatter.reticulocyte.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_High.light.scatter.reticulocyte.count_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_High.light.scatter.reticulocyte.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_High.light.scatter.reticulocyte.count_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_High.light.scatter.reticulocyte.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_High.light.scatter.reticulocyte.count_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_High.light.scatter.reticulocyte.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_High.light.scatter.reticulocyte.count_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_High.light.scatter.reticulocyte.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_High.light.scatter.reticulocyte.count_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_High.light.scatter.reticulocyte.count_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Immature.fraction.of.reticulocytes_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Immature.fraction.of.reticulocytes_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Immature.fraction.of.reticulocytes_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Immature.fraction.of.reticulocytes_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Immature.fraction.of.reticulocytes_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Immature.fraction.of.reticulocytes_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Immature.fraction.of.reticulocytes_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Immature.fraction.of.reticulocytes_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Immature.fraction.of.reticulocytes_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Immature.fraction.of.reticulocytes_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Immature.fraction.of.reticulocytes_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Immature.fraction.of.reticulocytes_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Lymphocyte.count_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Lymphocyte.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Lymphocyte.count_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Lymphocyte.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Lymphocyte.count_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Lymphocyte.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Lymphocyte.count_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Lymphocyte.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Lymphocyte.count_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Lymphocyte.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Lymphocyte.count_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Lymphocyte.count_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Lymphocyte.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Lymphocyte.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Lymphocyte.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Lymphocyte.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Lymphocyte.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Lymphocyte.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Lymphocyte.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Lymphocyte.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Lymphocyte.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Lymphocyte.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Lymphocyte.percentage.of.white.cells_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Lymphocyte.percentage.of.white.cells_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.hemoglobin.concentration_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Mean.corpuscular.hemoglobin.concentration_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.hemoglobin.concentration_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Mean.corpuscular.hemoglobin.concentration_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.hemoglobin.concentration_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Mean.corpuscular.hemoglobin.concentration_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.hemoglobin.concentration_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Mean.corpuscular.hemoglobin.concentration_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.hemoglobin.concentration_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Mean.corpuscular.hemoglobin.concentration_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.hemoglobin.concentration_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Mean.corpuscular.hemoglobin.concentration_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.hemoglobin_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Mean.corpuscular.hemoglobin_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.hemoglobin_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Mean.corpuscular.hemoglobin_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.hemoglobin_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Mean.corpuscular.hemoglobin_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.hemoglobin_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Mean.corpuscular.hemoglobin_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.hemoglobin_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Mean.corpuscular.hemoglobin_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.hemoglobin_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Mean.corpuscular.hemoglobin_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.volume_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Mean.corpuscular.volume_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.volume_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Mean.corpuscular.volume_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.volume_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Mean.corpuscular.volume_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.volume_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Mean.corpuscular.volume_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.volume_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Mean.corpuscular.volume_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.volume_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Mean.corpuscular.volume_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Mean.platelet.volume_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Mean.platelet.volume_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Mean.platelet.volume_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Mean.platelet.volume_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Mean.platelet.volume_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Mean.platelet.volume_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Mean.platelet.volume_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Mean.platelet.volume_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Mean.platelet.volume_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Mean.platelet.volume_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.platelet.volume_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Mean.platelet.volume_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Mean.reticulocyte.volume_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Mean.reticulocyte.volume_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Mean.reticulocyte.volume_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Mean.reticulocyte.volume_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Mean.reticulocyte.volume_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Mean.reticulocyte.volume_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Mean.reticulocyte.volume_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Mean.reticulocyte.volume_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Mean.reticulocyte.volume_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Mean.reticulocyte.volume_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.reticulocyte.volume_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Mean.reticulocyte.volume_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Mean.sphered.corpuscular.volume_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Mean.sphered.corpuscular.volume_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Mean.sphered.corpuscular.volume_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Mean.sphered.corpuscular.volume_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Mean.sphered.corpuscular.volume_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Mean.sphered.corpuscular.volume_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Mean.sphered.corpuscular.volume_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Mean.sphered.corpuscular.volume_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Mean.sphered.corpuscular.volume_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Mean.sphered.corpuscular.volume_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.sphered.corpuscular.volume_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Mean.sphered.corpuscular.volume_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Monocyte.count_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Monocyte.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Monocyte.count_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Monocyte.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Monocyte.count_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Monocyte.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Monocyte.count_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Monocyte.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Monocyte.count_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Monocyte.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Monocyte.count_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Monocyte.count_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Monocyte.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Monocyte.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Monocyte.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Monocyte.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Monocyte.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Monocyte.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Monocyte.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Monocyte.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Monocyte.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Monocyte.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Monocyte.percentage.of.white.cells_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Monocyte.percentage.of.white.cells_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Neutrophil.count_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Neutrophil.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Neutrophil.count_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Neutrophil.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Neutrophil.count_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Neutrophil.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Neutrophil.count_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Neutrophil.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Neutrophil.count_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Neutrophil.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Neutrophil.count_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Neutrophil.count_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Neutrophil.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Neutrophil.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Neutrophil.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Neutrophil.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Neutrophil.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Neutrophil.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Neutrophil.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Neutrophil.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Neutrophil.percentage.of.white.cells_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Neutrophil.percentage.of.white.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Neutrophil.percentage.of.white.cells_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Neutrophil.percentage.of.white.cells_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Platelet.count_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Platelet.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Platelet.count_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Platelet.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Platelet.count_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Platelet.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.count_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Platelet.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Platelet.count_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Platelet.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.count_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Platelet.count_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Platelet.crit_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Platelet.crit_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Platelet.crit_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Platelet.crit_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Platelet.crit_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Platelet.crit_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.crit_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Platelet.crit_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Platelet.crit_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Platelet.crit_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.crit_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Platelet.crit_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Platelet.distribution.width_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Platelet.distribution.width_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Platelet.distribution.width_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Platelet.distribution.width_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Platelet.distribution.width_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Platelet.distribution.width_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.distribution.width_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Platelet.distribution.width_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Platelet.distribution.width_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Platelet.distribution.width_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.distribution.width_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Platelet.distribution.width_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Red.blood.cell.count_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Red.blood.cell.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Red.blood.cell.count_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Red.blood.cell.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Red.blood.cell.count_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Red.blood.cell.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Red.blood.cell.count_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Red.blood.cell.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Red.blood.cell.count_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Red.blood.cell.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Red.blood.cell.count_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Red.blood.cell.count_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Red.cell.distribution.width_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Red.cell.distribution.width_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Red.cell.distribution.width_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Red.cell.distribution.width_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Red.cell.distribution.width_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Red.cell.distribution.width_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Red.cell.distribution.width_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Red.cell.distribution.width_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Red.cell.distribution.width_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Red.cell.distribution.width_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Red.cell.distribution.width_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Red.cell.distribution.width_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Reticulocyte.count_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Reticulocyte.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Reticulocyte.count_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Reticulocyte.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Reticulocyte.count_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Reticulocyte.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Reticulocyte.count_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Reticulocyte.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Reticulocyte.count_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Reticulocyte.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Reticulocyte.count_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Reticulocyte.count_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Reticulocyte.fraction.of.red.cells_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Reticulocyte.fraction.of.red.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Reticulocyte.fraction.of.red.cells_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Reticulocyte.fraction.of.red.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Reticulocyte.fraction.of.red.cells_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Reticulocyte.fraction.of.red.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Reticulocyte.fraction.of.red.cells_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Reticulocyte.fraction.of.red.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Reticulocyte.fraction.of.red.cells_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Reticulocyte.fraction.of.red.cells_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Reticulocyte.fraction.of.red.cells_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Reticulocyte.fraction.of.red.cells_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_White.blood.cell.count_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_White.blood.cell.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_White.blood.cell.count_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_White.blood.cell.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_White.blood.cell.count_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_White.blood.cell.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_White.blood.cell.count_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_White.blood.cell.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_White.blood.cell.count_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_White.blood.cell.count_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_White.blood.cell.count_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_White.blood.cell.count_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Celiac_GCST90014442_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Celiac_GCST90014442_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Celiac_GCST90014442_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Celiac_GCST90014442_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90014442_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Celiac_GCST90014442_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Celiac_GCST90014442_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Celiac_GCST90014442_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Celiac_GCST90014442_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Celiac_GCST90014442_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Celiac_GCST90014442_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Celiac_GCST90014442_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_Celiac_GCST90468120_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_Celiac_GCST90468120_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_Celiac_GCST90468120_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_Celiac_GCST90468120_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90468120_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_Celiac_GCST90468120_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_Celiac_GCST90468120_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_Celiac_GCST90468120_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_Celiac_GCST90468120_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_Celiac_GCST90468120_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_Celiac_GCST90468120_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_Celiac_GCST90468120_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_IBD_GCST90013901_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_IBD_GCST90013901_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_IBD_GCST90013901_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_IBD_GCST90013901_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013901_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_IBD_GCST90013901_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_IBD_GCST90013901_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_IBD_GCST90013901_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_IBD_GCST90013901_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_IBD_GCST90013901_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_IBD_GCST90013901_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_IBD_GCST90013901_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_IBD_GCST90013951_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_IBD_GCST90013951_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_IBD_GCST90013951_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_IBD_GCST90013951_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013951_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_IBD_GCST90013951_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_IBD_GCST90013951_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_IBD_GCST90013951_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_IBD_GCST90013951_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_IBD_GCST90013951_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_IBD_GCST90013951_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_IBD_GCST90013951_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_LUPUS_GCST003156_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_LUPUS_GCST003156_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_LUPUS_GCST003156_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_LUPUS_GCST003156_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST003156_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_LUPUS_GCST003156_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_LUPUS_GCST003156_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_LUPUS_GCST003156_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_LUPUS_GCST003156_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_LUPUS_GCST003156_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_LUPUS_GCST003156_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_LUPUS_GCST003156_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_LUPUS_GCST011096_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_LUPUS_GCST011096_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_LUPUS_GCST011096_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_LUPUS_GCST011096_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST011096_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_LUPUS_GCST011096_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_LUPUS_GCST011096_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_LUPUS_GCST011096_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_LUPUS_GCST011096_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_LUPUS_GCST011096_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_LUPUS_GCST011096_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_LUPUS_GCST011096_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_T1D_GCST90000529_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_T1D_GCST90000529_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_T1D_GCST90000529_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_T1D_GCST90000529_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_T1D_GCST90000529_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_T1D_GCST90000529_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_T1D_GCST90000529_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_T1D_GCST90000529_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_T1D_GCST90000529_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_T1D_GCST90000529_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_T1D_GCST90000529_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_T1D_GCST90000529_artery_validation.png" /></p>
 <p><img
-src="figure/differential_expression.Rmd/ma_plot_T1D_GCST90014023_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_T1D_GCST90014023_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/ma_plot_quantile_T1D_GCST90014023_artery_validation.png" />
+src="figure/validation.Rmd/ma_plot_quantile_T1D_GCST90014023_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_T1D_GCST90014023_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_T1D_GCST90014023_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/volcano_plot_quantile_T1D_GCST90014023_artery_validation.png" />
+src="figure/validation.Rmd/volcano_plot_quantile_T1D_GCST90014023_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_T1D_GCST90014023_artery_validation.png" />
+src="figure/validation.Rmd/enrichment_plot_T1D_GCST90014023_artery_validation.png" />
 <img
-src="figure/differential_expression.Rmd/enrichment_plot_quantile_T1D_GCST90014023_artery_validation.png" /></p>
+src="figure/validation.Rmd/enrichment_plot_quantile_T1D_GCST90014023_artery_validation.png" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">

@@ -386,7 +386,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-05-13
+<strong>Last updated:</strong> 2025-05-14
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -517,15 +517,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstreea2649641c72080088cacd37821f9a5d7c7231166targetblanka264964a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree0591bd80827f6b0f1edb51f1a7a397b1afb68d66targetblank0591bd8a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/yixuan-chen-elisa/prs/tree/a2649641c72080088cacd37821f9a5d7c7231166" target="_blank">a264964</a>
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/0591bd80827f6b0f1edb51f1a7a397b1afb68d66" target="_blank">0591bd8</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstreea2649641c72080088cacd37821f9a5d7c7231166targetblanka264964a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree0591bd80827f6b0f1edb51f1a7a397b1afb68d66targetblank0591bd8a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -535,7 +535,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/yixuan-chen-elisa/prs/tree/a2649641c72080088cacd37821f9a5d7c7231166" target="_blank">a264964</a>.
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/0591bd80827f6b0f1edb51f1a7a397b1afb68d66" target="_blank">0591bd8</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -557,12 +557,15 @@ Ignored files:
     Ignored:    data/.DS_Store
 
 Untracked files:
-    Untracked:  analysis/continuous/
+    Untracked:  analysis/continuous_artery/
+    Untracked:  analysis/continuous_wb/
     Untracked:  analysis/metadata.txt
+    Untracked:  analysis/metadata_artery.txt
+    Untracked:  analysis/metadata_artery_quantile.txt
     Untracked:  analysis/metadata_quantile.txt
     Untracked:  analysis/normalized_counts.rda
-    Untracked:  analysis/quantile/
-    Untracked:  analysis/validation.Rmd
+    Untracked:  analysis/quantile_artery/
+    Untracked:  analysis/quantile_wb/
     Untracked:  analysis/vst norm counts.rda
     Untracked:  data/Artery_Aorta.v8.covariates.txt
     Untracked:  data/GTEx_v8.bk
@@ -570,7 +573,7 @@ Untracked files:
     Untracked:  data/T2D_hmPOS_GRCh38.txt
     Untracked:  data/Whole_Blood.v8.covariates.txt
     Untracked:  data/blood_cell/
-    Untracked:  data/gene_reads_2017-06-05_v8_artery_aorta.gct.gz
+    Untracked:  data/gene_reads_2017-06-05_v8_artery_aorta.gct
     Untracked:  data/gene_reads_2017-06-05_v8_whole_blood.gct
     Untracked:  data/gene_tpm_2017-06-05_v8_whole_blood.gct.gz
     Untracked:  data/immune/
@@ -626,6 +629,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/0591bd80827f6b0f1edb51f1a7a397b1afb68d66/analysis/differential_expression.Rmd" target="_blank">0591bd8</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-05-14
+</td>
+<td>
+workflowr::wflow_publish(c("analysis/differential_expression.Rmd",
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/yixuan-chen-elisa/prs/3bb86a4cc06bad8b46207046d1c5e169dd3567a2/docs/differential_expression.html" target="_blank">3bb86a4</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-05-13
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1119,7 +1156,8 @@ for (trait in colnames(traits)) {
 universal genes</p>
 <p>GeneRatio: Number of genes enriched in specific term / Number of
 input genes</p>
-<p>FoldEnrichment: GeneRatio / BgRatio</p>
+<p>FoldEnrichment: GeneRatio / BgRatio (i.e. how much more enriched a
+term is in your genes of interest compared to the total gene set).</p>
 <pre class="r"><code># continous
 dir_path &lt;- &quot;analysis/continuous&quot;
 files &lt;- list.files(dir_path, pattern = &quot;differential_expression_.*_results.csv&quot;, full.names = TRUE)
@@ -1192,8 +1230,8 @@ for (file in files) {
 </div>
 <div id="result-table" class="section level1">
 <h1>Result table</h1>
-<pre class="r"><code>continuous_dir &lt;- &quot;analysis/continuous&quot;
-quantile_dir &lt;- &quot;analysis/quantile&quot;
+<pre class="r"><code>continuous_dir &lt;- &quot;analysis/continuous_wb&quot;
+quantile_dir &lt;- &quot;analysis/quantile_wb&quot;
 
 # Get the list of differential expression results and GO enrichment results
 de_files_continuous &lt;- list.files(continuous_dir, pattern = &quot;differential_expression_.*_results.csv&quot;, 
@@ -1848,6 +1886,33 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 </tr>
 </tbody>
 </table>
+<p><strong>Interpretation:</strong></p>
+<p>In the quantile analysis, the number of significant differential
+expressed genes is generally higher compared to the continuous analysis,
+which suggests that stratifying by PRS (top 25%) may identify more genes
+with stronger associations to the traits.</p>
+<p>The GO enrichment analysis provides additional insights into the
+biological pathways and processes that are potentially involved in these
+traits. BgRatio is the ratio of the total number of genes in a specific
+pathway (GO term) to the total number of genes. GeneRatio is the ratio
+of the number of genes enriched in specific pathway to the number of
+genes that were tested in the analysis. FoldEnrichment is the ratio of
+GeneRatio to BgRatio, showing how much more enriched a pathway is in
+your genes of interest compared to the total gene set. Higher
+FoldEnrichment values indicate that a particular GO term is
+overrepresented in your gene set compared to the general gene pool,
+suggesting it may be biologically relevant for the trait. Some traits
+show higher pathway enrichment in the quantile analysis, indicating that
+stratification by PRS may provide more biologically meaningful
+results.</p>
+<p>We are able to detect some (not all) overlapping top DEGs between
+continuous or quantile PRS. For example, SAA1, SAA2, ALDH1A3 are both
+detected and known to be involved in immune response and inflammation.
+For highly correlated traits, they tend to share similar GO enriched
+pathways. For example, mean corpuscular hemoglobin and mean corpucular
+volume are both involved in read blood cell biology, so it’s expected
+that their GO enrichment would point to similar biological processes,
+such as hemoglobin metabolism, iron homeostasis and erythropoiesis.</p>
 <p><img
 src="figure/differential_expression.Rmd/ma_plot_Basophil.count.png" />
 <img
