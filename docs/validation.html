@@ -1,0 +1,2265 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Validation</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myproject</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/yixuan-chen-elisa/myproject">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Validation</h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2025-05-14
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>prs/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250417code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20250417)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20250417code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20250417)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstreeb2c577cda9abb77611dce60ec0f70d86540eb74ctargetblankb2c577ca">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/b2c577cda9abb77611dce60ec0f70d86540eb74c" target="_blank">b2c577c</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstreeb2c577cda9abb77611dce60ec0f70d86540eb74ctargetblankb2c577ca"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/b2c577cda9abb77611dce60ec0f70d86540eb74c" target="_blank">b2c577c</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/.DS_Store
+    Ignored:    data/.DS_Store
+
+Untracked files:
+    Untracked:  analysis/continuous_artery/
+    Untracked:  analysis/continuous_wb/
+    Untracked:  analysis/metadata.txt
+    Untracked:  analysis/metadata_artery.txt
+    Untracked:  analysis/metadata_artery_quantile.txt
+    Untracked:  analysis/metadata_quantile.txt
+    Untracked:  analysis/normalized_counts.rda
+    Untracked:  analysis/quantile_artery/
+    Untracked:  analysis/quantile_wb/
+    Untracked:  analysis/vst norm counts.rda
+    Untracked:  data/Artery_Aorta.v8.covariates.txt
+    Untracked:  data/GTEx_v8.bk
+    Untracked:  data/GTEx_v8.rds
+    Untracked:  data/T2D_hmPOS_GRCh38.txt
+    Untracked:  data/Whole_Blood.v8.covariates.txt
+    Untracked:  data/blood_cell/
+    Untracked:  data/gene_reads_2017-06-05_v8_artery_aorta.gct
+    Untracked:  data/gene_reads_2017-06-05_v8_whole_blood.gct
+    Untracked:  data/gene_tpm_2017-06-05_v8_whole_blood.gct.gz
+    Untracked:  data/immune/
+    Untracked:  data/protein-coding_gene.txt
+
+Unstaged changes:
+    Deleted:    analysis/QC.Rmd
+    Deleted:    analysis/normalized_counts.txt
+    Modified:   analysis/prs_blood_cell.txt
+    Modified:   prs.Rproj
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/validation.Rmd</code>) and HTML
+(<code>docs/validation.html</code>) files. If you’ve configured a remote
+Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/b2c577cda9abb77611dce60ec0f70d86540eb74c/analysis/validation.Rmd" target="_blank">b2c577c</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-05-14
+</td>
+<td>
+workflowr::wflow_publish("analysis/validation.Rmd")
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="artery-aorta-validation" class="section level1">
+<h1>Artery Aorta Validation</h1>
+<div id="correlation-between-prs-expression-pcs" class="section level2">
+<h2>Correlation between PRS &amp; expression PCs</h2>
+<pre class="r"><code># load prs &amp; pcs
+metadata_file &lt;- &quot;analysis/metadata_artery.txt&quot;
+metadata &lt;- read.csv(metadata_file, header = T, sep = &quot;\t&quot;, stringsAsFactors = T)
+metadata$sex &lt;- as.factor(metadata$sex)
+
+traits &lt;- metadata[, 7:43]
+pc &lt;- metadata[, 1:5]
+
+# Calculate the correlation between each trait and each PC
+correlation_matrix &lt;- cor(traits, pc)
+range(correlation_matrix)</code></pre>
+<pre><code>[1] -0.2613287  0.2585593</code></pre>
+<pre class="r"><code>correlation_matrix &lt;- t(correlation_matrix)
+
+# Create the heatmap using corrplot
+corrplot(correlation_matrix, method = &quot;color&quot;, 
+         col = colorRampPalette(c(&quot;blue&quot;, &quot;white&quot;, &quot;red&quot;))(200), # color palette
+         addCoef.col = &quot;black&quot;, # Add correlation coefficients to the plot
+         number.cex = 0.4, # Adjust the font size of the numbers
+         tl.col = &quot;black&quot;, # text label color
+         tl.srt = 90, # rotate text labels
+         tl.cex = 0.5, 
+         title = &quot;Correlation between Traits and expression PCs&quot;, 
+         mar = c(0, 0, 1, 0)
+)</code></pre>
+<p><img src="figure/validation.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="perform-deseq2-differential-expression-analysis-for-each-trait"
+class="section level2">
+<h2>Perform DESeq2 differential expression analysis for each trait</h2>
+<pre class="r"><code># Load the gene expression data
+gene_expr_file &lt;- &quot;data/gene_reads_2017-06-05_v8_artery_aorta.gct&quot;
+raw_count_df &lt;- fread(gene_expr_file, header = TRUE, sep = &quot;\t&quot;, drop = &quot;id&quot;)
+
+# load protein_coding list
+protein_coding &lt;- fread(&quot;data/protein-coding_gene.txt&quot;, sep = &quot;\t&quot;)
+protein_coding &lt;- protein_coding[, c(&quot;symbol&quot;, &quot;ensembl_gene_id&quot;)]
+
+# keep only protein-coding genes
+raw_count_df &lt;- raw_count_df[raw_count_df$Description %in% protein_coding$symbol, ]
+
+id &lt;- raw_count_df$Name
+raw_count &lt;- raw_count_df[, -c(1:2)]
+
+# modify GTEx sample names matching names used in PRS data
+colnames(raw_count) &lt;- sub(&quot;^(GTEX-[^-.]+).*&quot;, &quot;\\1&quot;, colnames(raw_count))
+
+matching_samples &lt;- intersect(rownames(metadata), colnames(raw_count))
+final_count &lt;- raw_count[ , ..matching_samples]
+
+# prefilter: keep only rows that have a count of at least 10
+keep_genes &lt;- rowSums(final_count &gt;= 10) &gt; 0
+final_count &lt;- final_count[keep_genes, ]
+id &lt;- id[keep_genes]
+dim(final_count)
+
+# Loop through each trait and run DESeq2
+for (trait in colnames(traits)) {
+  
+  # Standardize PRS for the current trait
+  prs_trait &lt;- traits[,trait]
+  prs_trait &lt;- scale(prs_trait) # Standardize PRS to mean = 0, sd = 1
+    
+  # Add the standardized PRS to the metadata for continuous trait
+  metadata[,trait] &lt;- prs_trait
+  
+  # Create the DESeqDataSet for the current trait
+  dds &lt;- DESeqDataSetFromMatrix(
+    countData = as.matrix(final_count),  # Raw counts
+    colData = metadata[, c(1:6, which(colnames(metadata) == trait))],
+    design = as.formula(paste(&quot;~ PC1 + PC2 + PC3 + PC4 + PC5 + sex +&quot;, trait))
+  )
+  rownames(dds) &lt;- id
+  
+  # Run DESeq2 analysis
+  dds &lt;- DESeq(dds, parallel = TRUE, BPPARAM = MulticoreParam(4))
+  
+  # Get the results for the current trait
+  res &lt;- results(dds)
+  
+  # Save the results to a file
+  write.csv(res, paste0(&quot;differential_expression_&quot;, trait, &quot;_results_artery_validation.csv&quot;))
+  
+  # print a summary of the results
+  print(paste(&quot;Results for trait:&quot;, trait))
+  print(summary(res))
+  
+  # plot the MA-plot for the current trait
+  png(paste0(&quot;ma_plot_&quot;, trait, &quot;_artery_validation.png&quot;), width = 800, height = 600)
+  plotMA(res, main = paste(&quot;Continuous (Artery validation): MA Plot for&quot;, trait))
+  dev.off()
+  
+  # volcano plot
+  res_tableOE &lt;- as.data.frame(res)
+  res_tableOE$gene_name &lt;- raw_count_df$Description[keep_genes]
+  res_tableOE &lt;- mutate(res_tableOE, threshold_OE = padj &lt; 0.1)
+  res_tableOE &lt;- res_tableOE %&gt;% arrange(padj) %&gt;% mutate(genelabels = &quot;&quot;)
+  res_tableOE$genelabels[1:10] &lt;- res_tableOE$gene_name[1:10]
+  
+  volcano_plot &lt;- ggplot(res_tableOE, aes(x = log2FoldChange, y = -log10(padj))) +
+    geom_point(aes(colour = threshold_OE)) +
+    geom_text_repel(aes(label = genelabels)) +
+    ggtitle(label = paste(&quot;Continuous: Volcano Plot for&quot;, trait), 
+            subtitle = &quot;Artery Aorta validation&quot;) +
+    xlab(&quot;log2 fold change&quot;) + 
+    ylab(&quot;-log10 adjusted p-value&quot;) +
+    theme(legend.position = &quot;none&quot;,
+          plot.title = element_text(size = rel(1.5), hjust = 0.5),
+          axis.title = element_text(size = rel(1.25)))
+  
+  # Save the volcano plot
+  png(paste0(&quot;volcano_plot_&quot;, trait, &quot;_artery_validation.png&quot;), width = 800, 
+      height = 600)
+  print(volcano_plot)
+  dev.off()
+}</code></pre>
+<pre class="r"><code>metadata_file &lt;- &quot;analysis/metadata_artery_quantile.txt&quot;
+metadata &lt;- read.csv(metadata_file, header = T, sep = &quot;\t&quot;, stringsAsFactors = T)
+metadata$sex &lt;- as.factor(metadata$sex)
+
+traits &lt;- metadata[, 7:43]
+
+# Loop through each trait and run DESeq2
+for (trait in colnames(traits)) {
+  
+  # Create the DESeqDataSet for the current trait
+  dds &lt;- DESeqDataSetFromMatrix(
+    countData = as.matrix(final_count),  # Raw counts
+    colData = metadata[, c(1:6, which(colnames(metadata) == trait))],
+    design = as.formula(paste(&quot;~ PC1 + PC2 + PC3 + PC4 + PC5 + sex +&quot;, trait))
+  )
+  rownames(dds) &lt;- id
+  
+  # Run DESeq2 analysis
+  dds &lt;- DESeq(dds, parallel = TRUE, BPPARAM = MulticoreParam(4))
+  
+  # Get the results for the current trait
+  res &lt;- results(dds)
+  
+  # Save the results to a file
+  write.csv(res, paste0(&quot;differential_expression_&quot;, trait, &quot;_quantile_results_artery_validation.csv&quot;))
+  
+  # print a summary of the results
+  print(paste(&quot;Results for trait:&quot;, trait))
+  print(summary(res))
+  
+  # plot the MA-plot for the current trait
+  png(paste0(&quot;ma_plot_quantile_&quot;, trait, &quot;_artery_validation.png&quot;), width = 800, height = 600)
+  plotMA(res, main = paste(&quot;Quantile (Artery Validation): MA Plot for&quot;, trait))
+  dev.off()
+  
+  # volcano plot
+  res_tableOE &lt;- as.data.frame(res)
+  res_tableOE$gene_name &lt;- raw_count_df$Description[keep_genes]
+  res_tableOE &lt;- mutate(res_tableOE, threshold_OE = padj &lt; 0.1 &amp; 
+                          abs(log2FoldChange) &gt;= 0.5)
+  res_tableOE &lt;- res_tableOE %&gt;% arrange(padj) %&gt;% mutate(genelabels = &quot;&quot;)
+  res_tableOE$genelabels[1:10] &lt;- res_tableOE$gene_name[1:10]
+  
+  volcano_plot &lt;- ggplot(res_tableOE, aes(x = log2FoldChange, y = -log10(padj))) +
+    geom_point(aes(colour = threshold_OE)) +
+    geom_text_repel(aes(label = genelabels)) +
+    ggtitle(paste(&quot;Quantile:Volcano Plot for&quot;, trait), 
+            subtitle = &quot;Artery Aorta validation&quot;) +
+    xlab(&quot;log2 fold change&quot;) + 
+    ylab(&quot;-log10 adjusted p-value&quot;) +
+    theme(legend.position = &quot;none&quot;,
+          plot.title = element_text(size = rel(1.5), hjust = 0.5),
+          axis.title = element_text(size = rel(1.25)))
+  
+  # Save the volcano plot
+  png(paste0(&quot;volcano_plot_quantile_&quot;, trait, &quot;_artery_validation.png&quot;), width = 800, height = 600)
+  print(volcano_plot)
+  dev.off()
+}</code></pre>
+</div>
+<div id="gene-enrichment-analysis" class="section level2">
+<h2>Gene enrichment Analysis</h2>
+<p>BgRatio: Number of all genes in specific GO term / Number of
+universal genes</p>
+<p>GeneRatio: Number of genes enriched in specific term / Number of
+input genes</p>
+<p>FoldEnrichment: GeneRatio / BgRatio</p>
+<pre class="r"><code># continous
+dir_path &lt;- &quot;analysis/continuous_artery&quot;
+files &lt;- list.files(dir_path, pattern = &quot;differential_expression_.*_results_artery_validation.csv&quot;, full.names = TRUE)
+
+for (file in files) {
+  trait &lt;- gsub(&quot;differential_expression_(.*)_results_artery_validation.csv&quot;, &quot;\\1&quot;, basename(file))
+  trait
+  res_tableOE &lt;- read.csv(file, header = T, row.names = 1)
+  
+  deGenes &lt;- res_tableOE[res_tableOE$padj &lt; 0.1 &amp; 
+                           abs(res_tableOE$log2FoldChange) &gt;= 0.5, ]
+  deGenes$gene_id &lt;- gsub(&quot;\\.\\d+$&quot;, &quot;&quot;, rownames(deGenes))
+  
+  gse &lt;- enrichGO(gene = deGenes$gene_id, ont = &quot;BP&quot;, 
+                OrgDb =&quot;org.Hs.eg.db&quot;, keyType = &quot;ENSEMBL&quot;)
+  
+  write.csv(as.data.frame(gse), file = paste0(&quot;GO_enrichment_&quot;, trait, &quot;_results_artery_validation.csv&quot;))
+  
+  gse &lt;- as.data.frame(gse)
+  gse$GeneRatio_num &lt;- as.numeric(sapply(strsplit(gse$GeneRatio, &quot;/&quot;), 
+                                         function(x) x[1])) /
+                     as.numeric(sapply(strsplit(gse$GeneRatio, &quot;/&quot;), function(x) x[2]))
+
+  gse$BgRatio_num &lt;- as.numeric(sapply(strsplit(gse$BgRatio, &quot;/&quot;), function(x) x[1])) / 
+                     as.numeric(sapply(strsplit(gse$BgRatio, &quot;/&quot;), function(x) x[2]))
+  
+  gse &lt;- cbind(gse, FoldEnrich = gse$GeneRatio_num/gse$BgRatio_num)
+  
+  if (nrow(gse) &gt;= 20) {
+    enrich_plot &lt;- plotEnrich(gse[1:20,], plot_type = &quot;dot&quot;, scale_ratio = 0.5) +
+    labs(title = paste(&quot;Continuous: Enrichment plot for&quot;, trait), 
+         subtitle = &quot;Artery Aorta validation&quot;) + 
+    theme(plot.title = element_text(size = 10)) 
+  }else{
+    enrich_plot &lt;- plotEnrich(gse, plot_type = &quot;dot&quot;, scale_ratio = 0.5) +
+    labs(title = paste(&quot;Continuous: Enrichment plot for&quot;, trait), 
+         subtitle = &quot;Artery Aorta validation&quot;) + 
+    theme(plot.title = element_text(size = 10)) 
+  }
+  ggsave(paste0(&quot;enrichment_plot_&quot;, trait, &quot;_artery_validation.png&quot;), plot = enrich_plot, width = 8, height = 6)
+}</code></pre>
+<pre class="r"><code># quantile
+dir_path &lt;- &quot;analysis/quantile_artery&quot;
+files &lt;- list.files(dir_path, pattern = &quot;differential_expression_.*_quantile_results_artery_validation.csv&quot;,
+                    full.names = TRUE)
+
+for (file in files) {
+  trait &lt;- gsub(&quot;differential_expression_(.*)_quantile_results_artery_validation.csv&quot;, &quot;\\1&quot;, basename(file))
+  trait
+  res_tableOE &lt;- read.csv(file, header = T, row.names = 1)
+  
+  deGenes &lt;- res_tableOE[res_tableOE$padj &lt; 0.1 &amp; 
+                           abs(res_tableOE$log2FoldChange) &gt;= 0.5, ]
+  deGenes$gene_id &lt;- gsub(&quot;\\.\\d+$&quot;, &quot;&quot;, rownames(deGenes))
+  
+  gse &lt;- enrichGO(gene = deGenes$gene_id, ont = &quot;BP&quot;, 
+                OrgDb =&quot;org.Hs.eg.db&quot;, keyType = &quot;ENSEMBL&quot;)
+  
+  write.csv(as.data.frame(gse), file = paste0(&quot;GO_enrichment_quantile_&quot;, trait, &quot;_results_artery_validation.csv&quot;))
+  
+  gse &lt;- as.data.frame(gse)
+  gse$GeneRatio_num &lt;- as.numeric(sapply(strsplit(gse$GeneRatio, &quot;/&quot;), 
+                                         function(x) x[1])) /
+                     as.numeric(sapply(strsplit(gse$GeneRatio, &quot;/&quot;), function(x) x[2]))
+
+  gse$BgRatio_num &lt;- as.numeric(sapply(strsplit(gse$BgRatio, &quot;/&quot;), function(x) x[1])) / 
+                     as.numeric(sapply(strsplit(gse$BgRatio, &quot;/&quot;), function(x) x[2]))
+  
+  gse &lt;- cbind(gse, FoldEnrich = gse$GeneRatio_num/gse$BgRatio_num)
+  
+  if (nrow(gse) &gt;= 20) {
+    enrich_plot &lt;- plotEnrich(gse[1:20,], plot_type = &quot;dot&quot;, scale_ratio = 0.5) +
+    labs(title = paste(&quot;Quantile: Enrichment plot for&quot;, trait), 
+         subtitle = &quot;Artery Aorta validation&quot;) + 
+    theme(plot.title = element_text(size = 10)) 
+  }else{
+    enrich_plot &lt;- plotEnrich(gse, plot_type = &quot;dot&quot;, scale_ratio = 0.5) +
+    labs(title = paste(&quot;Quantile: Enrichment plot for&quot;, trait), 
+         subtitle = &quot;Artery Aorta validation&quot;) + 
+    theme(plot.title = element_text(size = 10)) 
+  }
+  ggsave(paste0(&quot;enrichment_plot_quantile_&quot;, trait, &quot;_artery_validation.png&quot;), plot = enrich_plot, width = 8, height = 6)
+}</code></pre>
+</div>
+<div id="result" class="section level2">
+<h2>Result</h2>
+<pre class="r"><code>continuous_dir &lt;- &quot;analysis/continuous_artery&quot;
+quantile_dir &lt;- &quot;analysis/quantile_artery&quot;
+
+# Get the list of differential expression results and GO enrichment results
+de_files_continuous &lt;- list.files(continuous_dir, pattern = &quot;differential_expression_.*_results_artery_validation.csv&quot;, 
+                                  full.names = TRUE)
+go_files_continuous &lt;- list.files(continuous_dir, pattern = &quot;GO_enrichment_.*_results_artery_validation.csv&quot;, 
+                                  full.names = TRUE)
+
+de_files_quantile &lt;- list.files(quantile_dir, pattern = &quot;differential_expression_.*_quantile_results_artery_validation.csv&quot;, 
+                                full.names = TRUE)
+go_files_quantile &lt;- list.files(quantile_dir, pattern = &quot;GO_enrichment_quantile_.*_results_artery_validation.csv&quot;, 
+                                full.names = TRUE)
+
+# Initialize a data frame to store the results
+results_df_continuous &lt;- data.frame(trait = character(),
+                                    num_significant_de = integer(),
+                                    upregulated = integer(),
+                                    downregulated = integer(),
+                                    num_enriched_go = integer(),
+                                    stringsAsFactors = FALSE)
+
+results_df_quantile &lt;- data.frame(trait = character(),
+                                  num_significant_de = integer(),
+                                  upregulated = integer(),
+                                  downregulated = integer(),
+                                  num_enriched_go = integer(),
+                                  stringsAsFactors = FALSE)
+
+# Function to extract significant DE genes and GO enriched pathways
+extract_results &lt;- function(de_file, go_file, analysis_type) {
+  # Load the differential expression results
+  res &lt;- read.csv(de_file, header = T, row.names = 1)
+  
+  # Filter for significant DE genes (padj &lt; 0.1)
+  significant_de &lt;- res[!is.na(res$padj) &amp; res$padj &lt; 0.1, ]
+  
+  # Count number of upregulated and downregulated genes
+  upregulated &lt;- sum(significant_de$log2FoldChange &gt; 0)
+  downregulated &lt;- sum(significant_de$log2FoldChange &lt; 0)
+  
+  # Load the GO enrichment results
+  go_res &lt;- read.csv(go_file, header = T, row.names = 1)
+  
+  # Count the number of enriched GO pathways (adjusted p-value &lt; 0.05)
+  enriched_go &lt;- sum(go_res$p.adjust &lt; 0.05)
+  
+  if (analysis_type == &quot;continuous&quot;){
+    # Extract trait name from the file name
+    trait_name &lt;- gsub(&quot;differential_expression_|_results.csv&quot;, &quot;&quot;, basename(de_file))
+    
+    # Create a row for this trait and add it to the results data frame
+    results_df_continuous &lt;&lt;- rbind(results_df_continuous, 
+                                    data.frame(trait = trait_name,
+                                               num_significant_de = nrow(significant_de),
+                                               upregulated = upregulated,
+                                              downregulated = downregulated,
+                                              num_enriched_go = enriched_go))
+  }else if (analysis_type == &quot;quantile&quot;) {
+    # Extract trait name from the file name
+    trait_name &lt;- gsub(&quot;differential_expression_|_quantile_results.csv&quot;, &quot;&quot;, basename(de_file))
+    
+    # Create a row for this trait and add it to the results data frame
+    results_df_quantile &lt;&lt;- rbind(
+      results_df_quantile,
+      data.frame(
+        trait = trait_name,
+        num_significant_de = nrow(significant_de),
+        upregulated = upregulated,
+        downregulated = downregulated,
+        num_enriched_go = enriched_go
+      )
+    )
+  }
+}
+
+# Loop through the continuous files and extract results
+for (i in seq_along(de_files_continuous)) {
+  extract_results(de_files_continuous[i], go_files_continuous[i], &quot;continuous&quot;)
+}
+
+# Loop through the quantile files and extract results
+for (i in seq_along(de_files_quantile)) {
+  extract_results(de_files_quantile[i], go_files_quantile[i], &quot;quantile&quot;)
+}
+
+colnames(results_df_continuous) &lt;- c(&quot;Trait&quot;,
+                          &quot;Significant differential expressed genes&quot;, 
+                          &quot;Up&quot;, &quot;Down&quot;, &quot;Significant GO enriched pathways&quot;)
+colnames(results_df_quantile) &lt;- c(&quot;Trait&quot;,
+                          &quot;Significant differential expressed genes&quot;, 
+                          &quot;Up&quot;, &quot;Down&quot;, &quot;Significant GO enriched pathways&quot;)
+knitr::kable(results_df_continuous, caption = &quot;Continuous&quot;)</code></pre>
+<table>
+<caption>Continuous</caption>
+<colgroup>
+<col width="50%" />
+<col width="24%" />
+<col width="2%" />
+<col width="2%" />
+<col width="19%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Trait</th>
+<th align="right">Significant differential expressed genes</th>
+<th align="right">Up</th>
+<th align="right">Down</th>
+<th align="right">Significant GO enriched pathways</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Basophil.count_results_artery_validation.csv</td>
+<td align="right">284</td>
+<td align="right">254</td>
+<td align="right">30</td>
+<td align="right">141</td>
+</tr>
+<tr class="even">
+<td
+align="left">Basophil.percentage.of.white.cells_results_artery_validation.csv</td>
+<td align="right">349</td>
+<td align="right">273</td>
+<td align="right">76</td>
+<td align="right">109</td>
+</tr>
+<tr class="odd">
+<td align="left">Celiac_GCST90014442_results_artery_validation.csv</td>
+<td align="right">418</td>
+<td align="right">346</td>
+<td align="right">72</td>
+<td align="right">171</td>
+</tr>
+<tr class="even">
+<td align="left">Celiac_GCST90468120_results_artery_validation.csv</td>
+<td align="right">103</td>
+<td align="right">16</td>
+<td align="right">87</td>
+<td align="right">111</td>
+</tr>
+<tr class="odd">
+<td align="left">Eosinophil.count_results_artery_validation.csv</td>
+<td align="right">251</td>
+<td align="right">186</td>
+<td align="right">65</td>
+<td align="right">121</td>
+</tr>
+<tr class="even">
+<td
+align="left">Eosinophil.percentage.of.white.cells_results_artery_validation.csv</td>
+<td align="right">139</td>
+<td align="right">12</td>
+<td align="right">127</td>
+<td align="right">69</td>
+</tr>
+<tr class="odd">
+<td align="left">Hematocrit_results_artery_validation.csv</td>
+<td align="right">184</td>
+<td align="right">38</td>
+<td align="right">146</td>
+<td align="right">78</td>
+</tr>
+<tr class="even">
+<td
+align="left">Hemoglobin.concentration_results_artery_validation.csv</td>
+<td align="right">217</td>
+<td align="right">77</td>
+<td align="right">140</td>
+<td align="right">88</td>
+</tr>
+<tr class="odd">
+<td
+align="left">High.light.scatter.reticulocyte.count_results_artery_validation.csv</td>
+<td align="right">67</td>
+<td align="right">56</td>
+<td align="right">11</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td
+align="left">High.light.scatter.reticulocyte.percentage.of.red.cells_results_artery_validation.csv</td>
+<td align="right">93</td>
+<td align="right">80</td>
+<td align="right">13</td>
+<td align="right">22</td>
+</tr>
+<tr class="odd">
+<td align="left">IBD_GCST90013901_results_artery_validation.csv</td>
+<td align="right">373</td>
+<td align="right">107</td>
+<td align="right">266</td>
+<td align="right">149</td>
+</tr>
+<tr class="even">
+<td align="left">IBD_GCST90013951_results_artery_validation.csv</td>
+<td align="right">479</td>
+<td align="right">135</td>
+<td align="right">344</td>
+<td align="right">151</td>
+</tr>
+<tr class="odd">
+<td
+align="left">Immature.fraction.of.reticulocytes_results_artery_validation.csv</td>
+<td align="right">269</td>
+<td align="right">159</td>
+<td align="right">110</td>
+<td align="right">101</td>
+</tr>
+<tr class="even">
+<td align="left">LUPUS_GCST003156_results_artery_validation.csv</td>
+<td align="right">132</td>
+<td align="right">44</td>
+<td align="right">88</td>
+<td align="right">7</td>
+</tr>
+<tr class="odd">
+<td align="left">LUPUS_GCST011096_results_artery_validation.csv</td>
+<td align="right">131</td>
+<td align="right">52</td>
+<td align="right">79</td>
+<td align="right">32</td>
+</tr>
+<tr class="even">
+<td align="left">Lymphocyte.count_results_artery_validation.csv</td>
+<td align="right">197</td>
+<td align="right">89</td>
+<td align="right">108</td>
+<td align="right">55</td>
+</tr>
+<tr class="odd">
+<td
+align="left">Lymphocyte.percentage.of.white.cells_results_artery_validation.csv</td>
+<td align="right">200</td>
+<td align="right">17</td>
+<td align="right">183</td>
+<td align="right">116</td>
+</tr>
+<tr class="even">
+<td
+align="left">Mean.corpuscular.hemoglobin_results_artery_validation.csv</td>
+<td align="right">293</td>
+<td align="right">103</td>
+<td align="right">190</td>
+<td align="right">77</td>
+</tr>
+<tr class="odd">
+<td
+align="left">Mean.corpuscular.hemoglobin.concentration_results_artery_validation.csv</td>
+<td align="right">1057</td>
+<td align="right">172</td>
+<td align="right">885</td>
+<td align="right">144</td>
+</tr>
+<tr class="even">
+<td
+align="left">Mean.corpuscular.volume_results_artery_validation.csv</td>
+<td align="right">205</td>
+<td align="right">140</td>
+<td align="right">65</td>
+<td align="right">77</td>
+</tr>
+<tr class="odd">
+<td align="left">Mean.platelet.volume_results_artery_validation.csv</td>
+<td align="right">155</td>
+<td align="right">126</td>
+<td align="right">29</td>
+<td align="right">63</td>
+</tr>
+<tr class="even">
+<td
+align="left">Mean.reticulocyte.volume_results_artery_validation.csv</td>
+<td align="right">115</td>
+<td align="right">77</td>
+<td align="right">38</td>
+<td align="right">76</td>
+</tr>
+<tr class="odd">
+<td
+align="left">Mean.sphered.corpuscular.volume_results_artery_validation.csv</td>
+<td align="right">73</td>
+<td align="right">29</td>
+<td align="right">44</td>
+<td align="right">38</td>
+</tr>
+<tr class="even">
+<td align="left">Monocyte.count_results_artery_validation.csv</td>
+<td align="right">206</td>
+<td align="right">185</td>
+<td align="right">21</td>
+<td align="right">130</td>
+</tr>
+<tr class="odd">
+<td
+align="left">Monocyte.percentage.of.white.cells_results_artery_validation.csv</td>
+<td align="right">77</td>
+<td align="right">53</td>
+<td align="right">24</td>
+<td align="right">19</td>
+</tr>
+<tr class="even">
+<td align="left">Neutrophil.count_results_artery_validation.csv</td>
+<td align="right">436</td>
+<td align="right">307</td>
+<td align="right">129</td>
+<td align="right">183</td>
+</tr>
+<tr class="odd">
+<td
+align="left">Neutrophil.percentage.of.white.cells_results_artery_validation.csv</td>
+<td align="right">466</td>
+<td align="right">313</td>
+<td align="right">153</td>
+<td align="right">220</td>
+</tr>
+<tr class="even">
+<td align="left">Platelet.count_results_artery_validation.csv</td>
+<td align="right">139</td>
+<td align="right">68</td>
+<td align="right">71</td>
+<td align="right">137</td>
+</tr>
+<tr class="odd">
+<td align="left">Platelet.crit_results_artery_validation.csv</td>
+<td align="right">310</td>
+<td align="right">169</td>
+<td align="right">141</td>
+<td align="right">229</td>
+</tr>
+<tr class="even">
+<td
+align="left">Platelet.distribution.width_results_artery_validation.csv</td>
+<td align="right">251</td>
+<td align="right">180</td>
+<td align="right">71</td>
+<td align="right">73</td>
+</tr>
+<tr class="odd">
+<td align="left">Red.blood.cell.count_results_artery_validation.csv</td>
+<td align="right">162</td>
+<td align="right">25</td>
+<td align="right">137</td>
+<td align="right">65</td>
+</tr>
+<tr class="even">
+<td
+align="left">Red.cell.distribution.width_results_artery_validation.csv</td>
+<td align="right">242</td>
+<td align="right">93</td>
+<td align="right">149</td>
+<td align="right">74</td>
+</tr>
+<tr class="odd">
+<td align="left">Reticulocyte.count_results_artery_validation.csv</td>
+<td align="right">33</td>
+<td align="right">18</td>
+<td align="right">15</td>
+<td align="right">42</td>
+</tr>
+<tr class="even">
+<td
+align="left">Reticulocyte.fraction.of.red.cells_results_artery_validation.csv</td>
+<td align="right">47</td>
+<td align="right">33</td>
+<td align="right">14</td>
+<td align="right">52</td>
+</tr>
+<tr class="odd">
+<td align="left">T1D_GCST90000529_results_artery_validation.csv</td>
+<td align="right">123</td>
+<td align="right">100</td>
+<td align="right">23</td>
+<td align="right">74</td>
+</tr>
+<tr class="even">
+<td align="left">T1D_GCST90014023_results_artery_validation.csv</td>
+<td align="right">447</td>
+<td align="right">282</td>
+<td align="right">165</td>
+<td align="right">140</td>
+</tr>
+<tr class="odd">
+<td
+align="left">White.blood.cell.count_results_artery_validation.csv</td>
+<td align="right">481</td>
+<td align="right">412</td>
+<td align="right">69</td>
+<td align="right">183</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>knitr::kable(results_df_quantile, caption = &quot;Quantile (Stratify trait into top 25% and remaining)&quot;)</code></pre>
+<table style="width:100%;">
+<caption>Quantile (Stratify trait into top 25% and remaining)</caption>
+<colgroup>
+<col width="53%" />
+<col width="23%" />
+<col width="2%" />
+<col width="2%" />
+<col width="18%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Trait</th>
+<th align="right">Significant differential expressed genes</th>
+<th align="right">Up</th>
+<th align="right">Down</th>
+<th align="right">Significant GO enriched pathways</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td
+align="left">Basophil.count_quantile_results_artery_validation.csv</td>
+<td align="right">325</td>
+<td align="right">292</td>
+<td align="right">33</td>
+<td align="right">135</td>
+</tr>
+<tr class="even">
+<td
+align="left">Basophil.percentage.of.white.cells_quantile_results_artery_validation.csv</td>
+<td align="right">218</td>
+<td align="right">186</td>
+<td align="right">32</td>
+<td align="right">125</td>
+</tr>
+<tr class="odd">
+<td
+align="left">Celiac_GCST90014442_quantile_results_artery_validation.csv</td>
+<td align="right">392</td>
+<td align="right">332</td>
+<td align="right">60</td>
+<td align="right">135</td>
+</tr>
+<tr class="even">
+<td
+align="left">Celiac_GCST90468120_quantile_results_artery_validation.csv</td>
+<td align="right">72</td>
+<td align="right">26</td>
+<td align="right">46</td>
+<td align="right">103</td>
+</tr>
+<tr class="odd">
+<td
+align="left">Eosinophil.count_quantile_results_artery_validation.csv</td>
+<td align="right">249</td>
+<td align="right">209</td>
+<td align="right">40</td>
+<td align="right">133</td>
+</tr>
+<tr class="even">
+<td
+align="left">Eosinophil.percentage.of.white.cells_quantile_results_artery_validation.csv</td>
+<td align="right">32</td>
+<td align="right">6</td>
+<td align="right">26</td>
+<td align="right">64</td>
+</tr>
+<tr class="odd">
+<td align="left">Hematocrit_quantile_results_artery_validation.csv</td>
+<td align="right">127</td>
+<td align="right">63</td>
+<td align="right">64</td>
+<td align="right">159</td>
+</tr>
+<tr class="even">
+<td
+align="left">Hemoglobin.concentration_quantile_results_artery_validation.csv</td>
+<td align="right">122</td>
+<td align="right">84</td>
+<td align="right">38</td>
+<td align="right">153</td>
+</tr>
+<tr class="odd">
+<td
+align="left">High.light.scatter.reticulocyte.count_quantile_results_artery_validation.csv</td>
+<td align="right">60</td>
+<td align="right">17</td>
+<td align="right">43</td>
+<td align="right">134</td>
+</tr>
+<tr class="even">
+<td
+align="left">High.light.scatter.reticulocyte.percentage.of.red.cells_quantile_results_artery_validation.csv</td>
+<td align="right">134</td>
+<td align="right">105</td>
+<td align="right">29</td>
+<td align="right">55</td>
+</tr>
+<tr class="odd">
+<td
+align="left">IBD_GCST90013901_quantile_results_artery_validation.csv</td>
+<td align="right">159</td>
+<td align="right">115</td>
+<td align="right">44</td>
+<td align="right">139</td>
+</tr>
+<tr class="even">
+<td
+align="left">IBD_GCST90013951_quantile_results_artery_validation.csv</td>
+<td align="right">226</td>
+<td align="right">108</td>
+<td align="right">118</td>
+<td align="right">139</td>
+</tr>
+<tr class="odd">
+<td
+align="left">Immature.fraction.of.reticulocytes_quantile_results_artery_validation.csv</td>
+<td align="right">140</td>
+<td align="right">101</td>
+<td align="right">39</td>
+<td align="right">111</td>
+</tr>
+<tr class="even">
+<td
+align="left">LUPUS_GCST003156_quantile_results_artery_validation.csv</td>
+<td align="right">143</td>
+<td align="right">57</td>
+<td align="right">86</td>
+<td align="right">78</td>
+</tr>
+<tr class="odd">
+<td
+align="left">LUPUS_GCST011096_quantile_results_artery_validation.csv</td>
+<td align="right">163</td>
+<td align="right">68</td>
+<td align="right">95</td>
+<td align="right">114</td>
+</tr>
+<tr class="even">
+<td
+align="left">Lymphocyte.count_quantile_results_artery_validation.csv</td>
+<td align="right">278</td>
+<td align="right">100</td>
+<td align="right">178</td>
+<td align="right">89</td>
+</tr>
+<tr class="odd">
+<td
+align="left">Lymphocyte.percentage.of.white.cells_quantile_results_artery_validation.csv</td>
+<td align="right">127</td>
+<td align="right">22</td>
+<td align="right">105</td>
+<td align="right">123</td>
+</tr>
+<tr class="even">
+<td
+align="left">Mean.corpuscular.hemoglobin_quantile_results_artery_validation.csv</td>
+<td align="right">319</td>
+<td align="right">143</td>
+<td align="right">176</td>
+<td align="right">119</td>
+</tr>
+<tr class="odd">
+<td
+align="left">Mean.corpuscular.hemoglobin.concentration_quantile_results_artery_validation.csv</td>
+<td align="right">793</td>
+<td align="right">133</td>
+<td align="right">660</td>
+<td align="right">471</td>
+</tr>
+<tr class="even">
+<td
+align="left">Mean.corpuscular.volume_quantile_results_artery_validation.csv</td>
+<td align="right">269</td>
+<td align="right">166</td>
+<td align="right">103</td>
+<td align="right">144</td>
+</tr>
+<tr class="odd">
+<td
+align="left">Mean.platelet.volume_quantile_results_artery_validation.csv</td>
+<td align="right">193</td>
+<td align="right">164</td>
+<td align="right">29</td>
+<td align="right">19</td>
+</tr>
+<tr class="even">
+<td
+align="left">Mean.reticulocyte.volume_quantile_results_artery_validation.csv</td>
+<td align="right">167</td>
+<td align="right">49</td>
+<td align="right">118</td>
+<td align="right">48</td>
+</tr>
+<tr class="odd">
+<td
+align="left">Mean.sphered.corpuscular.volume_quantile_results_artery_validation.csv</td>
+<td align="right">188</td>
+<td align="right">21</td>
+<td align="right">167</td>
+<td align="right">86</td>
+</tr>
+<tr class="even">
+<td
+align="left">Monocyte.count_quantile_results_artery_validation.csv</td>
+<td align="right">575</td>
+<td align="right">359</td>
+<td align="right">216</td>
+<td align="right">108</td>
+</tr>
+<tr class="odd">
+<td
+align="left">Monocyte.percentage.of.white.cells_quantile_results_artery_validation.csv</td>
+<td align="right">169</td>
+<td align="right">109</td>
+<td align="right">60</td>
+<td align="right">145</td>
+</tr>
+<tr class="even">
+<td
+align="left">Neutrophil.count_quantile_results_artery_validation.csv</td>
+<td align="right">339</td>
+<td align="right">247</td>
+<td align="right">92</td>
+<td align="right">363</td>
+</tr>
+<tr class="odd">
+<td
+align="left">Neutrophil.percentage.of.white.cells_quantile_results_artery_validation.csv</td>
+<td align="right">551</td>
+<td align="right">373</td>
+<td align="right">178</td>
+<td align="right">268</td>
+</tr>
+<tr class="even">
+<td
+align="left">Platelet.count_quantile_results_artery_validation.csv</td>
+<td align="right">152</td>
+<td align="right">129</td>
+<td align="right">23</td>
+<td align="right">124</td>
+</tr>
+<tr class="odd">
+<td
+align="left">Platelet.crit_quantile_results_artery_validation.csv</td>
+<td align="right">310</td>
+<td align="right">275</td>
+<td align="right">35</td>
+<td align="right">153</td>
+</tr>
+<tr class="even">
+<td
+align="left">Platelet.distribution.width_quantile_results_artery_validation.csv</td>
+<td align="right">354</td>
+<td align="right">309</td>
+<td align="right">45</td>
+<td align="right">181</td>
+</tr>
+<tr class="odd">
+<td
+align="left">Red.blood.cell.count_quantile_results_artery_validation.csv</td>
+<td align="right">118</td>
+<td align="right">26</td>
+<td align="right">92</td>
+<td align="right">29</td>
+</tr>
+<tr class="even">
+<td
+align="left">Red.cell.distribution.width_quantile_results_artery_validation.csv</td>
+<td align="right">172</td>
+<td align="right">75</td>
+<td align="right">97</td>
+<td align="right">150</td>
+</tr>
+<tr class="odd">
+<td
+align="left">Reticulocyte.count_quantile_results_artery_validation.csv</td>
+<td align="right">61</td>
+<td align="right">26</td>
+<td align="right">35</td>
+<td align="right">99</td>
+</tr>
+<tr class="even">
+<td
+align="left">Reticulocyte.fraction.of.red.cells_quantile_results_artery_validation.csv</td>
+<td align="right">39</td>
+<td align="right">15</td>
+<td align="right">24</td>
+<td align="right">73</td>
+</tr>
+<tr class="odd">
+<td
+align="left">T1D_GCST90000529_quantile_results_artery_validation.csv</td>
+<td align="right">131</td>
+<td align="right">95</td>
+<td align="right">36</td>
+<td align="right">45</td>
+</tr>
+<tr class="even">
+<td
+align="left">T1D_GCST90014023_quantile_results_artery_validation.csv</td>
+<td align="right">379</td>
+<td align="right">266</td>
+<td align="right">113</td>
+<td align="right">170</td>
+</tr>
+<tr class="odd">
+<td
+align="left">White.blood.cell.count_quantile_results_artery_validation.csv</td>
+<td align="right">284</td>
+<td align="right">231</td>
+<td align="right">53</td>
+<td align="right">260</td>
+</tr>
+</tbody>
+</table>
+<p><img
+src="figure/validation.Rmd/ma_plot_Basophil.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Basophil.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Basophil.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Basophil.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Basophil.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Basophil.count_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Basophil.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Basophil.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Basophil.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Basophil.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Basophil.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Basophil.percentage.of.white.cells_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Eosinophil.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Eosinophil.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Eosinophil.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Eosinophil.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Eosinophil.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Eosinophil.count_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Eosinophil.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Eosinophil.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Eosinophil.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Eosinophil.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Eosinophil.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Eosinophil.percentage.of.white.cells_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Hematocrit_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Hematocrit_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Hematocrit_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Hematocrit_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Hematocrit_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Hematocrit_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Hemoglobin.concentration_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Hemoglobin.concentration_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Hemoglobin.concentration_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Hemoglobin.concentration_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Hemoglobin.concentration_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Hemoglobin.concentration_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_High.light.scatter.reticulocyte.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_High.light.scatter.reticulocyte.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_High.light.scatter.reticulocyte.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_High.light.scatter.reticulocyte.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_High.light.scatter.reticulocyte.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_High.light.scatter.reticulocyte.count_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Immature.fraction.of.reticulocytes_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Immature.fraction.of.reticulocytes_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Immature.fraction.of.reticulocytes_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Immature.fraction.of.reticulocytes_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Immature.fraction.of.reticulocytes_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Immature.fraction.of.reticulocytes_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Lymphocyte.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Lymphocyte.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Lymphocyte.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Lymphocyte.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Lymphocyte.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Lymphocyte.count_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Lymphocyte.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Lymphocyte.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Lymphocyte.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Lymphocyte.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Lymphocyte.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Lymphocyte.percentage.of.white.cells_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.hemoglobin.concentration_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.hemoglobin.concentration_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.hemoglobin.concentration_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.hemoglobin.concentration_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.hemoglobin.concentration_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.hemoglobin.concentration_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.hemoglobin_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.hemoglobin_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.hemoglobin_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.hemoglobin_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.hemoglobin_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.hemoglobin_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.volume_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.volume_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.volume_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.volume_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.volume_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.volume_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Mean.platelet.volume_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Mean.platelet.volume_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Mean.platelet.volume_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Mean.platelet.volume_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Mean.platelet.volume_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.platelet.volume_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Mean.reticulocyte.volume_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Mean.reticulocyte.volume_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Mean.reticulocyte.volume_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Mean.reticulocyte.volume_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Mean.reticulocyte.volume_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.reticulocyte.volume_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Mean.sphered.corpuscular.volume_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Mean.sphered.corpuscular.volume_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Mean.sphered.corpuscular.volume_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Mean.sphered.corpuscular.volume_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Mean.sphered.corpuscular.volume_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.sphered.corpuscular.volume_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Monocyte.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Monocyte.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Monocyte.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Monocyte.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Monocyte.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Monocyte.count_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Monocyte.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Monocyte.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Monocyte.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Monocyte.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Monocyte.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Monocyte.percentage.of.white.cells_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Neutrophil.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Neutrophil.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Neutrophil.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Neutrophil.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Neutrophil.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Neutrophil.count_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Neutrophil.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Neutrophil.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Neutrophil.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Neutrophil.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Neutrophil.percentage.of.white.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Neutrophil.percentage.of.white.cells_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Platelet.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Platelet.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Platelet.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Platelet.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.count_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Platelet.crit_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Platelet.crit_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Platelet.crit_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.crit_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Platelet.crit_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.crit_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Platelet.distribution.width_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Platelet.distribution.width_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Platelet.distribution.width_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.distribution.width_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Platelet.distribution.width_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.distribution.width_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Red.blood.cell.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Red.blood.cell.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Red.blood.cell.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Red.blood.cell.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Red.blood.cell.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Red.blood.cell.count_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Red.cell.distribution.width_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Red.cell.distribution.width_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Red.cell.distribution.width_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Red.cell.distribution.width_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Red.cell.distribution.width_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Red.cell.distribution.width_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Reticulocyte.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Reticulocyte.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Reticulocyte.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Reticulocyte.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Reticulocyte.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Reticulocyte.count_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Reticulocyte.fraction.of.red.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Reticulocyte.fraction.of.red.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Reticulocyte.fraction.of.red.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Reticulocyte.fraction.of.red.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Reticulocyte.fraction.of.red.cells_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Reticulocyte.fraction.of.red.cells_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_White.blood.cell.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_White.blood.cell.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_White.blood.cell.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_White.blood.cell.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_White.blood.cell.count_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_White.blood.cell.count_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Celiac_GCST90014442_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Celiac_GCST90014442_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90014442_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Celiac_GCST90014442_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Celiac_GCST90014442_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Celiac_GCST90014442_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_Celiac_GCST90468120_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_Celiac_GCST90468120_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90468120_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_Celiac_GCST90468120_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_Celiac_GCST90468120_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_Celiac_GCST90468120_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_IBD_GCST90013901_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_IBD_GCST90013901_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013901_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_IBD_GCST90013901_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_IBD_GCST90013901_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_IBD_GCST90013901_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_IBD_GCST90013951_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_IBD_GCST90013951_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013951_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_IBD_GCST90013951_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_IBD_GCST90013951_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_IBD_GCST90013951_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_LUPUS_GCST003156_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_LUPUS_GCST003156_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST003156_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_LUPUS_GCST003156_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_LUPUS_GCST003156_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_LUPUS_GCST003156_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_LUPUS_GCST011096_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_LUPUS_GCST011096_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST011096_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_LUPUS_GCST011096_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_LUPUS_GCST011096_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_LUPUS_GCST011096_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_T1D_GCST90000529_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_T1D_GCST90000529_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_T1D_GCST90000529_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_T1D_GCST90000529_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_T1D_GCST90000529_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_T1D_GCST90000529_artery_validation.png" /></p>
+<p><img
+src="figure/differential_expression.Rmd/ma_plot_T1D_GCST90014023_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/ma_plot_quantile_T1D_GCST90014023_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_T1D_GCST90014023_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/volcano_plot_quantile_T1D_GCST90014023_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_T1D_GCST90014023_artery_validation.png" />
+<img
+src="figure/differential_expression.Rmd/enrichment_plot_quantile_T1D_GCST90014023_artery_validation.png" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.2 (2022-10-31)
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS Big Sur ... 10.16
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats4    stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] clusterProfiler_4.6.2       enrichplot_1.18.4          
+ [3] org.Hs.eg.db_3.16.0         AnnotationDbi_1.60.2       
+ [5] genekitr_1.2.8              ggrepel_0.9.6              
+ [7] BiocParallel_1.32.6         DESeq2_1.38.3              
+ [9] SummarizedExperiment_1.28.0 Biobase_2.58.0             
+[11] MatrixGenerics_1.10.0       matrixStats_1.2.0          
+[13] GenomicRanges_1.50.2        GenomeInfoDb_1.34.9        
+[15] IRanges_2.32.0              S4Vectors_0.36.2           
+[17] BiocGenerics_0.44.0         corrplot_0.95              
+[19] ggplot2_3.5.1               dplyr_1.1.4                
+[21] data.table_1.16.4           workflowr_1.7.1            
+
+loaded via a namespace (and not attached):
+  [1] shadowtext_0.1.4       fastmatch_1.1-6        plyr_1.8.9            
+  [4] igraph_1.5.1           lazyeval_0.2.2         splines_4.2.2         
+  [7] usethis_3.1.0          urltools_1.7.3         digest_0.6.37         
+ [10] yulab.utils_0.2.0      htmltools_0.5.8.1      GOSemSim_2.24.0       
+ [13] viridis_0.6.5          GO.db_3.16.0           magrittr_2.0.3        
+ [16] memoise_2.0.1          remotes_2.5.0          openxlsx_4.2.5.2      
+ [19] Biostrings_2.66.0      annotate_1.76.0        graphlayouts_1.0.1    
+ [22] prettyunits_1.2.0      colorspace_2.1-1       blob_1.2.4            
+ [25] xfun_0.50              callr_3.7.6            crayon_1.5.3          
+ [28] RCurl_1.98-1.16        jsonlite_1.8.9         scatterpie_0.2.4      
+ [31] ape_5.7-1              glue_1.8.0             polyclip_1.10-7       
+ [34] gtable_0.3.6           zlibbioc_1.44.0        XVector_0.38.0        
+ [37] DelayedArray_0.24.0    pkgbuild_1.4.6         scales_1.3.0          
+ [40] DOSE_3.24.2            DBI_1.2.3              miniUI_0.1.1.1        
+ [43] Rcpp_1.0.14            viridisLite_0.4.2      xtable_1.8-4          
+ [46] progress_1.2.3         gridGraphics_0.5-1     tidytree_0.4.6        
+ [49] bit_4.5.0.1            europepmc_0.4.3        profvis_0.4.0         
+ [52] htmlwidgets_1.6.4      httr_1.4.7             fgsea_1.24.0          
+ [55] RColorBrewer_1.1-3     ellipsis_0.3.2         urlchecker_1.0.1      
+ [58] pkgconfig_2.0.3        XML_3.99-0.18          farver_2.1.2          
+ [61] sass_0.4.9             locfit_1.5-9.8         ggplotify_0.1.2       
+ [64] tidyselect_1.2.1       rlang_1.1.5            reshape2_1.4.4        
+ [67] later_1.4.1            munsell_0.5.1          tools_4.2.2           
+ [70] cachem_1.1.0           downloader_0.4         cli_3.6.3             
+ [73] generics_0.1.3         RSQLite_2.3.9          gson_0.1.0            
+ [76] devtools_2.4.5         evaluate_1.0.3         stringr_1.5.1         
+ [79] fastmap_1.2.0          yaml_2.3.10            ggtree_3.6.2          
+ [82] processx_3.8.5         knitr_1.49             bit64_4.6.0-1         
+ [85] fs_1.6.5               tidygraph_1.3.0        zip_2.3.2             
+ [88] purrr_1.0.2            KEGGREST_1.38.0        ggraph_2.1.0          
+ [91] nlme_3.1-160           mime_0.12              whisker_0.4.1         
+ [94] aplot_0.2.4            ggvenn_0.1.10          xml2_1.3.6            
+ [97] compiler_4.2.2         rstudioapi_0.17.1      png_0.1-8             
+[100] treeio_1.22.0          tibble_3.2.1           tweenr_2.0.3          
+[103] geneplotter_1.76.0     bslib_0.9.0            stringi_1.8.4         
+[106] ps_1.8.1               lattice_0.22-6         Matrix_1.5-1          
+[109] vctrs_0.6.5            pillar_1.10.1          lifecycle_1.0.4       
+[112] triebeard_0.4.1        jquerylib_0.1.4        cowplot_1.1.3         
+[115] bitops_1.0-9           httpuv_1.6.15          patchwork_1.3.0       
+[118] qvalue_2.30.0          R6_2.5.1               promises_1.3.2        
+[121] gridExtra_2.3          sessioninfo_1.2.2      codetools_0.2-20      
+[124] pkgload_1.4.0          MASS_7.3-58.1          rprojroot_2.0.4       
+[127] withr_3.0.2            GenomeInfoDbData_1.2.9 parallel_4.2.2        
+[130] hms_1.1.3              grid_4.2.2             ggfun_0.1.8           
+[133] tidyr_1.3.1            HDO.db_0.99.1          rmarkdown_2.29        
+[136] git2r_0.33.0           getPass_0.2-4          ggforce_0.4.1         
+[139] shiny_1.10.0           geneset_0.2.7         </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
