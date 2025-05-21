@@ -28,7 +28,7 @@ metadata <- read.csv(metadata_file, header = T, sep = "\t", stringsAsFactors = T
 metadata$sex <- as.factor(metadata$sex)
 
 traits <- metadata[, 7:43]
-pc <- metadata[, 1:5]
+pc <- metadata[, c(1:5)]
 
 # Calculate the correlation between each trait and each PC
 correlation_matrix <- cor(traits, pc)
@@ -50,14 +50,17 @@ corrplot(correlation_matrix, method = "color",
 
 # Perform DESeq2 differential expression analysis for each trait
 
+## Model 1: expression \~ PRS + sex + expression PCs
+
+**Continuous PRS:**
+
 ```{r, warning=FALSE, eval=FALSE}
 # Load the gene expression data
 gene_expr_file <- "data/gene_reads_2017-06-05_v8_whole_blood.gct"
 raw_count_df <- fread(gene_expr_file, header = TRUE, sep = "\t", drop = "id")
 
 # load protein_coding list
-protein_coding <- fread("data/protein-coding_gene.txt", 
-                        sep = "\t")
+protein_coding <- fread("data/protein-coding_gene.txt", sep = "\t")
 protein_coding <- protein_coding[, c("symbol", "ensembl_gene_id")]
 
 # keep only protein-coding genes
@@ -138,6 +141,8 @@ for (trait in colnames(traits)) {
 }
 ```
 
+**Quantile PRS:**
+
 ```{r, warning=FALSE, eval=FALSE}
 metadata_file <- "analysis/metadata_quantile.txt"
 metadata <- read.csv(metadata_file, header = T, sep = "\t", stringsAsFactors = T)
@@ -199,21 +204,196 @@ for (trait in colnames(traits)) {
 }
 ```
 
-# Gene enrichment Analysis
+## Model 2: expression \~ PRS + sex + expression PCs + 2 genotype PCs
 
-BgRatio: Number of all genes in specific GO term / Number of universal genes
+**Continuous PRS:**
 
-GeneRatio: Number of genes enriched in specific term / Number of input genes
+```{r}
+# Load the gene expression data
+gene_expr_file <- "data/gene_reads_2017-06-05_v8_whole_blood.gct"
+raw_count_df <- fread(gene_expr_file, header = TRUE, sep = "\t", drop = "id")
 
-FoldEnrichment: GeneRatio / BgRatio (i.e. how much more enriched a term is in your genes of interest compared to the total gene set).
+# load protein_coding list
+protein_coding <- fread("data/protein-coding_gene.txt", 
+                        sep = "\t")
+protein_coding <- protein_coding[, c("symbol", "ensembl_gene_id")]
+
+# keep only protein-coding genes
+raw_count_df <- raw_count_df[raw_count_df$Description %in% protein_coding$symbol, ]
+
+id <- raw_count_df$Name
+raw_count <- raw_count_df[, -c(1:2)]
+
+# modify GTEx sample names matching names used in PRS data
+colnames(raw_count) <- sub("^(GTEX-[^-.]+).*", "\\1", colnames(raw_count))
+
+matching_samples <- intersect(rownames(metadata), colnames(raw_count))
+final_count <- raw_count[ , ..matching_samples]
+
+# prefilter: keep only rows that have a count of at least 10
+keep_genes <- rowSums(final_count >= 10) > 0
+final_count <- final_count[keep_genes, ]
+id <- id[keep_genes]
+dim(final_count)
+
+# obtain genotype PCs
+geno_pc <- read.table("data/pca.eigenvec")
+names(geno_pc) = c("FID","IID",paste0("geno_PC", c(1:(ncol(geno_pc)-2))))
+
+eigenval <- scan("data/pca.eigenval")
+pve <- data.frame(PC = 1:20, pve = eigenval/sum(eigenval)*100)
+
+ggplot(geno_pc) + geom_point(aes(x = geno_PC1, y = geno_PC2)) + 
+  labs(x = paste0("PC1 (", signif(pve$pve[1], 3), "%)"), 
+       y = paste0("PC2 (", signif(pve$pve[2], 3), "%)")) + theme_classic()
+ggplot(geno_pc) + geom_point(aes(x = geno_PC1, y = geno_PC3)) + 
+    labs(x = paste0("PC1 (", signif(pve$pve[1], 3), "%)"), 
+         y = paste0("PC3 (", signif(pve$pve[3], 3), "%)")) + theme_classic()
+
+ggplot(pve, aes(PC, pve)) + geom_point() + geom_line() +
+  labs(x = "Genotype PC", y = "Percentage variance explained") + theme_classic()
+```
 
 ```{r, warning=FALSE, eval=FALSE}
-# continous
+metadata <- cbind(metadata, geno_pc[,3:ncol(geno_pc)])
+
+# Loop through each trait and run DESeq2
+for (trait in colnames(traits)) {
+  
+  # Standardize PRS for the current trait
+  prs_trait <- traits[,trait]
+  prs_trait <- scale(prs_trait) # Standardize PRS to mean = 0, sd = 1
+    
+  # Add the standardized PRS to the metadata for continuous trait
+  metadata[,trait] <- prs_trait
+  
+  # Create the DESeqDataSet for the current trait
+  dds <- DESeqDataSetFromMatrix(
+    countData = as.matrix(final_count),  # Raw counts
+    colData = metadata[, c(1:6, 44:45, which(colnames(metadata) == trait))],
+    design = as.formula(paste("~ PC1 + PC2 + PC3 + PC4 + PC5 + sex + geno_PC1 + geno_PC2 +", trait))
+  )
+  rownames(dds) <- id
+  
+  # Run DESeq2 analysis
+  dds <- DESeq(dds, parallel = TRUE, BPPARAM = MulticoreParam(4))
+  
+  # Get the results for the current trait
+  res <- results(dds)
+  
+  # Save the results to a file
+  write.csv(res, paste0("differential_expression_", trait, "_results_M2.csv"))
+  
+  # print a summary of the results
+  print(paste("Results for trait:", trait))
+  print(summary(res))
+  
+  # plot the MA-plot for the current trait
+  png(paste0("ma_plot_", trait, "_M2.png"), width = 800, height = 600)
+  plotMA(res, main = paste("Continuous (M2): MA Plot for", trait))
+  dev.off()
+  
+  # volcano plot
+  res_tableOE <- as.data.frame(res)
+  res_tableOE$gene_name <- raw_count_df$Description[keep_genes]
+  res_tableOE <- mutate(res_tableOE, threshold_OE = padj < 0.1)
+  res_tableOE <- res_tableOE %>% arrange(padj) %>% mutate(genelabels = "")
+  res_tableOE$genelabels[1:10] <- res_tableOE$gene_name[1:10]
+  
+  volcano_plot <- ggplot(res_tableOE, aes(x = log2FoldChange, y = -log10(padj))) +
+    geom_point(aes(colour = threshold_OE)) +
+    geom_text_repel(aes(label = genelabels)) +
+    ggtitle(paste("Continuous (M2): Volcano Plot for", trait)) +
+    xlab("log2 fold change") + 
+    ylab("-log10 adjusted p-value") +
+    theme(legend.position = "none",
+          plot.title = element_text(size = rel(1.5), hjust = 0.5),
+          axis.title = element_text(size = rel(1.25)))
+  
+  # Save the volcano plot
+  png(paste0("volcano_plot_", trait, "_M2.png"), width = 800, height = 600)
+  print(volcano_plot)
+  dev.off()
+}
+```
+
+**Quantile PRS:**
+
+```{r, warning=FALSE, eval=FALSE}
+metadata_file <- "analysis/metadata_quantile.txt"
+metadata <- read.csv(metadata_file, header = T, sep = "\t", stringsAsFactors = T)
+metadata$sex <- as.factor(metadata$sex)
+
+traits <- metadata[, 7:43]
+
+metadata <- cbind(metadata, geno_pc[,3:ncol(geno_pc)])
+
+# Loop through each trait and run DESeq2
+for (trait in colnames(traits)) {
+  
+  # Create the DESeqDataSet for the current trait
+  dds <- DESeqDataSetFromMatrix(
+    countData = as.matrix(final_count),  # Raw counts
+    colData = metadata[, c(1:6, which(colnames(metadata) == trait))],
+    design = as.formula(paste("~ PC1 + PC2 + PC3 + PC4 + PC5 + sex + geno_PC1 + geno_PC2 +", trait))
+  )
+  rownames(dds) <- id
+  
+  # Run DESeq2 analysis
+  dds <- DESeq(dds, parallel = TRUE, BPPARAM = MulticoreParam(4))
+  
+  # Get the results for the current trait
+  res <- results(dds)
+  
+  # Save the results to a file
+  write.csv(res, paste0("differential_expression_", trait, "_quantile_results_M2.csv"))
+  
+  # print a summary of the results
+  print(paste("Results for trait:", trait))
+  print(summary(res))
+  
+  # plot the MA-plot for the current trait
+  png(paste0("ma_plot_quantile_", trait, "_M2.png"), width = 800, height = 600)
+  plotMA(res, main = paste("Quantile (M2): MA Plot for", trait))
+  dev.off()
+  
+  # volcano plot
+  res_tableOE <- as.data.frame(res)
+  res_tableOE$gene_name <- raw_count_df$Description[keep_genes]
+  res_tableOE <- mutate(res_tableOE, threshold_OE = padj < 0.1 & 
+                          abs(log2FoldChange) >= 0.5)
+  res_tableOE <- res_tableOE %>% arrange(padj) %>% mutate(genelabels = "")
+  res_tableOE$genelabels[1:10] <- res_tableOE$gene_name[1:10]
+  
+  volcano_plot <- ggplot(res_tableOE, aes(x = log2FoldChange, y = -log10(padj))) +
+    geom_point(aes(colour = threshold_OE)) +
+    geom_text_repel(aes(label = genelabels)) +
+    ggtitle(paste("Quantile (M2):Volcano Plot for", trait)) +
+    xlab("log2 fold change") + 
+    ylab("-log10 adjusted p-value") +
+    theme(legend.position = "none",
+          plot.title = element_text(size = rel(1.5), hjust = 0.5),
+          axis.title = element_text(size = rel(1.25)))
+  
+  # Save the volcano plot
+  png(paste0("volcano_plot_quantile_", trait, "_M2.png"), width = 800, height = 600)
+  print(volcano_plot)
+  dev.off()
+}
+```
+
+# GO enrichment Analysis
+
+Gene Ontology enrichment is applied to both models, with and without adjusting 2 genotype PCs, for both continuous & quantile PRS.
+
+**Continuous PRS:**
+
+```{r, warning=FALSE, eval=FALSE}
 dir_path <- "analysis/continuous"
-files <- list.files(dir_path, pattern = "differential_expression_.*_results.csv", full.names = TRUE)
+files <- list.files(dir_path, pattern = "differential_expression_.*_results_M2.csv", full.names = TRUE)
 
 for (file in files) {
-  trait <- gsub("differential_expression_(.*)_results.csv", "\\1", basename(file))
+  trait <- gsub("differential_expression_(.*)_results_M2.csv", "\\1", basename(file))
   trait
   res_tableOE <- read.csv(file, header = T, row.names = 1)
   
@@ -222,9 +402,9 @@ for (file in files) {
   deGenes$gene_id <- gsub("\\.\\d+$", "", rownames(deGenes))
   
   gse <- enrichGO(gene = deGenes$gene_id, ont = "BP", 
-                OrgDb ="org.Hs.eg.db", keyType = "ENSEMBL")
+                OrgDb ="org.Hs.eg.db", keyType = "ENSEMBL", readable = T)
   
-  write.csv(as.data.frame(gse), file = paste0("GO_enrichment_", trait, "_results.csv"))
+  write.csv(as.data.frame(gse), file = paste0("GO_enrichment_", trait, "_results_M2.csv"))
   
   gse <- as.data.frame(gse)
   gse$GeneRatio_num <- as.numeric(sapply(strsplit(gse$GeneRatio, "/"), 
@@ -236,22 +416,28 @@ for (file in files) {
   
   gse <- cbind(gse, FoldEnrich = gse$GeneRatio_num/gse$BgRatio_num)
   
-  enrich_plot <- plotEnrich(gse[1:20,], plot_type = "dot", scale_ratio = 0.2) +
-    labs(title = paste("Continuous: Enrichment plot for", trait)) + 
+  if (nrow(gse) >= 20) {
+    enrich_plot <- plotEnrich(gse[1:20,], plot_type = "dot", scale_ratio = 0.5) +
+    labs(title = paste("Continuous (M2): Enrichment plot for", trait)) + 
     theme(plot.title = element_text(size = 10)) 
-  enrich_plot
-  ggsave(paste0("enrichment_plot_", trait, ".png"), plot = enrich_plot, width = 8, height = 6)
+  }else{
+    enrich_plot <- plotEnrich(gse, plot_type = "dot", scale_ratio = 0.5) +
+    labs(title = paste("Continuous (M2): Enrichment plot for", trait)) + 
+    theme(plot.title = element_text(size = 10)) 
+  }
+  ggsave(paste0("enrichment_plot_", trait, "_M2.png"), plot = enrich_plot, width = 8, height = 6)
 }
 ```
 
+**Quantile PRS:**
+
 ```{r, warning=FALSE, eval=FALSE}
-# quantile
 dir_path <- "analysis/quantile"
-files <- list.files(dir_path, pattern = "differential_expression_.*_quantile_results.csv",
+files <- list.files(dir_path, pattern = "differential_expression_.*_quantile_results_M2.csv",
                     full.names = TRUE)
 
 for (file in files) {
-  trait <- gsub("differential_expression_(.*)_quantile_results.csv", "\\1", basename(file))
+  trait <- gsub("differential_expression_(.*)_quantile_results_M2.csv", "\\1", basename(file))
   trait
   res_tableOE <- read.csv(file, header = T, row.names = 1)
   
@@ -262,7 +448,7 @@ for (file in files) {
   gse <- enrichGO(gene = deGenes$gene_id, ont = "BP", 
                 OrgDb ="org.Hs.eg.db", keyType = "ENSEMBL")
   
-  write.csv(as.data.frame(gse), file = paste0("GO_enrichment_quantile_", trait, "_results.csv"))
+  write.csv(as.data.frame(gse), file = paste0("GO_enrichment_quantile_", trait, "_results_M2.csv"))
   
   gse <- as.data.frame(gse)
   gse$GeneRatio_num <- as.numeric(sapply(strsplit(gse$GeneRatio, "/"), 
@@ -274,29 +460,47 @@ for (file in files) {
   
   gse <- cbind(gse, FoldEnrich = gse$GeneRatio_num/gse$BgRatio_num)
   
-  enrich_plot <- plotEnrich(gse[1:20,], plot_type = "dot", scale_ratio = 0.3) +
-    labs(title = paste("Quantile: Enrichment plot for", trait)) + 
+  if (nrow(gse) >= 20) {
+    enrich_plot <- plotEnrich(gse[1:20,], plot_type = "dot", scale_ratio = 0.3) +
+    labs(title = paste("Quantile (M2): Enrichment plot for", trait)) + 
     theme(plot.title = element_text(size = 10)) 
-  enrich_plot
-  ggsave(paste0("enrichment_plot_quantile_", trait, ".png"), plot = enrich_plot, width = 8, height = 6)
+  }else{
+    enrich_plot <- plotEnrich(gse, plot_type = "dot", scale_ratio = 0.3) +
+    labs(title = paste("Quantile (M2): Enrichment plot for", trait)) + 
+    theme(plot.title = element_text(size = 10)) 
+  }
+  
+  ggsave(paste0("enrichment_plot_quantile_", trait, "_M2.png"), plot = enrich_plot, width = 8, height = 6)
 }
 ```
 
-# Result table
+# Result
+
+## Summary table
 
 ```{r}
 continuous_dir <- "analysis/continuous_wb"
+continuous_m2_dir <- "analysis/continuous_wb_m2"
 quantile_dir <- "analysis/quantile_wb"
+quantile_m2_dir <- "analysis/quantile_wb_m2"
 
 # Get the list of differential expression results and GO enrichment results
 de_files_continuous <- list.files(continuous_dir, pattern = "differential_expression_.*_results.csv", 
                                   full.names = TRUE)
 go_files_continuous <- list.files(continuous_dir, pattern = "GO_enrichment_.*_results.csv", 
                                   full.names = TRUE)
+de_files_continuous_m2 <- list.files(continuous_m2_dir, pattern = "differential_expression_.*_results_M2.csv", 
+                                     full.names = TRUE)
+go_files_continuous_m2 <- list.files(continuous_m2_dir, pattern = "GO_enrichment_.*_results_M2.csv", 
+                                  full.names = TRUE)
 
 de_files_quantile <- list.files(quantile_dir, pattern = "differential_expression_.*_quantile_results.csv", 
                                 full.names = TRUE)
 go_files_quantile <- list.files(quantile_dir, pattern = "GO_enrichment_quantile_.*_results.csv", 
+                                full.names = TRUE)
+de_files_quantile_m2 <- list.files(quantile_m2_dir, pattern = "differential_expression_.*_quantile_results_M2.csv", 
+                                full.names = TRUE)
+go_files_quantile_m2 <- list.files(quantile_m2_dir, pattern = "GO_enrichment_quantile_.*_results_M2.csv", 
                                 full.names = TRUE)
 
 # Initialize a data frame to store the results
@@ -308,6 +512,20 @@ results_df_continuous <- data.frame(trait = character(),
                                     stringsAsFactors = FALSE)
 
 results_df_quantile <- data.frame(trait = character(),
+                                  num_significant_de = integer(),
+                                  upregulated = integer(),
+                                  downregulated = integer(),
+                                  num_enriched_go = integer(),
+                                  stringsAsFactors = FALSE)
+
+results_df_continuous_m2 <- data.frame(trait = character(),
+                                    num_significant_de = integer(),
+                                    upregulated = integer(),
+                                    downregulated = integer(),
+                                    num_enriched_go = integer(),
+                                    stringsAsFactors = FALSE)
+
+results_df_quantile_m2 <- data.frame(trait = character(),
                                   num_significant_de = integer(),
                                   upregulated = integer(),
                                   downregulated = integer(),
@@ -332,32 +550,25 @@ extract_results <- function(de_file, go_file, analysis_type) {
   # Count the number of enriched GO pathways (adjusted p-value < 0.05)
   enriched_go <- sum(go_res$p.adjust < 0.05)
   
-  if (analysis_type == "continuous"){
-    # Extract trait name from the file name
-    trait_name <- gsub("differential_expression_|_results.csv", "", basename(de_file))
-    
-    # Create a row for this trait and add it to the results data frame
-    results_df_continuous <<- rbind(results_df_continuous, 
-                                    data.frame(trait = trait_name,
-                                               num_significant_de = nrow(significant_de),
-                                               upregulated = upregulated,
-                                              downregulated = downregulated,
-                                              num_enriched_go = enriched_go))
-  }else if (analysis_type == "quantile") {
-    # Extract trait name from the file name
-    trait_name <- gsub("differential_expression_|_quantile_results.csv", "", basename(de_file))
-    
-    # Create a row for this trait and add it to the results data frame
-    results_df_quantile <<- rbind(
-      results_df_quantile,
-      data.frame(
-        trait = trait_name,
-        num_significant_de = nrow(significant_de),
-        upregulated = upregulated,
-        downregulated = downregulated,
-        num_enriched_go = enriched_go
-      )
-    )
+  # Extract trait name from the file name
+  trait_name <- gsub("differential_expression_|_results(.*).csv", "", basename(de_file))
+  
+  # Create a row for this trait and add it to the results data frame
+  new_row <- data.frame(
+    trait = trait_name,
+    num_significant_de = nrow(significant_de),
+    upregulated = upregulated,
+    downregulated = downregulated,
+    num_enriched_go = enriched_go
+  )
+  if (analysis_type == "continuous") {
+    results_df_continuous <<- rbind(results_df_continuous, new_row)
+  } else if (analysis_type == "quantile") {
+    results_df_quantile <<- rbind(results_df_quantile, new_row)
+  } else if (analysis_type == "continuous_m2") {
+    results_df_continuous_m2 <<- rbind(results_df_continuous_m2, new_row)
+  } else if (analysis_type == "quantile_m2") {
+    results_df_quantile_m2 <<- rbind(results_df_quantile_m2, new_row)
   }
 }
 
@@ -366,9 +577,16 @@ for (i in seq_along(de_files_continuous)) {
   extract_results(de_files_continuous[i], go_files_continuous[i], "continuous")
 }
 
+for (i in seq_along(de_files_continuous_m2)) {
+  extract_results(de_files_continuous_m2[i], go_files_continuous_m2[i], "continuous_m2")
+}
+
 # Loop through the quantile files and extract results
 for (i in seq_along(de_files_quantile)) {
   extract_results(de_files_quantile[i], go_files_quantile[i], "quantile")
+}
+for (i in seq_along(de_files_quantile)) {
+  extract_results(de_files_quantile_m2[i], go_files_quantile_m2[i], "quantile_m2")
 }
 
 colnames(results_df_continuous) <- c("Trait",
@@ -377,162 +595,631 @@ colnames(results_df_continuous) <- c("Trait",
 colnames(results_df_quantile) <- c("Trait",
                           "Significant differential expressed genes", 
                           "Up", "Down", "Significant GO enriched pathways")
-knitr::kable(results_df_continuous, caption = "Continuous")
-knitr::kable(results_df_quantile, caption = "Quantile (Stratify trait into top 25% and remaining)")
+colnames(results_df_continuous_m2) <- c("Trait",
+                          "Significant differential expressed genes", 
+                          "Up", "Down", "Significant GO enriched pathways")
+colnames(results_df_quantile_m2) <- c("Trait",
+                          "Significant differential expressed genes", 
+                          "Up", "Down", "Significant GO enriched pathways")
+
+knitr::kable(results_df_continuous, caption = "Continuous PRS without adjusting genotype PCs")
+knitr::kable(results_df_continuous_m2, caption = "Continuous PRS with adjusting genotype PCs")
+knitr::kable(results_df_quantile, caption = "Quantile PRS without adjusting genotype PCs")
+knitr::kable(results_df_quantile_m2, caption = "Quantile PRS with adjusting genotype PCs")
 ```
 
 **Interpretation:**
 
-In the quantile analysis, the number of significant differential expressed genes is generally higher compared to the continuous analysis, which suggests that stratifying by PRS (top 25%) may identify more genes with stronger associations to the traits.
+In the quantile analysis, the number of significant differential expressed genes is generally higher compared to the continuous analysis, which suggests that stratifying by PRS (top 25%) may identify more genes with stronger associations to the traits. We observed that certain genes were identified in both the continuous and quantile PRS analyses, though not all genes overlapped. Specifically, for the Eosinophil count trait, ACTN3, HAMP, SCGB3A1, CH25H, and NPIPA8 appeared among the top 10 DEGs across both analyses, suggesting that these genes might play a key role in the trait regardless of the analysis approach. For example:  
 
-The GO enrichment analysis provides additional insights into the biological pathways and processes that are potentially involved in these traits. BgRatio is the ratio of the total number of genes in a specific pathway (GO term) to the total number of genes. GeneRatio is the ratio of the number of genes enriched in specific pathway to the number of genes that were tested in the analysis. FoldEnrichment is the ratio of GeneRatio to BgRatio, showing how much more enriched a pathway is in your genes of interest compared to the total gene set. Higher FoldEnrichment values indicate that a particular GO term is overrepresented in your gene set compared to the general gene pool, suggesting it may be biologically relevant for the trait. Some traits show higher pathway enrichment in the quantile analysis, indicating that stratification by PRS may provide more biologically meaningful results.
+- HAMP encodes Hepcidin, which is involved in the maintenance of iron homeostasis. 
 
-We are able to detect some (not all) overlapping top DEGs between continuous or quantile PRS. For example, SAA1, SAA2, ALDH1A3 are both detected and known to be involved in immune response and inflammation. For highly correlated traits, they tend to share similar GO enriched pathways. For example, mean corpuscular hemoglobin and mean corpucular volume are both involved in read blood cell biology, so it's expected that their GO enrichment would point to similar biological processes, such as hemoglobin metabolism, iron homeostasis and erythropoiesis.
+- SCGB3A1 predicts to enable cytokin activity. 
+
+- CH25H encodes for cholesterol 25-hydroxylase, involved in lipid metabolism and modulating immune responses.
+
+Additionally, the GO enrichment analysis provides insights into the biological pathways and processes that are potentially involved in these traits. BgRatio is the ratio of the total number of genes in a specific pathway (GO term) to the total number of genes. GeneRatio is the ratio of the number of genes enriched in specific pathway to the number of genes that were tested in the analysis. FoldEnrichment is the ratio of GeneRatio to BgRatio, showing how much more enriched a pathway is in your genes of interest compared to the total gene set. Higher FoldEnrichment values indicate that a particular GO term is overrepresented in your gene set compared to the general gene pool, suggesting it may be biologically relevant for the trait. Some traits show higher pathway enrichment in the quantile analysis, indicating that stratification by PRS may provide more biologically meaningful results.
+
+For highly correlated traits, they tend to share similar GO enriched pathways. For example, mean corpuscular hemoglobin and mean corpucular volume are both involved in read blood cell biology, so it's expected that their GO enrichment would point to similar biological processes, such as hemoglobin metabolism, iron homeostasis and erythropoiesis.
+
+To account for population stratification, we adjusted the model by including the first two genotype principal components (PCs), as they explain most of the genetic variation in the data. For Eosinophil count, we observed that genes were consistently identified as top differentially expressed with and without adjustment. The only difference is that instead of SLC6A9, WFDC2 was detected as top 10 DEGs when adjusting for the first two genotype PCs. WFBC2 is a protease inhibitor with a potential role in innate immune defense [L Bingle, 2006](https://doi.org/10.1186/1465-9921-7-61). Although same genes are identified as top DEGs for continuous analysis, additional pathways such as response to inactivity were highlighted when adjusting for the first two genotype PCs. 
 
 ## Basophil count
 
-![](figure/differential_expression.Rmd/ma_plot_Basophil.count.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Basophil.count.png) ![](figure/differential_expression.Rmd/volcano_plot_Basophil.count.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Basophil.count.png) ![](figure/differential_expression.Rmd/enrichment_plot_Basophil.count.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Basophil.count.png)
+![](figure/differential_expression.Rmd/ma_plot_Basophil.count.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Basophil.count.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Basophil.count.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Basophil.count.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Basophil.count.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Basophil.count.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Basophil.count_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Basophil.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Basophil.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Basophil.count_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Basophil.count_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Basophil.count_M2.png)
 
 ## Basophil.percentage.of.white.cells
 
-![](figure/differential_expression.Rmd/ma_plot_Basophil.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Basophil.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/volcano_plot_Basophil.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Basophil.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/enrichment_plot_Basophil.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Basophil.percentage.of.white.cells.png)
+![](figure/differential_expression.Rmd/ma_plot_Basophil.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Basophil.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Basophil.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Basophil.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Basophil.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Basophil.percentage.of.white.cells.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Basophil.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Basophil.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Basophil.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Basophil.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Basophil.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Basophil.percentage.of.white.cells_M2.png)
 
 ## Eosinophil.count
 
-![](figure/differential_expression.Rmd/ma_plot_Eosinophil.count.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Eosinophil.count.png) ![](figure/differential_expression.Rmd/volcano_plot_Eosinophil.count.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Eosinophil.count.png) ![](figure/differential_expression.Rmd/enrichment_plot_Eosinophil.count.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Eosinophil.count.png)
+![](figure/differential_expression.Rmd/ma_plot_Eosinophil.count.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Eosinophil.count.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Eosinophil.count.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Eosinophil.count.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Eosinophil.count.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Eosinophil.count.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Eosinophil.count_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Eosinophil.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Eosinophil.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Eosinophil.count_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Eosinophil.count_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Eosinophil.count_M2.png)
+
 
 ## Eosinophil.percentage.of.white.cells
 
-![](figure/differential_expression.Rmd/ma_plot_Eosinophil.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Eosinophil.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/volcano_plot_Eosinophil.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Eosinophil.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/enrichment_plot_Eosinophil.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Eosinophil.percentage.of.white.cells.png)
+![](figure/differential_expression.Rmd/ma_plot_Eosinophil.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Eosinophil.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Eosinophil.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Eosinophil.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Eosinophil.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Eosinophil.percentage.of.white.cells.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Eosinophil.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Eosinophil.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Eosinophil.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Eosinophil.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Eosinophil.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Eosinophil.percentage.of.white.cells_M2.png)
+
 
 ## Hematocrit
 
-![](figure/differential_expression.Rmd/ma_plot_Hematocrit.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Hematocrit.png) ![](figure/differential_expression.Rmd/volcano_plot_Hematocrit.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Hematocrit.png) ![](figure/differential_expression.Rmd/enrichment_plot_Hematocrit.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Hematocrit.png)
+![](figure/differential_expression.Rmd/ma_plot_Hematocrit.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Hematocrit.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Hematocrit.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Hematocrit.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Hematocrit.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Hematocrit.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Hematocrit_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Hematocrit_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Hematocrit_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Hematocrit_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Hematocrit_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Hematocrit_M2.png)
 
 ## Hemoglobin.concentration
 
-![](figure/differential_expression.Rmd/ma_plot_Hemoglobin.concentration.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Hemoglobin.concentration.png) ![](figure/differential_expression.Rmd/volcano_plot_Hemoglobin.concentration.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Hemoglobin.concentration.png) ![](figure/differential_expression.Rmd/enrichment_plot_Hemoglobin.concentration.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Hemoglobin.concentration.png)
+![](figure/differential_expression.Rmd/ma_plot_Hemoglobin.concentration.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Hemoglobin.concentration.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Hemoglobin.concentration.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Hemoglobin.concentration.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Hemoglobin.concentration.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Hemoglobin.concentration.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Hemoglobin.concentration_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Hemoglobin.concentration_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Hemoglobin.concentration_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Hemoglobin.concentration_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Hemoglobin.concentration_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Hemoglobin.concentration.png)
+
 
 ## High.light.scatter.reticulocyte.count
 
-![](figure/differential_expression.Rmd/ma_plot_High.light.scatter.reticulocyte.count.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_High.light.scatter.reticulocyte.count.png) ![](figure/differential_expression.Rmd/volcano_plot_High.light.scatter.reticulocyte.count.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_High.light.scatter.reticulocyte.count.png) ![](figure/differential_expression.Rmd/enrichment_plot_High.light.scatter.reticulocyte.count.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_High.light.scatter.reticulocyte.count.png)
+![](figure/differential_expression.Rmd/ma_plot_High.light.scatter.reticulocyte.count.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_High.light.scatter.reticulocyte.count.png) 
+![](figure/differential_expression.Rmd/volcano_plot_High.light.scatter.reticulocyte.count.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_High.light.scatter.reticulocyte.count.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_High.light.scatter.reticulocyte.count.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_High.light.scatter.reticulocyte.count.png)
+
+![](figure/differential_expression.Rmd/ma_plot_High.light.scatter.reticulocyte.count_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_High.light.scatter.reticulocyte.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_High.light.scatter.reticulocyte.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_High.light.scatter.reticulocyte.count_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_High.light.scatter.reticulocyte.count_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_High.light.scatter.reticulocyte.count_M2.png)
+
 
 ## High.light.scatter.reticulocyte.percentage.of.red.cells
 
-![](figure/differential_expression.Rmd/ma_plot_High.light.scatter.reticulocyte.percentage.of.red.cells.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells.png) ![](figure/differential_expression.Rmd/volcano_plot_High.light.scatter.reticulocyte.percentage.of.red.cells.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells.png) ![](figure/differential_expression.Rmd/enrichment_plot_High.light.scatter.reticulocyte.percentage.of.red.cells.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells.png)
+![](figure/differential_expression.Rmd/ma_plot_High.light.scatter.reticulocyte.percentage.of.red.cells.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells.png) 
+![](figure/differential_expression.Rmd/volcano_plot_High.light.scatter.reticulocyte.percentage.of.red.cells.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_High.light.scatter.reticulocyte.percentage.of.red.cells.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells.png)
+
+![](figure/differential_expression.Rmd/ma_plot_High.light.scatter.reticulocyte.percentage.of.red.cells_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_High.light.scatter.reticulocyte.percentage.of.red.cells_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_High.light.scatter.reticulocyte.percentage.of.red.cells_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_High.light.scatter.reticulocyte.percentage.of.red.cells_M2.png)
 
 ## Immature.fraction.of.reticulocytes
 
-![](figure/differential_expression.Rmd/ma_plot_Immature.fraction.of.reticulocytes.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Immature.fraction.of.reticulocytes.png) ![](figure/differential_expression.Rmd/volcano_plot_Immature.fraction.of.reticulocytes.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Immature.fraction.of.reticulocytes.png) ![](figure/differential_expression.Rmd/enrichment_plot_Immature.fraction.of.reticulocytes.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Immature.fraction.of.reticulocytes.png)
+![](figure/differential_expression.Rmd/ma_plot_Immature.fraction.of.reticulocytes.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Immature.fraction.of.reticulocytes.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Immature.fraction.of.reticulocytes.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Immature.fraction.of.reticulocytes.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Immature.fraction.of.reticulocytes.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Immature.fraction.of.reticulocytes.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Immature.fraction.of.reticulocytes_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Immature.fraction.of.reticulocytes_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Immature.fraction.of.reticulocytes_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Immature.fraction.of.reticulocytes_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Immature.fraction.of.reticulocytes_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Immature.fraction.of.reticulocytes_M2.png)
+
 
 ## Lymphocyte.count
 
-![](figure/differential_expression.Rmd/ma_plot_Lymphocyte.count.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Lymphocyte.count.png) ![](figure/differential_expression.Rmd/volcano_plot_Lymphocyte.count.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Lymphocyte.count.png) ![](figure/differential_expression.Rmd/enrichment_plot_Lymphocyte.count.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Lymphocyte.count.png)
+![](figure/differential_expression.Rmd/ma_plot_Lymphocyte.count.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Lymphocyte.count.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Lymphocyte.count.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Lymphocyte.count.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Lymphocyte.count.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Lymphocyte.count.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Lymphocyte.count_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Lymphocyte.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Lymphocyte.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Lymphocyte.count_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Lymphocyte.count_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Lymphocyte.count_M2.png)
 
 ## Lymphocyte.percentage.of.white.cells
 
-![](figure/differential_expression.Rmd/ma_plot_Lymphocyte.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Lymphocyte.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/volcano_plot_Lymphocyte.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Lymphocyte.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/enrichment_plot_Lymphocyte.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Lymphocyte.percentage.of.white.cells.png)
+![](figure/differential_expression.Rmd/ma_plot_Lymphocyte.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Lymphocyte.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Lymphocyte.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Lymphocyte.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Lymphocyte.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Lymphocyte.percentage.of.white.cells.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Lymphocyte.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Lymphocyte.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Lymphocyte.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Lymphocyte.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Lymphocyte.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Lymphocyte.percentage.of.white.cells_M2.png)
+
 
 ## Mean.corpuscular.hemoglobin.concentration
 
-![](figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.hemoglobin.concentration.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.hemoglobin.concentration.png) ![](figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.hemoglobin.concentration.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.hemoglobin.concentration.png) ![](figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.hemoglobin.concentration.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.hemoglobin.concentration.png)
+![](figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.hemoglobin.concentration.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.hemoglobin.concentration.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.hemoglobin.concentration.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.hemoglobin.concentration.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.hemoglobin.concentration.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.hemoglobin.concentration.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.hemoglobin.concentration_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.hemoglobin.concentration_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.hemoglobin.concentration_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.hemoglobin.concentration_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.hemoglobin.concentration_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.hemoglobin.concentration_M2.png)
+
 
 ## Mean.corpuscular.hemoglobin
 
-![](figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.hemoglobin.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.hemoglobin.png) ![](figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.hemoglobin.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.hemoglobin.png) ![](figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.hemoglobin.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.hemoglobin.png)
+![](figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.hemoglobin.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.hemoglobin.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.hemoglobin.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.hemoglobin.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.hemoglobin.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.hemoglobin.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.hemoglobin_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.hemoglobin_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.hemoglobin_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.hemoglobin_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.hemoglobin_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.hemoglobin_M2.png)
+
 
 ## Mean.corpuscular.volume
 
-![](figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.volume.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.volume.png) ![](figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.volume.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.volume.png) ![](figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.volume.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.volume.png)
+![](figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.volume.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.volume.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.volume.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.volume.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.volume.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.volume.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.volume_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.corpuscular.volume_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Mean.corpuscular.volume_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.volume_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.volume_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.volume_M2.png)
 
 ## Mean.platelet.volume
 
-![](figure/differential_expression.Rmd/ma_plot_Mean.platelet.volume.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.platelet.volume.png) ![](figure/differential_expression.Rmd/volcano_plot_Mean.platelet.volume.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.platelet.volume.png) ![](figure/differential_expression.Rmd/enrichment_plot_Mean.platelet.volume.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.platelet.volume.png)
+![](figure/differential_expression.Rmd/ma_plot_Mean.platelet.volume.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.platelet.volume.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Mean.platelet.volume.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.platelet.volume.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Mean.platelet.volume.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.platelet.volume.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Mean.platelet.volume_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.platelet.volume_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Mean.platelet.volume_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.platelet.volume_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Mean.platelet.volume_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.platelet.volume_M2.png)
 
 ## Mean.reticulocyte.volume
 
-![](figure/differential_expression.Rmd/ma_plot_Mean.reticulocyte.volume.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.reticulocyte.volume.png) ![](figure/differential_expression.Rmd/volcano_plot_Mean.reticulocyte.volume.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.reticulocyte.volume.png) ![](figure/differential_expression.Rmd/enrichment_plot_Mean.reticulocyte.volume.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.reticulocyte.volume.png)
+![](figure/differential_expression.Rmd/ma_plot_Mean.reticulocyte.volume.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.reticulocyte.volume.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Mean.reticulocyte.volume.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.reticulocyte.volume.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Mean.reticulocyte.volume.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.reticulocyte.volume.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Mean.reticulocyte.volume_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.reticulocyte.volume_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Mean.reticulocyte.volume_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.reticulocyte.volume_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Mean.reticulocyte.volume_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.reticulocyte.volume_M2.png)
 
 ## Mean.sphered.corpuscular.volume
 
-![](figure/differential_expression.Rmd/ma_plot_Mean.sphered.corpuscular.volume.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.sphered.corpuscular.volume.png) ![](figure/differential_expression.Rmd/volcano_plot_Mean.sphered.corpuscular.volume.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.sphered.corpuscular.volume.png) ![](figure/differential_expression.Rmd/enrichment_plot_Mean.sphered.corpuscular.volume.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.sphered.corpuscular.volume.png)
+![](figure/differential_expression.Rmd/ma_plot_Mean.sphered.corpuscular.volume.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.sphered.corpuscular.volume.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Mean.sphered.corpuscular.volume.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.sphered.corpuscular.volume.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Mean.sphered.corpuscular.volume.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.sphered.corpuscular.volume.png)
 
-## Monocyte.count
+![](figure/differential_expression.Rmd/ma_plot_Mean.sphered.corpuscular.volume_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.sphered.corpuscular.volume_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Mean.sphered.corpuscular.volume_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.sphered.corpuscular.volume_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Mean.sphered.corpuscular.volume_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.sphered.corpuscular.volume_M2.png)
 
-![](figure/differential_expression.Rmd/ma_plot_Monocyte.count.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Monocyte.count.png) ![](figure/differential_expression.Rmd/volcano_plot_Monocyte.count.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Monocyte.count.png) ![](figure/differential_expression.Rmd/enrichment_plot_Monocyte.count.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Monocyte.count.png)
+# Monocyte.count
 
-## Monocyte.percentage.of.white.cells
+![](figure/differential_expression.Rmd/ma_plot_Monocyte.count.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Monocyte.count.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Monocyte.count.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Monocyte.count.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Monocyte.count.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Monocyte.count.png)
 
-![](figure/differential_expression.Rmd/ma_plot_Monocyte.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Monocyte.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/volcano_plot_Monocyte.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Monocyte.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/enrichment_plot_Monocyte.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Monocyte.percentage.of.white.cells.png)
+![](figure/differential_expression.Rmd/ma_plot_Monocyte.count_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Monocyte.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Monocyte.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Monocyte.count_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Monocyte.count_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Monocyte.count_M2.png)
+
+# Monocyte.percentage.of.white.cells
+
+![](figure/differential_expression.Rmd/ma_plot_Monocyte.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Monocyte.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Monocyte.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Monocyte.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Monocyte.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Monocyte.percentage.of.white.cells.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Monocyte.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Monocyte.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Monocyte.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Monocyte.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Monocyte.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Monocyte.percentage.of.white.cells_M2.png)
 
 ## Neutrophil.count
 
-![](figure/differential_expression.Rmd/ma_plot_Neutrophil.count.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Neutrophil.count.png) ![](figure/differential_expression.Rmd/volcano_plot_Neutrophil.count.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Neutrophil.count.png) ![](figure/differential_expression.Rmd/enrichment_plot_Neutrophil.count.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Neutrophil.count.png)
+![](figure/differential_expression.Rmd/ma_plot_Neutrophil.count.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Neutrophil.count.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Neutrophil.count.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Neutrophil.count.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Neutrophil.count.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Neutrophil.count.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Neutrophil.count_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Neutrophil.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Neutrophil.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Neutrophil.count_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Neutrophil.count_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Neutrophil.count_M2.png)
 
 ## Neutrophil.percentage.of.white.cells
 
-![](figure/differential_expression.Rmd/ma_plot_Neutrophil.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Neutrophil.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/volcano_plot_Neutrophil.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Neutrophil.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/enrichment_plot_Neutrophil.percentage.of.white.cells.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Neutrophil.percentage.of.white.cells.png)
+![](figure/differential_expression.Rmd/ma_plot_Neutrophil.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Neutrophil.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Neutrophil.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Neutrophil.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Neutrophil.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Neutrophil.percentage.of.white.cells.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Neutrophil.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Neutrophil.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Neutrophil.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Neutrophil.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Neutrophil.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Neutrophil.percentage.of.white.cells_M2.png)
 
 ## Platelet.count
 
-![](figure/differential_expression.Rmd/ma_plot_Platelet.count.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Platelet.count.png) ![](figure/differential_expression.Rmd/volcano_plot_Platelet.count.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.count.png) ![](figure/differential_expression.Rmd/enrichment_plot_Platelet.count.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.count.png)
+![](figure/differential_expression.Rmd/ma_plot_Platelet.count.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Platelet.count.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Platelet.count.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.count.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Platelet.count.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.count.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Platelet.count_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Platelet.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Platelet.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.count_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Platelet.count_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.count_M2.png)
 
 ## Platelet.crit
 
-![](figure/differential_expression.Rmd/ma_plot_Platelet.crit.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Platelet.crit.png) ![](figure/differential_expression.Rmd/volcano_plot_Platelet.crit.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.crit.png) ![](figure/differential_expression.Rmd/enrichment_plot_Platelet.crit.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.crit.png)
+![](figure/differential_expression.Rmd/ma_plot_Platelet.crit.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Platelet.crit.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Platelet.crit.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.crit.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Platelet.crit.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.crit.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Platelet.crit_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Platelet.crit_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Platelet.crit_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.crit_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Platelet.crit_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.crit_M2.png)
 
 ## Platelet.distribution.width
 
-![](figure/differential_expression.Rmd/ma_plot_Platelet.distribution.width.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Platelet.distribution.width.png) ![](figure/differential_expression.Rmd/volcano_plot_Platelet.distribution.width.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.distribution.width.png) ![](figure/differential_expression.Rmd/enrichment_plot_Platelet.distribution.width.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.distribution.width.png)
+![](figure/differential_expression.Rmd/ma_plot_Platelet.distribution.width.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Platelet.distribution.width.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Platelet.distribution.width.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.distribution.width.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Platelet.distribution.width.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.distribution.width.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Platelet.distribution.width_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Platelet.distribution.width_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Platelet.distribution.width_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Platelet.distribution.width_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Platelet.distribution.width_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Platelet.distribution.width_M2.png)
 
 ## Red.blood.cell.count
 
-![](figure/differential_expression.Rmd/ma_plot_Red.blood.cell.count.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Red.blood.cell.count.png) ![](figure/differential_expression.Rmd/volcano_plot_Red.blood.cell.count.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Red.blood.cell.count.png) ![](figure/differential_expression.Rmd/enrichment_plot_Red.blood.cell.count.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Red.blood.cell.count.png)
+![](figure/differential_expression.Rmd/ma_plot_Red.blood.cell.count.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Red.blood.cell.count.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Red.blood.cell.count.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Red.blood.cell.count.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Red.blood.cell.count.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Red.blood.cell.count.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Red.blood.cell.count_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Red.blood.cell.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Red.blood.cell.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Red.blood.cell.count_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Red.blood.cell.count_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Red.blood.cell.count_M2.png)
 
 ## Red.cell.distribution.width
 
-![](figure/differential_expression.Rmd/ma_plot_Red.cell.distribution.width.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Red.cell.distribution.width.png) ![](figure/differential_expression.Rmd/volcano_plot_Red.cell.distribution.width.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Red.cell.distribution.width.png) ![](figure/differential_expression.Rmd/enrichment_plot_Red.cell.distribution.width.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Red.cell.distribution.width.png)
+![](figure/differential_expression.Rmd/ma_plot_Red.cell.distribution.width.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Red.cell.distribution.width.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Red.cell.distribution.width.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Red.cell.distribution.width.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Red.cell.distribution.width.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Red.cell.distribution.width.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Red.cell.distribution.width_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Red.cell.distribution.width_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Red.cell.distribution.width_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Red.cell.distribution.width_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Red.cell.distribution.width_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Red.cell.distribution.width_M2.png)
 
 ## Reticulocyte.count
 
-![](figure/differential_expression.Rmd/ma_plot_Reticulocyte.count.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Reticulocyte.count.png) ![](figure/differential_expression.Rmd/volcano_plot_Reticulocyte.count.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Reticulocyte.count.png) ![](figure/differential_expression.Rmd/enrichment_plot_Reticulocyte.count.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Reticulocyte.count.png)
+![](figure/differential_expression.Rmd/ma_plot_Reticulocyte.count.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Reticulocyte.count.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Reticulocyte.count.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Reticulocyte.count.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Reticulocyte.count.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Reticulocyte.count.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Reticulocyte.count_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Reticulocyte.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Reticulocyte.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Reticulocyte.count_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Reticulocyte.count_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Reticulocyte.count_M2.png)
 
 ## Reticulocyte.fraction.of.red.cells
 
-![](figure/differential_expression.Rmd/ma_plot_Reticulocyte.fraction.of.red.cells.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Reticulocyte.fraction.of.red.cells.png) ![](figure/differential_expression.Rmd/volcano_plot_Reticulocyte.fraction.of.red.cells.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Reticulocyte.fraction.of.red.cells.png) ![](figure/differential_expression.Rmd/enrichment_plot_Reticulocyte.fraction.of.red.cells.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Reticulocyte.fraction.of.red.cells.png)
+![](figure/differential_expression.Rmd/ma_plot_Reticulocyte.fraction.of.red.cells.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Reticulocyte.fraction.of.red.cells.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Reticulocyte.fraction.of.red.cells.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Reticulocyte.fraction.of.red.cells.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Reticulocyte.fraction.of.red.cells.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Reticulocyte.fraction.of.red.cells.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Reticulocyte.fraction.of.red.cells_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Reticulocyte.fraction.of.red.cells_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Reticulocyte.fraction.of.red.cells_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Reticulocyte.fraction.of.red.cells_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Reticulocyte.fraction.of.red.cells_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Reticulocyte.fraction.of.red.cells_M2.png)
 
 ## White.blood.cell.count
 
-![](figure/differential_expression.Rmd/ma_plot_White.blood.cell.count.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_White.blood.cell.count.png) ![](figure/differential_expression.Rmd/volcano_plot_White.blood.cell.count.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_White.blood.cell.count.png) ![](figure/differential_expression.Rmd/enrichment_plot_White.blood.cell.count.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_White.blood.cell.count.png)
+![](figure/differential_expression.Rmd/ma_plot_White.blood.cell.count.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_White.blood.cell.count.png) 
+![](figure/differential_expression.Rmd/volcano_plot_White.blood.cell.count.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_White.blood.cell.count.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_White.blood.cell.count.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_White.blood.cell.count.png)
+
+![](figure/differential_expression.Rmd/ma_plot_White.blood.cell.count_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_White.blood.cell.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_White.blood.cell.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_White.blood.cell.count_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_White.blood.cell.count_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_White.blood.cell.count_M2.png)
 
 ## Celiac_GCST90014442
 
-![](figure/differential_expression.Rmd/ma_plot_Celiac_GCST90014442.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Celiac_GCST90014442.png) ![](figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90014442.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Celiac_GCST90014442.png) ![](figure/differential_expression.Rmd/enrichment_plot_Celiac_GCST90014442.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Celiac_GCST90014442.png)
+![](figure/differential_expression.Rmd/ma_plot_Celiac_GCST90014442.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Celiac_GCST90014442.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90014442.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Celiac_GCST90014442.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Celiac_GCST90014442.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Celiac_GCST90014442.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Celiac_GCST90014442_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Celiac_GCST90014442_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90014442_M2.png)
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Celiac_GCST90014442_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Celiac_GCST90014442_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Celiac_GCST90014442_M2.png)
 
 ## Celiac_GCST90468120
 
-![](figure/differential_expression.Rmd/ma_plot_Celiac_GCST90468120.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_Celiac_GCST90468120.png) ![](figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90468120.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_Celiac_GCST90468120.png) ![](figure/differential_expression.Rmd/enrichment_plot_Celiac_GCST90468120.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Celiac_GCST90468120.png)
+![](figure/differential_expression.Rmd/ma_plot_Celiac_GCST90468120.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Celiac_GCST90468120.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90468120.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Celiac_GCST90468120.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Celiac_GCST90468120.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Celiac_GCST90468120.png)
+
+![](figure/differential_expression.Rmd/ma_plot_Celiac_GCST90468120_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_Celiac_GCST90468120_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90468120_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_Celiac_GCST90468120_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_Celiac_GCST90468120_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_Celiac_GCST90468120_M2.png)
 
 ## IBD_GCST90013901
 
-![](figure/differential_expression.Rmd/ma_plot_IBD_GCST90013901.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_IBD_GCST90013901.png) ![](figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013901.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_IBD_GCST90013901.png) ![](figure/differential_expression.Rmd/enrichment_plot_IBD_GCST90013901.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_IBD_GCST90013901.png)
+![](figure/differential_expression.Rmd/ma_plot_IBD_GCST90013901.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_IBD_GCST90013901.png) 
+![](figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013901.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_IBD_GCST90013901.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_IBD_GCST90013901.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_IBD_GCST90013901.png)
+
+![](figure/differential_expression.Rmd/ma_plot_IBD_GCST90013901_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_IBD_GCST90013901_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013901_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_IBD_GCST90013901_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_IBD_GCST90013901_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_IBD_GCST90013901_M2.png)
 
 ## IBD_GCST90013951
 
-![](figure/differential_expression.Rmd/ma_plot_IBD_GCST90013951.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_IBD_GCST90013951.png) ![](figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013951.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_IBD_GCST90013951.png) ![](figure/differential_expression.Rmd/enrichment_plot_IBD_GCST90013951.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_IBD_GCST90013951.png)
+![](figure/differential_expression.Rmd/ma_plot_IBD_GCST90013951.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_IBD_GCST90013951.png) 
+![](figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013951.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_IBD_GCST90013951.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_IBD_GCST90013951.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_IBD_GCST90013951.png)
+
+![](figure/differential_expression.Rmd/ma_plot_IBD_GCST90013951_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_IBD_GCST90013951_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_IBD_GCST90013951_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_IBD_GCST90013951_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_IBD_GCST90013951_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_IBD_GCST90013951_M2.png)
 
 ## LUPUS_GCST003156
 
-![](figure/differential_expression.Rmd/ma_plot_LUPUS_GCST003156.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_LUPUS_GCST003156.png) ![](figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST003156.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_LUPUS_GCST003156.png) ![](figure/differential_expression.Rmd/enrichment_plot_LUPUS_GCST003156.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_LUPUS_GCST003156.png)
+![](figure/differential_expression.Rmd/ma_plot_LUPUS_GCST003156.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_LUPUS_GCST003156.png) 
+![](figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST003156.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_LUPUS_GCST003156.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_LUPUS_GCST003156.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_LUPUS_GCST003156.png)
 
-## LUPUS_GCST011096
+![](figure/differential_expression.Rmd/ma_plot_LUPUS_GCST003156_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_LUPUS_GCST003156_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST003156_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_LUPUS_GCST003156_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_LUPUS_GCST003156_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_LUPUS_GCST003156_M2.png)
 
-![](figure/differential_expression.Rmd/ma_plot_LUPUS_GCST011096.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_LUPUS_GCST011096.png) ![](figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST011096.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_LUPUS_GCST011096.png) ![](figure/differential_expression.Rmd/enrichment_plot_LUPUS_GCST011096.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_LUPUS_GCST011096.png)
+# LUPUS_GCST011096
+
+![](figure/differential_expression.Rmd/ma_plot_LUPUS_GCST011096.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_LUPUS_GCST011096.png) 
+![](figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST011096.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_LUPUS_GCST011096.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_LUPUS_GCST011096.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_LUPUS_GCST011096.png)
+
+![](figure/differential_expression.Rmd/ma_plot_LUPUS_GCST011096_M2.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_LUPUS_GCST011096_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST011096_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_LUPUS_GCST011096_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_LUPUS_GCST011096_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_LUPUS_GCST011096_M2.png)
 
 ## T1D_GCST90000529
 
-![](figure/differential_expression.Rmd/ma_plot_T1D_GCST90000529.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_T1D_GCST90000529.png) ![](figure/differential_expression.Rmd/volcano_plot_T1D_GCST90000529.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_T1D_GCST90000529.png) ![](figure/differential_expression.Rmd/enrichment_plot_T1D_GCST90000529.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_T1D_GCST90000529.png)
+![](figure/differential_expression.Rmd/ma_plot_T1D_GCST90000529.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_T1D_GCST90000529.png) 
+![](figure/differential_expression.Rmd/volcano_plot_T1D_GCST90000529.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_T1D_GCST90000529.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_T1D_GCST90000529.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_T1D_GCST90000529.png)
+
+![](figure/differential_expression.Rmd/ma_plot_T1D_GCST90000529_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_T1D_GCST90000529_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_T1D_GCST90000529_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_T1D_GCST90000529_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_T1D_GCST90000529_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_T1D_GCST90000529_M2.png)
 
 ## T1D_GCST90014023
 
-![](figure/differential_expression.Rmd/ma_plot_T1D_GCST90014023.png) ![](figure/differential_expression.Rmd/ma_plot_quantile_T1D_GCST90014023.png) ![](figure/differential_expression.Rmd/volcano_plot_T1D_GCST90014023.png) ![](figure/differential_expression.Rmd/volcano_plot_quantile_T1D_GCST90014023.png) ![](figure/differential_expression.Rmd/enrichment_plot_T1D_GCST90014023.png) ![](figure/differential_expression.Rmd/enrichment_plot_quantile_T1D_GCST90014023.png)
+![](figure/differential_expression.Rmd/ma_plot_T1D_GCST90014023.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_T1D_GCST90014023.png) 
+![](figure/differential_expression.Rmd/volcano_plot_T1D_GCST90014023.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_T1D_GCST90014023.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_T1D_GCST90014023.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_T1D_GCST90014023.png)
+
+![](figure/differential_expression.Rmd/ma_plot_T1D_GCST90014023_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_quantile_T1D_GCST90014023_M2.png)
+![](figure/differential_expression.Rmd/volcano_plot_T1D_GCST90014023_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_quantile_T1D_GCST90014023_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_T1D_GCST90014023_M2.png) 
+![](figure/differential_expression.Rmd/enrichment_plot_quantile_T1D_GCST90014023_M2.png)
