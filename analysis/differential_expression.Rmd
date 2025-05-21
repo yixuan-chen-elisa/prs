@@ -478,7 +478,7 @@ for (file in files) {
 
 ## Summary table
 
-```{r}
+```{r, echo = F}
 continuous_dir <- "analysis/continuous_wb"
 continuous_m2_dir <- "analysis/continuous_wb_m2"
 quantile_dir <- "analysis/quantile_wb"
@@ -622,7 +622,7 @@ Additionally, the GO enrichment analysis provides insights into the biological p
 
 For highly correlated traits, they tend to share similar GO enriched pathways. For example, mean corpuscular hemoglobin and mean corpucular volume are both involved in read blood cell biology, so it's expected that their GO enrichment would point to similar biological processes, such as hemoglobin metabolism, iron homeostasis and erythropoiesis.
 
-To account for population stratification, we adjusted the model by including the first two genotype principal components (PCs), as they explain most of the genetic variation in the data. For Eosinophil count, we observed that genes were consistently identified as top differentially expressed with and without adjustment. The only difference is that instead of SLC6A9, WFDC2 was detected as top 10 DEGs when adjusting for the first two genotype PCs. WFBC2 is a protease inhibitor with a potential role in innate immune defense [L Bingle, 2006](https://doi.org/10.1186/1465-9921-7-61). Although same genes are identified as top DEGs for continuous analysis, additional pathways such as response to inactivity were highlighted when adjusting for the first two genotype PCs. 
+To account for population stratification, we adjusted the model by including the first two genotype principal components (PCs), as they explain most of the genetic variation in the data. For Eosinophil count, we observed that genes were consistently identified as top differentially expressed with and without adjustment. The only difference is that instead of SLC6A9, WFDC2 was detected as top 10 DEGs when adjusting for the first two genotype PCs. WFBC2 is a protease inhibitor with a potential role in innate immune defense ([L Bingle, 2006](https://doi.org/10.1186/1465-9921-7-61)). Although same genes are identified as top DEGs for continuous analysis, additional pathways such as response to inactivity were highlighted when adjusting for the first two genotype PCs. 
 
 ## Basophil count
 
@@ -904,7 +904,7 @@ To account for population stratification, we adjusted the model by including the
 ![](figure/differential_expression.Rmd/enrichment_plot_Mean.sphered.corpuscular.volume_M2.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.sphered.corpuscular.volume_M2.png)
 
-# Monocyte.count
+## Monocyte.count
 
 ![](figure/differential_expression.Rmd/ma_plot_Monocyte.count.png) 
 ![](figure/differential_expression.Rmd/ma_plot_quantile_Monocyte.count.png) 
@@ -920,7 +920,7 @@ To account for population stratification, we adjusted the model by including the
 ![](figure/differential_expression.Rmd/enrichment_plot_Monocyte.count_M2.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Monocyte.count_M2.png)
 
-# Monocyte.percentage.of.white.cells
+## Monocyte.percentage.of.white.cells
 
 ![](figure/differential_expression.Rmd/ma_plot_Monocyte.percentage.of.white.cells.png) 
 ![](figure/differential_expression.Rmd/ma_plot_quantile_Monocyte.percentage.of.white.cells.png) 
@@ -1176,7 +1176,7 @@ To account for population stratification, we adjusted the model by including the
 ![](figure/differential_expression.Rmd/enrichment_plot_LUPUS_GCST003156_M2.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_quantile_LUPUS_GCST003156_M2.png)
 
-# LUPUS_GCST011096
+## LUPUS_GCST011096
 
 ![](figure/differential_expression.Rmd/ma_plot_LUPUS_GCST011096.png) 
 ![](figure/differential_expression.Rmd/ma_plot_quantile_LUPUS_GCST011096.png) 
