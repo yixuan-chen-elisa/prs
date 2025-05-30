@@ -26,3 +26,11 @@ Welcome to my research website.
 
 - [Validation](validation.html)
 
+# Asthma application
+
+- [Relation between whole blood gene expression with Asthma PRS](asthma_wb.html)
+
+- [Relation between lung gene expression with Asthma PRS](asthma_lung.html)
+
+
+

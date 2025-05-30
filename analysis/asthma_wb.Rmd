@@ -1,0 +1,756 @@
+---
+title: "Relation between whole blood gene expression with Asthma PRS"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(data.table)
+library(tidyverse)
+library(ggplot2)
+library(corrplot)
+library(DESeq2)
+library(SummarizedExperiment)
+library(BiocParallel)
+library(ggrepel)
+library(genekitr)
+library(org.Hs.eg.db)
+library(enrichplot)
+library(clusterProfiler)
+library(gridExtra)
+```
+
+Use **Whole Blood** GTEx gene expression counts for the analysis.
+
+# Correlation between PRS & expression PCs 
+
+```{r}
+# load prs & pcs
+metadata_file <- "analysis/metadata_asthma.txt"
+metadata <- read.csv(metadata_file, header = T, sep = "\t", stringsAsFactors = T)
+metadata$sex <- as.factor(metadata$sex)
+
+traits <- metadata$asthma
+pc <- metadata[, c(1:5)]
+
+# Calculate the correlation between each trait and each PC
+correlation_matrix <- cor(traits, pc)
+range(correlation_matrix)
+correlation_matrix <- t(correlation_matrix)
+correlation_matrix
+```
+
+# Model 1: expression ~ PRS + sex + expression PCs
+
+## Continuous PRS
+
+### DESeq2 Differential Expression 
+
+```{r, warning=FALSE, eval=FALSE}
+# Load the gene expression data
+gene_expr_file <- "data/gene_reads_2017-06-05_v8_whole_blood.gct"
+raw_count_df <- fread(gene_expr_file, header = TRUE, sep = "\t", drop = "id")
+
+# load protein_coding list
+protein_coding <- fread("data/protein-coding_gene.txt", sep = "\t")
+protein_coding <- protein_coding[, c("symbol", "ensembl_gene_id")]
+
+# keep only protein-coding genes
+raw_count_df <- raw_count_df[raw_count_df$Description %in% protein_coding$symbol, ]
+
+id <- raw_count_df$Name
+raw_count <- raw_count_df[, -c(1:2)]
+
+# modify GTEx sample names matching names used in PRS data
+colnames(raw_count) <- sub("^(GTEX-[^-.]+).*", "\\1", colnames(raw_count))
+
+matching_samples <- intersect(rownames(metadata), colnames(raw_count))
+final_count <- raw_count[ , ..matching_samples]
+
+# prefilter: keep only rows that have a count of at least 10
+keep_genes <- rowSums(final_count >= 10) > 0
+final_count <- final_count[keep_genes, ]
+id <- id[keep_genes]
+dim(final_count)
+
+prs_trait <- scale(traits) # Standardize PRS to mean = 0, sd = 1
+    
+# Add the standardized PRS to the metadata for continuous trait
+metadata$asthma <- prs_trait
+  
+# Create the DESeqDataSet for the current trait
+dds <- DESeqDataSetFromMatrix(
+  countData = as.matrix(final_count),  # Raw counts
+  colData = metadata,
+  design = as.formula("~ PC1 + PC2 + PC3 + PC4 + PC5 + sex + asthma")
+  )
+rownames(dds) <- id
+  
+# Run DESeq2 analysis
+dds <- DESeq(dds, parallel = TRUE, BPPARAM = MulticoreParam(4))
+  
+# Get the results for the current trait
+res <- results(dds)
+  
+# Save the results to a file
+write.csv(res, "differential_expression_asthma_results.csv")
+  
+# print a summary of the results
+print(paste("Results for trait: asthma"))
+print(summary(res))
+  
+# plot the MA-plot for the current trait
+png(paste0("ma_plot_asthma.png"), width = 800, height = 600)
+plotMA(res, main = paste("Continuous: MA Plot for Asthma"))
+dev.off()
+  
+# volcano plot
+res_tableOE <- as.data.frame(res)
+res_tableOE$gene_name <- raw_count_df$Description[keep_genes]
+res_tableOE <- mutate(res_tableOE, threshold_OE = padj < 0.1)
+res_tableOE <- res_tableOE %>% arrange(padj) %>% mutate(genelabels = "")
+res_tableOE$genelabels[1:10] <- res_tableOE$gene_name[1:10]
+  
+volcano_plot <- ggplot(res_tableOE, aes(x = log2FoldChange, y = -log10(padj))) +
+    geom_point(aes(colour = threshold_OE)) +
+    geom_text_repel(aes(label = genelabels)) +
+    ggtitle(paste("Continuous: Volcano Plot for Asthma")) +
+    xlab("log2 fold change") + 
+    ylab("-log10 adjusted p-value") +
+    theme(legend.position = "none",
+          plot.title = element_text(size = rel(1.5), hjust = 0.5),
+          axis.title = element_text(size = rel(1.25)))
+  
+# Save the volcano plot
+png(paste0("volcano_plot_asthma.png"), width = 800, height = 600)
+print(volcano_plot)
+dev.off()
+```
+
+### GO enrichment Analysis 
+
+```{r, warning=FALSE, eval=FALSE}
+file <- "analysis/asthma_wb/differential_expression_asthma_results.csv"
+
+res_tableOE <- read.csv(file, header = T, row.names = 1)
+  
+deGenes <- res_tableOE[res_tableOE$padj < 0.1 & 
+                         abs(res_tableOE$log2FoldChange) >= 0.5, ]
+deGenes$gene_id <- gsub("\\.\\d+$", "", rownames(deGenes))
+
+# Separate upregulated and downregulated genes
+upregulated_genes <- deGenes[deGenes$log2FoldChange > 0, ]$gene_id
+downregulated_genes <- deGenes[deGenes$log2FoldChange < 0, ]$gene_id
+  
+# Run GO enrichment for upregulated genes
+gse_up <- enrichGO(gene = upregulated_genes, ont = "BP", 
+                   OrgDb = "org.Hs.eg.db", keyType = "ENSEMBL", readable = T)
+
+# Run GO enrichment for downregulated genes
+gse_down <- enrichGO(gene = downregulated_genes, ont = "BP", 
+                     OrgDb = "org.Hs.eg.db", keyType = "ENSEMBL", readable = T)
+  
+# Convert enrichment results to data frames and calculate additional ratios
+gse_up <- as.data.frame(gse_up)
+gse_down <- as.data.frame(gse_down)
+
+gse_up$GeneRatio_num <- as.numeric(sapply(strsplit(gse_up$GeneRatio, "/"), function(x) x[1])) / 
+                        as.numeric(sapply(strsplit(gse_up$GeneRatio, "/"), function(x) x[2]))
+gse_up$BgRatio_num <- as.numeric(sapply(strsplit(gse_up$BgRatio, "/"), function(x) x[1])) / 
+                        as.numeric(sapply(strsplit(gse_up$BgRatio, "/"), function(x) x[2]))
+gse_up <- cbind(gse_up, FoldEnrich = gse_up$GeneRatio_num / gse_up$BgRatio_num)
+
+gse_down$GeneRatio_num <- as.numeric(sapply(strsplit(gse_down$GeneRatio, "/"), function(x) x[1])) / 
+                          as.numeric(sapply(strsplit(gse_down$GeneRatio, "/"), function(x) x[2]))
+gse_down$BgRatio_num <- as.numeric(sapply(strsplit(gse_down$BgRatio, "/"), function(x) x[1])) / 
+                          as.numeric(sapply(strsplit(gse_down$BgRatio, "/"), function(x) x[2]))
+gse_down <- cbind(gse_down, FoldEnrich = gse_down$GeneRatio_num / gse_down$BgRatio_num)
+
+if (nrow(gse_up) >= 20) {
+    enrich_plot_up <- plotEnrich(gse_up[1:20,], plot_type = "dot", scale_ratio = 0.5) +
+    labs(title = "Continuous: Upregulated Enrichment Pathways for Asthma") + 
+    theme(plot.title = element_text(size = 10)) 
+}else{
+    enrich_plot_up <- plotEnrich(gse_up, plot_type = "dot", scale_ratio = 0.5) +
+    labs(title = "Continuous: Upregulated Enrichment Pathways for Asthma") + 
+    theme(plot.title = element_text(size = 10)) 
+}
+
+if (nrow(gse_down) >= 20) {
+    enrich_plot_down <- plotEnrich(gse_down[1:20,], plot_type = "dot", scale_ratio = 0.5) +
+    labs(title = "Continuous: Downregulated Enrichment Pathways for Asthma") + 
+    theme(plot.title = element_text(size = 10)) 
+}else{
+    enrich_plot_down <- plotEnrich(gse_down, plot_type = "dot", scale_ratio = 0.5) +
+    labs(title = "Continuous: Downregulated Enrichment Pathways for Asthma") + 
+    theme(plot.title = element_text(size = 10)) 
+}
+
+# Arrange the two plots side by side
+combined_plot <- grid.arrange(enrich_plot_up, enrich_plot_down, ncol = 2)
+
+# Save the combined plot
+ggsave("enrichment_plot_asthma.png", plot = combined_plot, width = 12, height = 6)
+
+# Save the GO enrichment results to CSV
+write.csv(gse_up, "GO_enrichment_asthma_upregulated.csv")
+write.csv(gse_down, "GO_enrichment_asthma_downregulated.csv")
+```
+
+## Quantile PRS
+
+### DESeq2 Differential Expression 
+
+```{r, warning=FALSE, eval=FALSE}
+metadata_file <- "analysis/metadata_asthma_quantile.txt"
+metadata <- read.csv(metadata_file, header = T, sep = "\t", stringsAsFactors = T)
+metadata$sex <- as.factor(metadata$sex)
+
+# Create the DESeqDataSet for the current trait
+dds <- DESeqDataSetFromMatrix(
+  countData = as.matrix(final_count),
+  colData = metadata,
+  design = as.formula("~ PC1 + PC2 + PC3 + PC4 + PC5 + sex + asthma")
+  )
+rownames(dds) <- id
+  
+# Run DESeq2 analysis
+dds <- DESeq(dds, parallel = TRUE, BPPARAM = MulticoreParam(4))
+  
+# Get the results for the current trait
+res <- results(dds)
+  
+# Save the results to a file
+write.csv(res, "differential_expression_asthma_quantile_results.csv")
+  
+# print a summary of the results
+print(paste("Results for trait: asthma"))
+print(summary(res))
+  
+# plot the MA-plot for the current trait
+png(paste0("ma_plot_quantile_asthma.png"), width = 800, height = 600)
+plotMA(res, main = paste("Quantile: MA Plot for Asthma"))
+dev.off()
+  
+# volcano plot
+res_tableOE <- as.data.frame(res)
+res_tableOE$gene_name <- raw_count_df$Description[keep_genes]
+res_tableOE <- mutate(res_tableOE, threshold_OE = padj < 0.1)
+res_tableOE <- res_tableOE %>% arrange(padj) %>% mutate(genelabels = "")
+res_tableOE$genelabels[1:10] <- res_tableOE$gene_name[1:10]
+  
+volcano_plot <- ggplot(res_tableOE, aes(x = log2FoldChange, y = -log10(padj))) +
+    geom_point(aes(colour = threshold_OE)) +
+    geom_text_repel(aes(label = genelabels)) +
+    ggtitle(paste("Quantile: Volcano Plot for Asthma")) +
+    xlab("log2 fold change") + 
+    ylab("-log10 adjusted p-value") +
+    theme(legend.position = "none",
+          plot.title = element_text(size = rel(1.5), hjust = 0.5),
+          axis.title = element_text(size = rel(1.25)))
+  
+# Save the volcano plot
+png(paste0("volcano_plot_quantile_asthma.png"), width = 800, height = 600)
+print(volcano_plot)
+dev.off()
+```
+
+### GO enrichment Analysis 
+
+```{r, warning=FALSE, eval=FALSE}
+file <- "analysis/asthma_wb/differential_expression_asthma_quantile_results.csv"
+
+res_tableOE <- read.csv(file, header = T, row.names = 1)
+  
+deGenes <- res_tableOE[res_tableOE$padj < 0.1 & 
+                         abs(res_tableOE$log2FoldChange) >= 0.5, ]
+deGenes$gene_id <- gsub("\\.\\d+$", "", rownames(deGenes))
+
+# Separate upregulated and downregulated genes
+upregulated_genes <- deGenes[deGenes$log2FoldChange > 0, ]$gene_id
+downregulated_genes <- deGenes[deGenes$log2FoldChange < 0, ]$gene_id
+  
+# Run GO enrichment for upregulated genes
+gse_up <- enrichGO(gene = upregulated_genes, ont = "BP", 
+                   OrgDb = "org.Hs.eg.db", keyType = "ENSEMBL", readable = T)
+
+# Run GO enrichment for downregulated genes
+gse_down <- enrichGO(gene = downregulated_genes, ont = "BP", 
+                     OrgDb = "org.Hs.eg.db", keyType = "ENSEMBL", readable = T)
+  
+# Convert enrichment results to data frames and calculate additional ratios
+gse_up <- as.data.frame(gse_up)
+gse_down <- as.data.frame(gse_down)
+
+gse_up$GeneRatio_num <- as.numeric(sapply(strsplit(gse_up$GeneRatio, "/"), function(x) x[1])) / 
+                        as.numeric(sapply(strsplit(gse_up$GeneRatio, "/"), function(x) x[2]))
+gse_up$BgRatio_num <- as.numeric(sapply(strsplit(gse_up$BgRatio, "/"), function(x) x[1])) / 
+                        as.numeric(sapply(strsplit(gse_up$BgRatio, "/"), function(x) x[2]))
+gse_up <- cbind(gse_up, FoldEnrich = gse_up$GeneRatio_num / gse_up$BgRatio_num)
+
+gse_down$GeneRatio_num <- as.numeric(sapply(strsplit(gse_down$GeneRatio, "/"), function(x) x[1])) / 
+                          as.numeric(sapply(strsplit(gse_down$GeneRatio, "/"), function(x) x[2]))
+gse_down$BgRatio_num <- as.numeric(sapply(strsplit(gse_down$BgRatio, "/"), function(x) x[1])) / 
+                          as.numeric(sapply(strsplit(gse_down$BgRatio, "/"), function(x) x[2]))
+gse_down <- cbind(gse_down, FoldEnrich = gse_down$GeneRatio_num / gse_down$BgRatio_num)
+
+if (nrow(gse_up) >= 20) {
+    enrich_plot_up <- plotEnrich(gse_up[1:20,], plot_type = "dot", scale_ratio = 0.4) +
+    labs(title = "Quantile: Upregulated Enrichment Pathways for Asthma") + 
+    theme(plot.title = element_text(size = 6)) 
+}else{
+    enrich_plot_up <- plotEnrich(gse_up, plot_type = "dot", scale_ratio = 0.4) +
+    labs(title = "Quantile: Upregulated Enrichment Pathways for Asthma") + 
+    theme(plot.title = element_text(size = 6)) 
+}
+
+if (nrow(gse_down) >= 20) {
+    enrich_plot_down <- plotEnrich(gse_down[1:20,], plot_type = "dot", scale_ratio = 0.4) +
+    labs(title = "Quantile: Downregulated Enrichment Pathways for Asthma") + 
+    theme(plot.title = element_text(size = 6)) 
+}else{
+    enrich_plot_down <- plotEnrich(gse_down, plot_type = "dot", scale_ratio = 0.4) +
+    labs(title = "Quantile: Downregulated Enrichment Pathways for Asthma") + 
+    theme(plot.title = element_text(size = 6)) 
+}
+
+# Arrange the two plots side by side
+combined_plot <- grid.arrange(enrich_plot_up, enrich_plot_down, ncol = 2)
+
+# Save the combined plot
+ggsave("enrichment_plot_quantile_asthma.png", plot = combined_plot, width = 12, height = 6)
+
+# Save the GO enrichment results to CSV
+write.csv(gse_up, "GO_enrichment_quantile_asthma_upregulated.csv")
+write.csv(gse_down, "GO_enrichment_quantile_asthma_downregulated.csv")
+```
+
+# Model 2: expression ~ PRS + sex + expression PCs + 2 genotype PCs
+
+## Obtain genotype PCs
+
+```{r}
+# Load the gene expression data
+gene_expr_file <- "data/gene_reads_2017-06-05_v8_whole_blood.gct"
+raw_count_df <- fread(gene_expr_file, header = TRUE, sep = "\t", drop = "id")
+
+# load protein_coding list
+protein_coding <- fread("data/protein-coding_gene.txt", 
+                        sep = "\t")
+protein_coding <- protein_coding[, c("symbol", "ensembl_gene_id")]
+
+# keep only protein-coding genes
+raw_count_df <- raw_count_df[raw_count_df$Description %in% protein_coding$symbol, ]
+
+id <- raw_count_df$Name
+raw_count <- raw_count_df[, -c(1:2)]
+
+# modify GTEx sample names matching names used in PRS data
+colnames(raw_count) <- sub("^(GTEX-[^-.]+).*", "\\1", colnames(raw_count))
+
+matching_samples <- intersect(rownames(metadata), colnames(raw_count))
+final_count <- raw_count[ , ..matching_samples]
+
+# prefilter: keep only rows that have a count of at least 10
+keep_genes <- rowSums(final_count >= 10) > 0
+final_count <- final_count[keep_genes, ]
+id <- id[keep_genes]
+dim(final_count)
+
+# obtain genotype PCs
+geno_pc <- read.table("data/pca.eigenvec")
+names(geno_pc) = c("FID","IID",paste0("geno_PC", c(1:(ncol(geno_pc)-2))))
+geno_pc <- geno_pc[geno_pc$FID %in% matching_samples, ]
+
+eigenval <- scan("data/pca.eigenval")
+pve <- data.frame(PC = 1:20, pve = eigenval/sum(eigenval)*100)
+
+ggplot(geno_pc) + geom_point(aes(x = geno_PC1, y = geno_PC2)) + 
+  labs(x = paste0("PC1 (", signif(pve$pve[1], 3), "%)"), 
+       y = paste0("PC2 (", signif(pve$pve[2], 3), "%)")) + theme_classic()
+ggplot(geno_pc) + geom_point(aes(x = geno_PC1, y = geno_PC3)) + 
+    labs(x = paste0("PC1 (", signif(pve$pve[1], 3), "%)"), 
+         y = paste0("PC3 (", signif(pve$pve[3], 3), "%)")) + theme_classic()
+ggplot(pve, aes(PC, pve)) + geom_point() + geom_line() +
+  labs(x = "Genotype PC", y = "Percentage variance explained") + theme_classic()
+```
+
+## Continuous PRS
+
+### DESeq2 Differential Expression
+
+```{r, warning=FALSE, eval=FALSE}
+metadata_file <- "analysis/metadata_asthma.txt"
+metadata <- read.csv(metadata_file, header = T, sep = "\t", stringsAsFactors = T)
+metadata$sex <- as.factor(metadata$sex)
+
+metadata <- cbind(metadata, geno_pc[,3:ncol(geno_pc)])
+
+# Standardize PRS for the current trait
+prs_trait <- scale(metadata$asthma)
+
+# Add the standardized PRS to the metadata for continuous trait
+metadata$asthma <- prs_trait
+
+# Create the DESeqDataSet for the current trait
+dds <- DESeqDataSetFromMatrix(
+  countData = as.matrix(final_count),  # Raw counts
+  colData = metadata[, 1:9],
+  design = as.formula("~ PC1 + PC2 + PC3 + PC4 + PC5 + sex + geno_PC1 + geno_PC2 + asthma")
+)
+rownames(dds) <- id
+
+# Run DESeq2 analysis
+dds <- DESeq(dds, parallel = TRUE, BPPARAM = MulticoreParam(4))
+
+# Get the results for the current trait
+res <- results(dds)
+  
+# Save the results to a file
+write.csv(res, "differential_expression_asthma_results_M2.csv")
+  
+# print a summary of the results
+print("Results for trait: Asthma")
+print(summary(res))
+  
+# plot the MA-plot for the current trait
+png(paste0("ma_plot_asthma_M2.png"), width = 800, height = 600)
+plotMA(res, main = "Continuous (M2): MA Plot for Asthma")
+dev.off()
+  
+# volcano plot
+res_tableOE <- as.data.frame(res)
+res_tableOE$gene_name <- raw_count_df$Description[keep_genes]
+res_tableOE <- mutate(res_tableOE, threshold_OE = padj < 0.1)
+res_tableOE <- res_tableOE %>% arrange(padj) %>% mutate(genelabels = "")
+res_tableOE$genelabels[1:10] <- res_tableOE$gene_name[1:10]
+  
+volcano_plot <- ggplot(res_tableOE, aes(x = log2FoldChange, y = -log10(padj))) +
+  geom_point(aes(colour = threshold_OE)) +
+  geom_text_repel(aes(label = genelabels)) +
+  ggtitle("Continuous (M2): Volcano Plot for Asthma") +
+    xlab("log2 fold change") + 
+    ylab("-log10 adjusted p-value") +
+    theme(legend.position = "none",
+          plot.title = element_text(size = rel(1.5), hjust = 0.5),
+          axis.title = element_text(size = rel(1.25)))
+  
+# Save the volcano plot
+png(paste0("volcano_plot_asthma_M2.png"), width = 800, height = 600)
+print(volcano_plot)
+dev.off()
+```
+
+### GO enrichment Analysis 
+
+```{r, warning=FALSE, eval=FALSE}
+file <- "analysis/asthma_wb/differential_expression_asthma_results_M2.csv"
+
+res_tableOE <- read.csv(file, header = T, row.names = 1)
+  
+deGenes <- res_tableOE[res_tableOE$padj < 0.1 & 
+                         abs(res_tableOE$log2FoldChange) >= 0.5, ]
+deGenes$gene_id <- gsub("\\.\\d+$", "", rownames(deGenes))
+
+# Separate upregulated and downregulated genes
+upregulated_genes <- deGenes[deGenes$log2FoldChange > 0, ]$gene_id
+downregulated_genes <- deGenes[deGenes$log2FoldChange < 0, ]$gene_id
+  
+# Run GO enrichment for upregulated genes
+gse_up <- enrichGO(gene = upregulated_genes, ont = "BP", 
+                   OrgDb = "org.Hs.eg.db", keyType = "ENSEMBL", readable = T)
+
+# Run GO enrichment for downregulated genes
+gse_down <- enrichGO(gene = downregulated_genes, ont = "BP", 
+                     OrgDb = "org.Hs.eg.db", keyType = "ENSEMBL", readable = T)
+  
+# Convert enrichment results to data frames and calculate additional ratios
+gse_up <- as.data.frame(gse_up)
+gse_down <- as.data.frame(gse_down)
+
+gse_up$GeneRatio_num <- as.numeric(sapply(strsplit(gse_up$GeneRatio, "/"), function(x) x[1])) / 
+                        as.numeric(sapply(strsplit(gse_up$GeneRatio, "/"), function(x) x[2]))
+gse_up$BgRatio_num <- as.numeric(sapply(strsplit(gse_up$BgRatio, "/"), function(x) x[1])) / 
+                        as.numeric(sapply(strsplit(gse_up$BgRatio, "/"), function(x) x[2]))
+gse_up <- cbind(gse_up, FoldEnrich = gse_up$GeneRatio_num / gse_up$BgRatio_num)
+
+gse_down$GeneRatio_num <- as.numeric(sapply(strsplit(gse_down$GeneRatio, "/"), function(x) x[1])) / 
+                          as.numeric(sapply(strsplit(gse_down$GeneRatio, "/"), function(x) x[2]))
+gse_down$BgRatio_num <- as.numeric(sapply(strsplit(gse_down$BgRatio, "/"), function(x) x[1])) / 
+                          as.numeric(sapply(strsplit(gse_down$BgRatio, "/"), function(x) x[2]))
+gse_down <- cbind(gse_down, FoldEnrich = gse_down$GeneRatio_num / gse_down$BgRatio_num)
+
+if (nrow(gse_up) >= 20) {
+    enrich_plot_up <- plotEnrich(gse_up[1:20,], plot_type = "dot", scale_ratio = 0.5) +
+    labs(title = "Continuous (M2): Upregulated Enrichment Pathways for Asthma") + 
+    theme(plot.title = element_text(size = 6)) 
+}else{
+    enrich_plot_up <- plotEnrich(gse_up, plot_type = "dot", scale_ratio = 0.5) +
+    labs(title = "Continuous (M2): Upregulated Enrichment Pathways for Asthma") + 
+    theme(plot.title = element_text(size = 6)) 
+}
+
+if (nrow(gse_down) >= 20) {
+    enrich_plot_down <- plotEnrich(gse_down[1:20,], plot_type = "dot", scale_ratio = 0.5) +
+    labs(title = "Continuous (M2): Downregulated Enrichment Pathways for Asthma") + 
+    theme(plot.title = element_text(size = 6)) 
+}else{
+    enrich_plot_down <- plotEnrich(gse_down, plot_type = "dot", scale_ratio = 0.5) +
+    labs(title = "Continuous (M2): Downregulated Enrichment Pathways for Asthma") + 
+    theme(plot.title = element_text(size = 6)) 
+}
+
+# Arrange the two plots side by side
+combined_plot <- grid.arrange(enrich_plot_up, enrich_plot_down, ncol = 2)
+
+# Save the combined plot
+ggsave("enrichment_plot_asthma_M2.png", plot = combined_plot, width = 12, height = 6)
+
+# Save the GO enrichment results to CSV
+write.csv(gse_up, "GO_enrichment_asthma_upregulated_M2.csv")
+write.csv(gse_down, "GO_enrichment_asthma_downregulated_M2.csv")
+```
+
+
+## Quantile PRS
+
+### DESeq2 Differential Expression
+
+```{r, warning=FALSE, eval=FALSE}
+metadata_file <- "analysis/metadata_asthma_quantile.txt"
+metadata <- read.csv(metadata_file, header = T, sep = "\t", stringsAsFactors = T)
+metadata$sex <- as.factor(metadata$sex)
+
+metadata <- cbind(metadata, geno_pc[,3:ncol(geno_pc)])
+
+# Create the DESeqDataSet for the current trait
+dds <- DESeqDataSetFromMatrix(
+  countData = as.matrix(final_count),  # Raw counts
+  colData = metadata[, 1:9],
+  design = as.formula("~ PC1 + PC2 + PC3 + PC4 + PC5 + sex + geno_PC1 + geno_PC2 + asthma")
+)
+rownames(dds) <- id
+
+# Run DESeq2 analysis
+dds <- DESeq(dds, parallel = TRUE, BPPARAM = MulticoreParam(4))
+
+# Get the results for the current trait
+res <- results(dds)
+  
+# Save the results to a file
+write.csv(res, "differential_expression_asthma_quantile_results_M2.csv")
+  
+# print a summary of the results
+print("Results for trait: Asthma")
+print(summary(res))
+  
+# plot the MA-plot for the current trait
+png(paste0("ma_plot_quantile_asthma_M2.png"), width = 800, height = 600)
+plotMA(res, main = "Quantile (M2): MA Plot for Asthma")
+dev.off()
+  
+# volcano plot
+res_tableOE <- as.data.frame(res)
+res_tableOE$gene_name <- raw_count_df$Description[keep_genes]
+res_tableOE <- mutate(res_tableOE, threshold_OE = padj < 0.1)
+res_tableOE <- res_tableOE %>% arrange(padj) %>% mutate(genelabels = "")
+res_tableOE$genelabels[1:10] <- res_tableOE$gene_name[1:10]
+  
+volcano_plot <- ggplot(res_tableOE, aes(x = log2FoldChange, y = -log10(padj))) +
+  geom_point(aes(colour = threshold_OE)) +
+  geom_text_repel(aes(label = genelabels)) +
+  ggtitle("Quantile (M2): Volcano Plot for Asthma") +
+    xlab("log2 fold change") + 
+    ylab("-log10 adjusted p-value") +
+    theme(legend.position = "none",
+          plot.title = element_text(size = rel(1.5), hjust = 0.5),
+          axis.title = element_text(size = rel(1.25)))
+  
+# Save the volcano plot
+png(paste0("volcano_plot_quantile_asthma_M2.png"), width = 800, height = 600)
+print(volcano_plot)
+dev.off()
+```
+
+### GO enrichment Analysis 
+
+```{r, warning=FALSE, eval=FALSE}
+file <- "analysis/asthma_wb/differential_expression_asthma_quantile_results_M2.csv"
+
+res_tableOE <- read.csv(file, header = T, row.names = 1)
+  
+deGenes <- res_tableOE[res_tableOE$padj < 0.1 & 
+                         abs(res_tableOE$log2FoldChange) >= 0.5, ]
+deGenes$gene_id <- gsub("\\.\\d+$", "", rownames(deGenes))
+
+# Separate upregulated and downregulated genes
+upregulated_genes <- deGenes[deGenes$log2FoldChange > 0, ]$gene_id
+downregulated_genes <- deGenes[deGenes$log2FoldChange < 0, ]$gene_id
+  
+# Run GO enrichment for upregulated genes
+gse_up <- enrichGO(gene = upregulated_genes, ont = "BP", 
+                   OrgDb = "org.Hs.eg.db", keyType = "ENSEMBL", readable = T)
+
+# Run GO enrichment for downregulated genes
+gse_down <- enrichGO(gene = downregulated_genes, ont = "BP", 
+                     OrgDb = "org.Hs.eg.db", keyType = "ENSEMBL", readable = T)
+  
+# Convert enrichment results to data frames and calculate additional ratios
+gse_up <- as.data.frame(gse_up)
+gse_down <- as.data.frame(gse_down)
+
+gse_up$GeneRatio_num <- as.numeric(sapply(strsplit(gse_up$GeneRatio, "/"), function(x) x[1])) / 
+                        as.numeric(sapply(strsplit(gse_up$GeneRatio, "/"), function(x) x[2]))
+gse_up$BgRatio_num <- as.numeric(sapply(strsplit(gse_up$BgRatio, "/"), function(x) x[1])) / 
+                        as.numeric(sapply(strsplit(gse_up$BgRatio, "/"), function(x) x[2]))
+gse_up <- cbind(gse_up, FoldEnrich = gse_up$GeneRatio_num / gse_up$BgRatio_num)
+
+gse_down$GeneRatio_num <- as.numeric(sapply(strsplit(gse_down$GeneRatio, "/"), function(x) x[1])) / 
+                          as.numeric(sapply(strsplit(gse_down$GeneRatio, "/"), function(x) x[2]))
+gse_down$BgRatio_num <- as.numeric(sapply(strsplit(gse_down$BgRatio, "/"), function(x) x[1])) / 
+                          as.numeric(sapply(strsplit(gse_down$BgRatio, "/"), function(x) x[2]))
+gse_down <- cbind(gse_down, FoldEnrich = gse_down$GeneRatio_num / gse_down$BgRatio_num)
+
+if (nrow(gse_up) >= 20) {
+    enrich_plot_up <- plotEnrich(gse_up[1:20,], plot_type = "dot", scale_ratio = 0.4) +
+    labs(title = "Quantile (M2): Upregulated Enrichment Pathways for Asthma") + 
+    theme(plot.title = element_text(size = 6)) 
+}else{
+    enrich_plot_up <- plotEnrich(gse_up, plot_type = "dot", scale_ratio = 0.4) +
+    labs(title = "Quantile (M2): Upregulated Enrichment Pathways for Asthma") + 
+    theme(plot.title = element_text(size = 6)) 
+}
+
+if (nrow(gse_down) >= 20) {
+    enrich_plot_down <- plotEnrich(gse_down[1:20,], plot_type = "dot", scale_ratio = 0.4) +
+    labs(title = "Quantile (M2): Downregulated Enrichment Pathways for Asthma") + 
+    theme(plot.title = element_text(size = 6)) 
+}else{
+    enrich_plot_down <- plotEnrich(gse_down, plot_type = "dot", scale_ratio = 0.4) +
+    labs(title = "Quantile (M2): Downregulated Enrichment Pathways for Asthma") + 
+    theme(plot.title = element_text(size = 6)) 
+}
+
+# Arrange the two plots side by side
+combined_plot <- grid.arrange(enrich_plot_up, enrich_plot_down, ncol = 2)
+
+# Save the combined plot
+ggsave("enrichment_plot_quantile_asthma_M2.png", plot = combined_plot, width = 12, height = 6)
+
+# Save the GO enrichment results to CSV
+write.csv(gse_up, "GO_enrichment_quantile_asthma_upregulated_M2.csv")
+write.csv(gse_down, "GO_enrichment_quantil_asthma_downregulated_M2.csv")
+```
+
+# Results
+
+## Summary table
+
+```{r, echo = F, warning=F, message = F}
+de_files_continuous <- "analysis/asthma_wb/differential_expression_asthma_results.csv"
+up_files_continuous <- "analysis/asthma_wb/GO_enrichment_asthma_upregulated.csv"
+down_files_continuous <- "analysis/asthma_wb/GO_enrichment_asthma_downregulated.csv"
+
+de_files_continuous_m2 <- "analysis/asthma_wb/differential_expression_asthma_results_M2.csv"
+up_files_continuous_m2 <- "analysis/asthma_wb/GO_enrichment_asthma_upregulated_M2.csv"
+down_files_continuous_m2 <- "analysis/asthma_wb/GO_enrichment_asthma_downregulated_M2.csv"
+
+de_files_quantile <- "analysis/asthma_wb/differential_expression_asthma_quantile_results.csv"
+up_files_quantile <- "analysis/asthma_wb/GO_enrichment_quantile_asthma_upregulated.csv"
+down_files_quantile <- "analysis/asthma_wb/GO_enrichment_quantile_asthma_downregulated.csv"
+
+de_files_quantile_m2 <- "analysis/asthma_wb/differential_expression_asthma_quantile_results_M2.csv"
+up_files_quantile_m2 <- "analysis/asthma_wb/GO_enrichment_quantile_asthma_upregulated_M2.csv"
+down_files_quantile_m2 <- "analysis/asthma_wb/GO_enrichment_quantile_asthma_downregulated_M2.csv"
+
+# define all your file paths in a named list
+files <- list(
+  continuous      = list(
+    de    = de_files_continuous,
+    upGO  = up_files_continuous,
+    downGO= down_files_continuous
+  ),
+  continuous_M2   = list(
+    de    = de_files_continuous_m2,
+    upGO  = up_files_continuous_m2,
+    downGO= down_files_continuous_m2
+  ),
+  quantile        = list(
+    de    = de_files_quantile,
+    upGO  = up_files_quantile,
+    downGO= down_files_quantile
+  ),
+  quantile_M2     = list(
+    de    = de_files_quantile_m2,
+    upGO  = up_files_quantile_m2,
+    downGO= down_files_quantile_m2
+  )
+)
+
+# a helper to summarize one model
+summarize_model <- function(name, paths){
+  # read DE results
+  de <- read_csv(paths$de)
+  
+  # assume columns: gene, log2FoldChange, padj
+  sig   <- de %>% filter(!is.na(padj) & padj < 0.05)
+  up    <- sig %>% filter(log2FoldChange > 0)
+  down  <- sig %>% filter(log2FoldChange < 0)
+  
+  # read GO results (each one is already the significant enriched pathways)
+  upGO   <- read_csv(paths$upGO)
+  downGO <- read_csv(paths$downGO)
+  
+  tibble(
+    Model                          = name,
+    `Significant DE genes`         = nrow(sig),
+    `Up-regulated genes`           = nrow(up),
+    `Down-regulated genes`         = nrow(down),
+    `Up-regulated GO pathways`        = nrow(upGO),
+    `Down-regulated GO pathways`      = nrow(downGO)
+  )
+}
+
+# run it for all
+summary_tbl <- map2_dfr(names(files), files, summarize_model)
+
+# nicely print
+knitr::kable(summary_tbl, caption = "Summary of Differential Expression and Enriched Pathways for Asthma PRS Models")
+```
+
+## Model 1: Adjust without genotype PCs
+
+### Continuous PRS
+
+![](figure/asthma_wb/ma_plot_asthma.png)
+![](figure/asthma_wb/volcano_plot_asthma.png)
+![](figure/asthma_wb/enrichment_plot_asthma.png)
+
+
+### Quantile PRS
+
+![](figure/asthma_wb/ma_plot_quantile_asthma.png)
+![](figure/asthma_wb/volcano_plot_quantile_asthma.png)
+![](figure/asthma_wb/enrichment_plot_quantile_asthma.png)
+
+## Model 2: Adjust with genotype PCs
+
+### Continuous PRS
+
+![](figure/asthma_wb/ma_plot_asthma_M2.png)
+![](figure/asthma_wb/volcano_plot_asthma_M2.png)
+![](figure/asthma_wb/enrichment_plot_asthma_M2.png)
+
+### Quantile PRS
+
+![](figure/asthma_wb/ma_plot_quantile_asthma_M2.png)
+![](figure/asthma_wb/volcano_plot_quantile_asthma_M2.png)
+![](figure/asthma_wb/enrichment_plot_quantile_asthma_M2.png)
+
+
+
+
+
+
+
+
