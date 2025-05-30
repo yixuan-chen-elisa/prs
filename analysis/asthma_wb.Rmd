@@ -722,30 +722,30 @@ knitr::kable(summary_tbl, caption = "Summary of Differential Expression and Enri
 
 ### Continuous PRS
 
-![](figure/asthma_wb/ma_plot_asthma.png)
-![](figure/asthma_wb/volcano_plot_asthma.png)
-![](figure/asthma_wb/enrichment_plot_asthma.png)
+![](figure/asthma_wb.Rmd/ma_plot_asthma.png)
+![](figure/asthma_wb.Rmd/volcano_plot_asthma.png)
+![](figure/asthma_wb.Rmd/enrichment_plot_asthma.png)
 
 
 ### Quantile PRS
 
-![](figure/asthma_wb/ma_plot_quantile_asthma.png)
-![](figure/asthma_wb/volcano_plot_quantile_asthma.png)
-![](figure/asthma_wb/enrichment_plot_quantile_asthma.png)
+![](figure/asthma_wb.Rmd/ma_plot_quantile_asthma.png)
+![](figure/asthma_wb.Rmd/volcano_plot_quantile_asthma.png)
+![](figure/asthma_wb.Rmd/enrichment_plot_quantile_asthma.png)
 
 ## Model 2: Adjust with genotype PCs
 
 ### Continuous PRS
 
-![](figure/asthma_wb/ma_plot_asthma_M2.png)
-![](figure/asthma_wb/volcano_plot_asthma_M2.png)
-![](figure/asthma_wb/enrichment_plot_asthma_M2.png)
+![](figure/asthma_wb.Rmd/ma_plot_asthma_M2.png)
+![](figure/asthma_wb.Rmd/volcano_plot_asthma_M2.png)
+![](figure/asthma_wb.Rmd/enrichment_plot_asthma_M2.png)
 
 ### Quantile PRS
 
-![](figure/asthma_wb/ma_plot_quantile_asthma_M2.png)
-![](figure/asthma_wb/volcano_plot_quantile_asthma_M2.png)
-![](figure/asthma_wb/enrichment_plot_quantile_asthma_M2.png)
+![](figure/asthma_wb.Rmd/ma_plot_quantile_asthma_M2.png)
+![](figure/asthma_wb.Rmd/volcano_plot_quantile_asthma_M2.png)
+![](figure/asthma_wb.Rmd/enrichment_plot_quantile_asthma_M2.png)
 
 
 
