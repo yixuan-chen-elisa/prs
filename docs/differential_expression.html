@@ -386,7 +386,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-05-20
+<strong>Last updated:</strong> 2025-06-09
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -517,15 +517,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstreec2d7279074ba2e70d8ad9331d0794a6a802a2d0atargetblankc2d7279a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree66b1a1753c498f962176dea43dd211f7064e7fc1targetblank66b1a17a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/yixuan-chen-elisa/prs/tree/c2d7279074ba2e70d8ad9331d0794a6a802a2d0a" target="_blank">c2d7279</a>
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/66b1a1753c498f962176dea43dd211f7064e7fc1" target="_blank">66b1a17</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstreec2d7279074ba2e70d8ad9331d0794a6a802a2d0atargetblankc2d7279a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomyixuanchenelisaprstree66b1a1753c498f962176dea43dd211f7064e7fc1targetblank66b1a17a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -535,7 +535,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/yixuan-chen-elisa/prs/tree/c2d7279074ba2e70d8ad9331d0794a6a802a2d0a" target="_blank">c2d7279</a>.
+<a href="https://github.com/yixuan-chen-elisa/prs/tree/66b1a1753c498f962176dea43dd211f7064e7fc1" target="_blank">66b1a17</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -554,40 +554,51 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    analysis/.DS_Store
+    Ignored:    analysis/.Rhistory
     Ignored:    data/.DS_Store
 
 Untracked files:
+    Untracked:  analysis/asthma_lung/
+    Untracked:  analysis/asthma_wb/
     Untracked:  analysis/continuous_artery/
     Untracked:  analysis/continuous_wb/
-    Untracked:  analysis/continuous_wb_m1/
     Untracked:  analysis/continuous_wb_m2/
     Untracked:  analysis/metadata.txt
     Untracked:  analysis/metadata_artery.txt
     Untracked:  analysis/metadata_artery_quantile.txt
+    Untracked:  analysis/metadata_lung_asthma.txt
+    Untracked:  analysis/metadata_lung_asthma_quantile.txt
     Untracked:  analysis/metadata_quantile.txt
+    Untracked:  analysis/metadata_wb_asthma.txt
+    Untracked:  analysis/metadata_wb_asthma_quantile.txt
     Untracked:  analysis/normalized_counts.rda
+    Untracked:  analysis/prs_asthma.txt
     Untracked:  analysis/quantile_artery/
     Untracked:  analysis/quantile_wb/
-    Untracked:  analysis/quantile_wb_m1/
     Untracked:  analysis/quantile_wb_m2/
     Untracked:  analysis/vst norm counts.rda
     Untracked:  data/Artery_Aorta.v8.covariates.txt
     Untracked:  data/GTEx_v8.bk
     Untracked:  data/GTEx_v8.rds
+    Untracked:  data/Lung.v8.covariates.txt
+    Untracked:  data/PGS001787.txt
+    Untracked:  data/PGS001787_hmPOS_GRCh38.txt
     Untracked:  data/T2D_hmPOS_GRCh38.txt
     Untracked:  data/Whole_Blood.v8.covariates.txt
     Untracked:  data/blood_cell/
+    Untracked:  data/endotype_sumstats/
     Untracked:  data/gene_reads_2017-06-05_v8_artery_aorta.gct
+    Untracked:  data/gene_reads_2017-06-05_v8_lung.gct
     Untracked:  data/gene_reads_2017-06-05_v8_whole_blood.gct
-    Untracked:  data/gene_tpm_2017-06-05_v8_whole_blood.gct.gz
     Untracked:  data/immune/
     Untracked:  data/pca.eigenval
     Untracked:  data/pca.eigenvec
     Untracked:  data/protein-coding_gene.txt
-    Untracked:  metadata_m2.csv
 
 Unstaged changes:
+    Modified:   analysis/PRS.Rmd
     Deleted:    analysis/QC.Rmd
+    Modified:   analysis/asthma_wb.Rmd
     Deleted:    analysis/normalized_counts.txt
     Modified:   analysis/prs_blood_cell.txt
     Modified:   prs.Rproj
@@ -636,6 +647,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/yixuan-chen-elisa/prs/blob/66b1a1753c498f962176dea43dd211f7064e7fc1/analysis/differential_expression.Rmd" target="_blank">66b1a17</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-06-09
+</td>
+<td>
+workflowr::wflow_publish(c("analysis/differential_expression.Rmd",
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/yixuan-chen-elisa/prs/c49ada7bb76b8d3590c29a602e257ec5847c39b4/docs/differential_expression.html" target="_blank">c49ada7</a>
+</td>
+<td>
+ElisaChen
+</td>
+<td>
+2025-05-20
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -1637,51 +1682,12 @@ for (trait in colnames(traits)) {
 <p>Gene Ontology enrichment is applied to both models, with and without
 adjusting 2 genotype PCs, for both continuous &amp; quantile PRS.</p>
 <p><strong>Continuous PRS:</strong></p>
-<pre class="r"><code>dir_path &lt;- &quot;analysis/continuous&quot;
-files &lt;- list.files(dir_path, pattern = &quot;differential_expression_.*_results_M2.csv&quot;, full.names = TRUE)
-
-for (file in files) {
-  trait &lt;- gsub(&quot;differential_expression_(.*)_results_M2.csv&quot;, &quot;\\1&quot;, basename(file))
-  trait
-  res_tableOE &lt;- read.csv(file, header = T, row.names = 1)
-  
-  deGenes &lt;- res_tableOE[res_tableOE$padj &lt; 0.1 &amp; 
-                           abs(res_tableOE$log2FoldChange) &gt;= 0.5, ]
-  deGenes$gene_id &lt;- gsub(&quot;\\.\\d+$&quot;, &quot;&quot;, rownames(deGenes))
-  
-  gse &lt;- enrichGO(gene = deGenes$gene_id, ont = &quot;BP&quot;, 
-                OrgDb =&quot;org.Hs.eg.db&quot;, keyType = &quot;ENSEMBL&quot;, readable = T)
-  
-  write.csv(as.data.frame(gse), file = paste0(&quot;GO_enrichment_&quot;, trait, &quot;_results_M2.csv&quot;))
-  
-  gse &lt;- as.data.frame(gse)
-  gse$GeneRatio_num &lt;- as.numeric(sapply(strsplit(gse$GeneRatio, &quot;/&quot;), 
-                                         function(x) x[1])) /
-                     as.numeric(sapply(strsplit(gse$GeneRatio, &quot;/&quot;), function(x) x[2]))
-
-  gse$BgRatio_num &lt;- as.numeric(sapply(strsplit(gse$BgRatio, &quot;/&quot;), function(x) x[1])) / 
-                     as.numeric(sapply(strsplit(gse$BgRatio, &quot;/&quot;), function(x) x[2]))
-  
-  gse &lt;- cbind(gse, FoldEnrich = gse$GeneRatio_num/gse$BgRatio_num)
-  
-  if (nrow(gse) &gt;= 20) {
-    enrich_plot &lt;- plotEnrich(gse[1:20,], plot_type = &quot;dot&quot;, scale_ratio = 0.5) +
-    labs(title = paste(&quot;Continuous (M2): Enrichment plot for&quot;, trait)) + 
-    theme(plot.title = element_text(size = 10)) 
-  }else{
-    enrich_plot &lt;- plotEnrich(gse, plot_type = &quot;dot&quot;, scale_ratio = 0.5) +
-    labs(title = paste(&quot;Continuous (M2): Enrichment plot for&quot;, trait)) + 
-    theme(plot.title = element_text(size = 10)) 
-  }
-  ggsave(paste0(&quot;enrichment_plot_&quot;, trait, &quot;_M2.png&quot;), plot = enrich_plot, width = 8, height = 6)
-}</code></pre>
-<p><strong>Quantile PRS:</strong></p>
-<pre class="r"><code>dir_path &lt;- &quot;analysis/quantile&quot;
-files &lt;- list.files(dir_path, pattern = &quot;differential_expression_.*_quantile_results_M2.csv&quot;,
+<pre class="r"><code>dir_path &lt;- &quot;analysis/continuous_wb&quot;
+files &lt;- list.files(dir_path, pattern = &quot;differential_expression_.*_results.csv&quot;, 
                     full.names = TRUE)
 
 for (file in files) {
-  trait &lt;- gsub(&quot;differential_expression_(.*)_quantile_results_M2.csv&quot;, &quot;\\1&quot;, basename(file))
+  trait &lt;- gsub(&quot;differential_expression_(.*)_results.csv&quot;, &quot;\\1&quot;, basename(file))
   trait
   res_tableOE &lt;- read.csv(file, header = T, row.names = 1)
   
@@ -1689,32 +1695,153 @@ for (file in files) {
                            abs(res_tableOE$log2FoldChange) &gt;= 0.5, ]
   deGenes$gene_id &lt;- gsub(&quot;\\.\\d+$&quot;, &quot;&quot;, rownames(deGenes))
   
-  gse &lt;- enrichGO(gene = deGenes$gene_id, ont = &quot;BP&quot;, 
-                OrgDb =&quot;org.Hs.eg.db&quot;, keyType = &quot;ENSEMBL&quot;)
+  # Separate upregulated and downregulated genes
+  upregulated_genes &lt;- deGenes[deGenes$log2FoldChange &gt; 0, ]$gene_id
+  downregulated_genes &lt;- deGenes[deGenes$log2FoldChange &lt; 0, ]$gene_id
   
-  write.csv(as.data.frame(gse), file = paste0(&quot;GO_enrichment_quantile_&quot;, trait, &quot;_results_M2.csv&quot;))
+  # Run GO enrichment for upregulated genes
+  gse_up &lt;- enrichGO(gene = upregulated_genes, ont = &quot;BP&quot;, 
+                   OrgDb = &quot;org.Hs.eg.db&quot;, keyType = &quot;ENSEMBL&quot;, readable = T)
   
-  gse &lt;- as.data.frame(gse)
-  gse$GeneRatio_num &lt;- as.numeric(sapply(strsplit(gse$GeneRatio, &quot;/&quot;), 
-                                         function(x) x[1])) /
-                     as.numeric(sapply(strsplit(gse$GeneRatio, &quot;/&quot;), function(x) x[2]))
+  # Run GO enrichment for downregulated genes
+  gse_down &lt;- enrichGO(gene = downregulated_genes, ont = &quot;BP&quot;, 
+                     OrgDb = &quot;org.Hs.eg.db&quot;, keyType = &quot;ENSEMBL&quot;, readable = T)
+  
+  # Convert enrichment results to data frames and calculate additional ratios
+  if (is.null(gse_up)) {
+    gse_up &lt;- data.frame(ID = character(), Description = character(),
+                       GeneRatio = character(), BgRatio = character(),
+                       pvalue = numeric(), p.adjust = numeric(),
+                       qvalue = numeric(), geneID = character(),
+                       Count = integer(), stringsAsFactors = FALSE)
+  } else { 
+    gse_up &lt;- as.data.frame(gse_up)}
+  
+  gse_down &lt;- as.data.frame(gse_down)
+  
+  gse_up$GeneRatio_num &lt;- as.numeric(sapply(strsplit(gse_up$GeneRatio, &quot;/&quot;), function(x) x[1])) / 
+                        as.numeric(sapply(strsplit(gse_up$GeneRatio, &quot;/&quot;), function(x) x[2]))
+  gse_up$BgRatio_num &lt;- as.numeric(sapply(strsplit(gse_up$BgRatio, &quot;/&quot;), function(x) x[1])) / 
+                        as.numeric(sapply(strsplit(gse_up$BgRatio, &quot;/&quot;), function(x) x[2]))
+  gse_up &lt;- cbind(gse_up, FoldEnrich = gse_up$GeneRatio_num / gse_up$BgRatio_num)
 
-  gse$BgRatio_num &lt;- as.numeric(sapply(strsplit(gse$BgRatio, &quot;/&quot;), function(x) x[1])) / 
-                     as.numeric(sapply(strsplit(gse$BgRatio, &quot;/&quot;), function(x) x[2]))
+  gse_down$GeneRatio_num &lt;- as.numeric(sapply(strsplit(gse_down$GeneRatio, &quot;/&quot;), function(x) x[1])) / 
+                          as.numeric(sapply(strsplit(gse_down$GeneRatio, &quot;/&quot;), function(x) x[2]))
+  gse_down$BgRatio_num &lt;- as.numeric(sapply(strsplit(gse_down$BgRatio, &quot;/&quot;), function(x) x[1])) / 
+                          as.numeric(sapply(strsplit(gse_down$BgRatio, &quot;/&quot;), function(x) x[2]))
+  gse_down &lt;- cbind(gse_down, FoldEnrich = gse_down$GeneRatio_num / gse_down$BgRatio_num)
   
-  gse &lt;- cbind(gse, FoldEnrich = gse$GeneRatio_num/gse$BgRatio_num)
+if (nrow(gse_up) &gt;= 20) {
+  enrich_plot_up &lt;- plotEnrich(gse_up[1:20, ], plot_type = &quot;dot&quot;, scale_ratio = 0.4) +
+    labs(title = paste(&quot;Continuous: Upregulated Enrichment Pathways for&quot;, trait)) +
+    theme(plot.title = element_text(size = 6), axis.text.y   = element_text(size = 5))
+} else {
+  enrich_plot_up &lt;- plotEnrich(gse_up, plot_type = &quot;dot&quot;, scale_ratio = 0.4) +
+    labs(title = paste(&quot;Continuous: Upregulated Enrichment Pathways for&quot;, trait)) +
+    theme(plot.title = element_text(size = 6), axis.text.y   = element_text(size = 5))
+}
   
-  if (nrow(gse) &gt;= 20) {
-    enrich_plot &lt;- plotEnrich(gse[1:20,], plot_type = &quot;dot&quot;, scale_ratio = 0.3) +
-    labs(title = paste(&quot;Quantile (M2): Enrichment plot for&quot;, trait)) + 
-    theme(plot.title = element_text(size = 10)) 
-  }else{
-    enrich_plot &lt;- plotEnrich(gse, plot_type = &quot;dot&quot;, scale_ratio = 0.3) +
-    labs(title = paste(&quot;Quantile (M2): Enrichment plot for&quot;, trait)) + 
-    theme(plot.title = element_text(size = 10)) 
-  }
+if (nrow(gse_down) &gt;= 20) {
+  enrich_plot_down &lt;- plotEnrich(gse_down[1:20, ], plot_type = &quot;dot&quot;, scale_ratio = 0.4) +
+    labs(title = paste(&quot;Continuous: Downregulated Enrichment Pathways for&quot;, trait)) +
+    theme(plot.title = element_text(size = 6), axis.text.y   = element_text(size = 5))
+} else {
+  enrich_plot_down &lt;- plotEnrich(gse_down, plot_type = &quot;dot&quot;, scale_ratio = 0.4) +
+    labs(title = paste(&quot;Continuous: Downregulated Enrichment Pathways for&quot;, trait)) +
+    theme(plot.title = element_text(size = 6), axis.text.y   = element_text(size = 5))
+}
   
-  ggsave(paste0(&quot;enrichment_plot_quantile_&quot;, trait, &quot;_M2.png&quot;), plot = enrich_plot, width = 8, height = 6)
+  # Arrange the two plots side by side
+  combined_plot &lt;- grid.arrange(enrich_plot_up, enrich_plot_down, ncol = 2)
+  
+  # Save the combined plot
+  ggsave(paste0(&quot;enrichment_plot_&quot;, trait, &quot;.png&quot;), plot = combined_plot, 
+         width = 15, height = 6)
+  
+  # Save the GO enrichment results to CSV
+  write.csv(gse_up, file = paste0(&quot;GO_enrichment_&quot;, trait, &quot;_upregulated.csv&quot;))
+  write.csv(gse_down, file = paste0(&quot;GO_enrichment_&quot;, trait, &quot;_downregulated.csv&quot;))
+}</code></pre>
+<p><strong>Quantile PRS:</strong></p>
+<pre class="r"><code>dir_path &lt;- &quot;analysis/quantile_wb&quot;
+files &lt;- list.files(dir_path, pattern = &quot;differential_expression_.*_quantile_results.csv&quot;, 
+                    full.names = TRUE)
+
+for (file in files) {
+  trait &lt;- gsub(&quot;differential_expression_(.*)_quantile_results.csv&quot;, &quot;\\1&quot;, basename(file))
+  trait
+  res_tableOE &lt;- read.csv(file, header = T, row.names = 1)
+  
+  deGenes &lt;- res_tableOE[res_tableOE$padj &lt; 0.1 &amp; 
+                           abs(res_tableOE$log2FoldChange) &gt;= 0.5, ]
+  deGenes$gene_id &lt;- gsub(&quot;\\.\\d+$&quot;, &quot;&quot;, rownames(deGenes))
+  
+  # Separate upregulated and downregulated genes
+  upregulated_genes &lt;- deGenes[deGenes$log2FoldChange &gt; 0, ]$gene_id
+  downregulated_genes &lt;- deGenes[deGenes$log2FoldChange &lt; 0, ]$gene_id
+  
+  # Run GO enrichment for upregulated genes
+  gse_up &lt;- enrichGO(gene = upregulated_genes, ont = &quot;BP&quot;, 
+                   OrgDb = &quot;org.Hs.eg.db&quot;, keyType = &quot;ENSEMBL&quot;, readable = T)
+  
+  # Run GO enrichment for downregulated genes
+  gse_down &lt;- enrichGO(gene = downregulated_genes, ont = &quot;BP&quot;, 
+                     OrgDb = &quot;org.Hs.eg.db&quot;, keyType = &quot;ENSEMBL&quot;, readable = T)
+  
+  # Convert enrichment results to data frames and calculate additional ratios
+  if (is.null(gse_up)) {
+    gse_up &lt;- data.frame(ID = character(), Description = character(),
+                       GeneRatio = character(), BgRatio = character(),
+                       pvalue = numeric(), p.adjust = numeric(),
+                       qvalue = numeric(), geneID = character(),
+                       Count = integer(), stringsAsFactors = FALSE)
+  } else { 
+    gse_up &lt;- as.data.frame(gse_up)}
+  
+  gse_down &lt;- as.data.frame(gse_down)
+  
+  gse_up$GeneRatio_num &lt;- as.numeric(sapply(strsplit(gse_up$GeneRatio, &quot;/&quot;), function(x) x[1])) / 
+                        as.numeric(sapply(strsplit(gse_up$GeneRatio, &quot;/&quot;), function(x) x[2]))
+  gse_up$BgRatio_num &lt;- as.numeric(sapply(strsplit(gse_up$BgRatio, &quot;/&quot;), function(x) x[1])) / 
+                        as.numeric(sapply(strsplit(gse_up$BgRatio, &quot;/&quot;), function(x) x[2]))
+  gse_up &lt;- cbind(gse_up, FoldEnrich = gse_up$GeneRatio_num / gse_up$BgRatio_num)
+
+  gse_down$GeneRatio_num &lt;- as.numeric(sapply(strsplit(gse_down$GeneRatio, &quot;/&quot;), function(x) x[1])) / 
+                          as.numeric(sapply(strsplit(gse_down$GeneRatio, &quot;/&quot;), function(x) x[2]))
+  gse_down$BgRatio_num &lt;- as.numeric(sapply(strsplit(gse_down$BgRatio, &quot;/&quot;), function(x) x[1])) / 
+                          as.numeric(sapply(strsplit(gse_down$BgRatio, &quot;/&quot;), function(x) x[2]))
+  gse_down &lt;- cbind(gse_down, FoldEnrich = gse_down$GeneRatio_num / gse_down$BgRatio_num)
+  
+if (nrow(gse_up) &gt;= 20) {
+  enrich_plot_up &lt;- plotEnrich(gse_up[1:20, ], plot_type = &quot;dot&quot;, scale_ratio = 0.4) +
+    labs(title = paste(&quot;Quantile: Upregulated Enrichment Pathways for&quot;, trait)) +
+    theme(plot.title = element_text(size = 6), axis.text.y   = element_text(size = 5))
+} else {
+  enrich_plot_up &lt;- plotEnrich(gse_up, plot_type = &quot;dot&quot;, scale_ratio = 0.4) +
+    labs(title = paste(&quot;Quantile: Upregulated Enrichment Pathways for&quot;, trait)) +
+    theme(plot.title = element_text(size = 6), axis.text.y   = element_text(size = 5))
+}
+  
+if (nrow(gse_down) &gt;= 20) {
+  enrich_plot_down &lt;- plotEnrich(gse_down[1:20, ], plot_type = &quot;dot&quot;, scale_ratio = 0.4) +
+    labs(title = paste(&quot;Quantile: Downregulated Enrichment Pathways for&quot;, trait)) +
+    theme(plot.title = element_text(size = 6), axis.text.y   = element_text(size = 5))
+} else {
+  enrich_plot_down &lt;- plotEnrich(gse_down, plot_type = &quot;dot&quot;, scale_ratio = 0.4) +
+    labs(title = paste(&quot;Quantile: Downregulated Enrichment Pathways for&quot;, trait)) +
+    theme(plot.title = element_text(size = 6), axis.text.y   = element_text(size = 5))
+}
+  
+  # Arrange the two plots side by side
+  combined_plot &lt;- grid.arrange(enrich_plot_up, enrich_plot_down, ncol = 2)
+  
+  # Save the combined plot
+  ggsave(paste0(&quot;enrichment_plot_quantile_&quot;, trait, &quot;.png&quot;), plot = combined_plot, 
+         width = 15, height = 6)
+  
+  # Save the GO enrichment results to CSV
+  write.csv(gse_up, file = paste0(&quot;GO_enrichment_&quot;, trait, &quot;_quantile_upregulated.csv&quot;))
+  write.csv(gse_down, file = paste0(&quot;GO_enrichment_&quot;, trait, &quot;_quantile_downregulated.csv&quot;))
 }</code></pre>
 </div>
 <div id="result" class="section level1">
@@ -1724,19 +1851,21 @@ for (file in files) {
 <table>
 <caption>Continuous PRS without adjusting genotype PCs</caption>
 <colgroup>
-<col width="40%" />
-<col width="29%" />
-<col width="3%" />
-<col width="3%" />
-<col width="23%" />
+<col width="33%" />
+<col width="12%" />
+<col width="11%" />
+<col width="12%" />
+<col width="14%" />
+<col width="15%" />
 </colgroup>
 <thead>
 <tr class="header">
 <th align="left">Trait</th>
-<th align="right">Significant differential expressed genes</th>
-<th align="right">Up</th>
-<th align="right">Down</th>
-<th align="right">Significant GO enriched pathways</th>
+<th align="right">Significant DE genes</th>
+<th align="right">Up-regulated Genes</th>
+<th align="right">Down-regulated Genes</th>
+<th align="right">Up-regulated GO pathways</th>
+<th align="right">Down-regulated GO pathways</th>
 </tr>
 </thead>
 <tbody>
@@ -1746,61 +1875,70 @@ for (file in files) {
 <td align="right">363</td>
 <td align="right">39</td>
 <td align="right">0</td>
+<td align="right">27</td>
 </tr>
 <tr class="even">
 <td align="left">Basophil.percentage.of.white.cells</td>
 <td align="right">200</td>
 <td align="right">89</td>
 <td align="right">111</td>
-<td align="right">109</td>
+<td align="right">0</td>
+<td align="right">167</td>
 </tr>
 <tr class="odd">
 <td align="left">Celiac_GCST90014442</td>
 <td align="right">97</td>
 <td align="right">55</td>
 <td align="right">42</td>
-<td align="right">8</td>
+<td align="right">7</td>
+<td align="right">73</td>
 </tr>
 <tr class="even">
 <td align="left">Celiac_GCST90468120</td>
 <td align="right">493</td>
 <td align="right">25</td>
 <td align="right">468</td>
-<td align="right">6</td>
+<td align="right">27</td>
+<td align="right">8</td>
 </tr>
 <tr class="odd">
 <td align="left">Eosinophil.count</td>
 <td align="right">338</td>
 <td align="right">128</td>
 <td align="right">210</td>
-<td align="right">75</td>
+<td align="right">0</td>
+<td align="right">88</td>
 </tr>
 <tr class="even">
 <td align="left">Eosinophil.percentage.of.white.cells</td>
 <td align="right">209</td>
 <td align="right">85</td>
 <td align="right">124</td>
-<td align="right">13</td>
+<td align="right">1</td>
+<td align="right">28</td>
 </tr>
 <tr class="odd">
 <td align="left">Hematocrit</td>
 <td align="right">337</td>
 <td align="right">57</td>
 <td align="right">280</td>
-<td align="right">7</td>
+<td align="right">8</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">Hemoglobin.concentration</td>
 <td align="right">132</td>
 <td align="right">57</td>
 <td align="right">75</td>
-<td align="right">12</td>
+<td align="right">194</td>
+<td align="right">5</td>
 </tr>
 <tr class="odd">
 <td align="left">High.light.scatter.reticulocyte.count</td>
 <td align="right">239</td>
 <td align="right">52</td>
 <td align="right">187</td>
+<td align="right">34</td>
 <td align="right">73</td>
 </tr>
 <tr class="even">
@@ -1809,28 +1947,32 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">325</td>
 <td align="right">94</td>
 <td align="right">231</td>
-<td align="right">146</td>
+<td align="right">15</td>
+<td align="right">161</td>
 </tr>
 <tr class="odd">
 <td align="left">IBD_GCST90013901</td>
 <td align="right">559</td>
 <td align="right">522</td>
 <td align="right">37</td>
-<td align="right">7</td>
+<td align="right">5</td>
+<td align="right">96</td>
 </tr>
 <tr class="even">
 <td align="left">IBD_GCST90013951</td>
 <td align="right">380</td>
 <td align="right">338</td>
 <td align="right">42</td>
-<td align="right">192</td>
+<td align="right">199</td>
+<td align="right">71</td>
 </tr>
 <tr class="odd">
 <td align="left">Immature.fraction.of.reticulocytes</td>
 <td align="right">288</td>
 <td align="right">134</td>
 <td align="right">154</td>
-<td align="right">71</td>
+<td align="right">43</td>
+<td align="right">73</td>
 </tr>
 <tr class="even">
 <td align="left">LUPUS_GCST003156</td>
@@ -1838,33 +1980,38 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">79</td>
 <td align="right">40</td>
 <td align="right">48</td>
+<td align="right">39</td>
 </tr>
 <tr class="odd">
 <td align="left">LUPUS_GCST011096</td>
 <td align="right">131</td>
 <td align="right">89</td>
 <td align="right">42</td>
-<td align="right">85</td>
+<td align="right">66</td>
+<td align="right">132</td>
 </tr>
 <tr class="even">
 <td align="left">Lymphocyte.count</td>
 <td align="right">729</td>
 <td align="right">347</td>
 <td align="right">382</td>
-<td align="right">59</td>
+<td align="right">12</td>
+<td align="right">71</td>
 </tr>
 <tr class="odd">
 <td align="left">Lymphocyte.percentage.of.white.cells</td>
 <td align="right">927</td>
 <td align="right">305</td>
 <td align="right">622</td>
-<td align="right">31</td>
+<td align="right">3</td>
+<td align="right">33</td>
 </tr>
 <tr class="even">
 <td align="left">Mean.corpuscular.hemoglobin</td>
 <td align="right">402</td>
 <td align="right">22</td>
 <td align="right">380</td>
+<td align="right">0</td>
 <td align="right">55</td>
 </tr>
 <tr class="odd">
@@ -1872,13 +2019,15 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">788</td>
 <td align="right">69</td>
 <td align="right">719</td>
-<td align="right">189</td>
+<td align="right">20</td>
+<td align="right">193</td>
 </tr>
 <tr class="even">
 <td align="left">Mean.corpuscular.volume</td>
 <td align="right">162</td>
 <td align="right">22</td>
 <td align="right">140</td>
+<td align="right">0</td>
 <td align="right">44</td>
 </tr>
 <tr class="odd">
@@ -1886,35 +2035,40 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">146</td>
 <td align="right">30</td>
 <td align="right">116</td>
-<td align="right">22</td>
+<td align="right">39</td>
+<td align="right">7</td>
 </tr>
 <tr class="even">
 <td align="left">Mean.reticulocyte.volume</td>
 <td align="right">312</td>
 <td align="right">148</td>
 <td align="right">164</td>
-<td align="right">99</td>
+<td align="right">110</td>
+<td align="right">4</td>
 </tr>
 <tr class="odd">
 <td align="left">Mean.sphered.corpuscular.volume</td>
 <td align="right">533</td>
 <td align="right">81</td>
 <td align="right">452</td>
-<td align="right">3</td>
+<td align="right">89</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">Monocyte.count</td>
 <td align="right">348</td>
 <td align="right">180</td>
 <td align="right">168</td>
-<td align="right">35</td>
+<td align="right">4</td>
+<td align="right">33</td>
 </tr>
 <tr class="odd">
 <td align="left">Monocyte.percentage.of.white.cells</td>
 <td align="right">179</td>
 <td align="right">42</td>
 <td align="right">137</td>
-<td align="right">11</td>
+<td align="right">55</td>
+<td align="right">13</td>
 </tr>
 <tr class="even">
 <td align="left">Neutrophil.count</td>
@@ -1922,13 +2076,15 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">1260</td>
 <td align="right">98</td>
 <td align="right">46</td>
+<td align="right">43</td>
 </tr>
 <tr class="odd">
 <td align="left">Neutrophil.percentage.of.white.cells</td>
 <td align="right">421</td>
 <td align="right">357</td>
 <td align="right">64</td>
-<td align="right">20</td>
+<td align="right">21</td>
+<td align="right">50</td>
 </tr>
 <tr class="even">
 <td align="left">Platelet.count</td>
@@ -1936,26 +2092,30 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">51</td>
 <td align="right">27</td>
 <td align="right">0</td>
+<td align="right">8</td>
 </tr>
 <tr class="odd">
 <td align="left">Platelet.crit</td>
 <td align="right">113</td>
 <td align="right">82</td>
 <td align="right">31</td>
-<td align="right">8</td>
+<td align="right">13</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">Platelet.distribution.width</td>
 <td align="right">105</td>
 <td align="right">32</td>
 <td align="right">73</td>
-<td align="right">22</td>
+<td align="right">38</td>
+<td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="left">Red.blood.cell.count</td>
 <td align="right">130</td>
 <td align="right">81</td>
 <td align="right">49</td>
+<td align="right">56</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
@@ -1963,6 +2123,7 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">999</td>
 <td align="right">396</td>
 <td align="right">603</td>
+<td align="right">77</td>
 <td align="right">18</td>
 </tr>
 <tr class="odd">
@@ -1970,14 +2131,16 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">140</td>
 <td align="right">60</td>
 <td align="right">80</td>
-<td align="right">30</td>
+<td align="right">2</td>
+<td align="right">164</td>
 </tr>
 <tr class="even">
 <td align="left">Reticulocyte.fraction.of.red.cells</td>
 <td align="right">225</td>
 <td align="right">122</td>
 <td align="right">103</td>
-<td align="right">28</td>
+<td align="right">23</td>
+<td align="right">25</td>
 </tr>
 <tr class="odd">
 <td align="left">T1D_GCST90000529</td>
@@ -1985,39 +2148,44 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">540</td>
 <td align="right">78</td>
 <td align="right">30</td>
+<td align="right">22</td>
 </tr>
 <tr class="even">
 <td align="left">T1D_GCST90014023</td>
 <td align="right">205</td>
 <td align="right">135</td>
 <td align="right">70</td>
-<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">4</td>
 </tr>
 <tr class="odd">
 <td align="left">White.blood.cell.count</td>
 <td align="right">1314</td>
 <td align="right">1118</td>
 <td align="right">196</td>
-<td align="right">34</td>
+<td align="right">40</td>
+<td align="right">0</td>
 </tr>
 </tbody>
 </table>
 <table>
 <caption>Continuous PRS with adjusting genotype PCs</caption>
 <colgroup>
-<col width="40%" />
-<col width="29%" />
-<col width="3%" />
-<col width="3%" />
-<col width="23%" />
+<col width="33%" />
+<col width="12%" />
+<col width="11%" />
+<col width="12%" />
+<col width="14%" />
+<col width="15%" />
 </colgroup>
 <thead>
 <tr class="header">
 <th align="left">Trait</th>
-<th align="right">Significant differential expressed genes</th>
-<th align="right">Up</th>
-<th align="right">Down</th>
-<th align="right">Significant GO enriched pathways</th>
+<th align="right">Significant DE genes</th>
+<th align="right">Up-regulated Genes</th>
+<th align="right">Down-regulated Genes</th>
+<th align="right">Up-regulated GO pathways</th>
+<th align="right">Down-regulated GO pathways</th>
 </tr>
 </thead>
 <tbody>
@@ -2026,48 +2194,55 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">385</td>
 <td align="right">345</td>
 <td align="right">40</td>
-<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">47</td>
 </tr>
 <tr class="even">
 <td align="left">Basophil.percentage.of.white.cells</td>
 <td align="right">203</td>
 <td align="right">93</td>
 <td align="right">110</td>
-<td align="right">107</td>
+<td align="right">0</td>
+<td align="right">167</td>
 </tr>
 <tr class="odd">
 <td align="left">Celiac_GCST90014442</td>
 <td align="right">94</td>
 <td align="right">55</td>
 <td align="right">39</td>
-<td align="right">9</td>
+<td align="right">2</td>
+<td align="right">114</td>
 </tr>
 <tr class="even">
 <td align="left">Celiac_GCST90468120</td>
 <td align="right">493</td>
 <td align="right">25</td>
 <td align="right">468</td>
-<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">9</td>
 </tr>
 <tr class="odd">
 <td align="left">Eosinophil.count</td>
 <td align="right">333</td>
 <td align="right">126</td>
 <td align="right">207</td>
-<td align="right">75</td>
+<td align="right">0</td>
+<td align="right">89</td>
 </tr>
 <tr class="even">
 <td align="left">Eosinophil.percentage.of.white.cells</td>
 <td align="right">211</td>
 <td align="right">87</td>
 <td align="right">124</td>
-<td align="right">6</td>
+<td align="right">1</td>
+<td align="right">21</td>
 </tr>
 <tr class="odd">
 <td align="left">Hematocrit</td>
 <td align="right">318</td>
 <td align="right">51</td>
 <td align="right">267</td>
+<td align="right">8</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
@@ -2076,13 +2251,15 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">54</td>
 <td align="right">66</td>
 <td align="right">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="left">High.light.scatter.reticulocyte.count</td>
 <td align="right">237</td>
 <td align="right">52</td>
 <td align="right">185</td>
-<td align="right">72</td>
+<td align="right">34</td>
+<td align="right">74</td>
 </tr>
 <tr class="even">
 <td
@@ -2090,62 +2267,71 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">328</td>
 <td align="right">101</td>
 <td align="right">227</td>
-<td align="right">139</td>
+<td align="right">14</td>
+<td align="right">153</td>
 </tr>
 <tr class="odd">
 <td align="left">IBD_GCST90013901</td>
 <td align="right">561</td>
 <td align="right">525</td>
 <td align="right">36</td>
-<td align="right">18</td>
+<td align="right">15</td>
+<td align="right">96</td>
 </tr>
 <tr class="even">
 <td align="left">IBD_GCST90013951</td>
 <td align="right">378</td>
 <td align="right">340</td>
 <td align="right">38</td>
-<td align="right">179</td>
+<td align="right">183</td>
+<td align="right">71</td>
 </tr>
 <tr class="odd">
 <td align="left">Immature.fraction.of.reticulocytes</td>
 <td align="right">294</td>
 <td align="right">142</td>
 <td align="right">152</td>
-<td align="right">69</td>
+<td align="right">44</td>
+<td align="right">73</td>
 </tr>
 <tr class="even">
 <td align="left">LUPUS_GCST003156</td>
 <td align="right">123</td>
 <td align="right">82</td>
 <td align="right">41</td>
-<td align="right">50</td>
+<td align="right">42</td>
+<td align="right">279</td>
 </tr>
 <tr class="odd">
 <td align="left">LUPUS_GCST011096</td>
 <td align="right">138</td>
 <td align="right">94</td>
 <td align="right">44</td>
-<td align="right">109</td>
+<td align="right">60</td>
+<td align="right">236</td>
 </tr>
 <tr class="even">
 <td align="left">Lymphocyte.count</td>
 <td align="right">718</td>
 <td align="right">341</td>
 <td align="right">377</td>
-<td align="right">62</td>
+<td align="right">8</td>
+<td align="right">74</td>
 </tr>
 <tr class="odd">
 <td align="left">Lymphocyte.percentage.of.white.cells</td>
 <td align="right">923</td>
 <td align="right">309</td>
 <td align="right">614</td>
-<td align="right">32</td>
+<td align="right">3</td>
+<td align="right">30</td>
 </tr>
 <tr class="even">
 <td align="left">Mean.corpuscular.hemoglobin</td>
 <td align="right">381</td>
 <td align="right">22</td>
 <td align="right">359</td>
+<td align="right">0</td>
 <td align="right">63</td>
 </tr>
 <tr class="odd">
@@ -2153,13 +2339,15 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">785</td>
 <td align="right">71</td>
 <td align="right">714</td>
-<td align="right">243</td>
+<td align="right">0</td>
+<td align="right">244</td>
 </tr>
 <tr class="even">
 <td align="left">Mean.corpuscular.volume</td>
 <td align="right">162</td>
 <td align="right">22</td>
 <td align="right">140</td>
+<td align="right">0</td>
 <td align="right">40</td>
 </tr>
 <tr class="odd">
@@ -2167,35 +2355,40 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">147</td>
 <td align="right">31</td>
 <td align="right">116</td>
-<td align="right">6</td>
+<td align="right">5</td>
+<td align="right">9</td>
 </tr>
 <tr class="even">
 <td align="left">Mean.reticulocyte.volume</td>
 <td align="right">312</td>
 <td align="right">147</td>
 <td align="right">165</td>
-<td align="right">104</td>
+<td align="right">105</td>
+<td align="right">2</td>
 </tr>
 <tr class="odd">
 <td align="left">Mean.sphered.corpuscular.volume</td>
 <td align="right">534</td>
 <td align="right">84</td>
 <td align="right">450</td>
-<td align="right">4</td>
+<td align="right">43</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">Monocyte.count</td>
 <td align="right">366</td>
 <td align="right">188</td>
 <td align="right">178</td>
-<td align="right">41</td>
+<td align="right">10</td>
+<td align="right">33</td>
 </tr>
 <tr class="odd">
 <td align="left">Monocyte.percentage.of.white.cells</td>
 <td align="right">182</td>
 <td align="right">43</td>
 <td align="right">139</td>
-<td align="right">17</td>
+<td align="right">30</td>
+<td align="right">21</td>
 </tr>
 <tr class="even">
 <td align="left">Neutrophil.count</td>
@@ -2203,13 +2396,15 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">1271</td>
 <td align="right">103</td>
 <td align="right">44</td>
+<td align="right">43</td>
 </tr>
 <tr class="odd">
 <td align="left">Neutrophil.percentage.of.white.cells</td>
 <td align="right">428</td>
 <td align="right">361</td>
 <td align="right">67</td>
-<td align="right">21</td>
+<td align="right">19</td>
+<td align="right">18</td>
 </tr>
 <tr class="even">
 <td align="left">Platelet.count</td>
@@ -2217,26 +2412,30 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">47</td>
 <td align="right">26</td>
 <td align="right">0</td>
+<td align="right">8</td>
 </tr>
 <tr class="odd">
 <td align="left">Platelet.crit</td>
 <td align="right">110</td>
 <td align="right">80</td>
 <td align="right">30</td>
-<td align="right">8</td>
+<td align="right">13</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">Platelet.distribution.width</td>
 <td align="right">93</td>
 <td align="right">31</td>
 <td align="right">62</td>
-<td align="right">22</td>
+<td align="right">39</td>
+<td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="left">Red.blood.cell.count</td>
 <td align="right">110</td>
 <td align="right">67</td>
 <td align="right">43</td>
+<td align="right">29</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
@@ -2244,6 +2443,7 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">990</td>
 <td align="right">401</td>
 <td align="right">589</td>
+<td align="right">16</td>
 <td align="right">19</td>
 </tr>
 <tr class="odd">
@@ -2251,14 +2451,16 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">129</td>
 <td align="right">57</td>
 <td align="right">72</td>
-<td align="right">34</td>
+<td align="right">2</td>
+<td align="right">150</td>
 </tr>
 <tr class="even">
 <td align="left">Reticulocyte.fraction.of.red.cells</td>
 <td align="right">213</td>
 <td align="right">120</td>
 <td align="right">93</td>
-<td align="right">27</td>
+<td align="right">23</td>
+<td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="left">T1D_GCST90000529</td>
@@ -2266,6 +2468,7 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">537</td>
 <td align="right">82</td>
 <td align="right">32</td>
+<td align="right">23</td>
 </tr>
 <tr class="even">
 <td align="left">T1D_GCST90014023</td>
@@ -2273,32 +2476,36 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">123</td>
 <td align="right">69</td>
 <td align="right">2</td>
+<td align="right">4</td>
 </tr>
 <tr class="odd">
 <td align="left">White.blood.cell.count</td>
 <td align="right">1313</td>
 <td align="right">1118</td>
 <td align="right">195</td>
-<td align="right">35</td>
+<td align="right">39</td>
+<td align="right">48</td>
 </tr>
 </tbody>
 </table>
-<table style="width:100%;">
+<table>
 <caption>Quantile PRS without adjusting genotype PCs</caption>
 <colgroup>
-<col width="43%" />
-<col width="27%" />
-<col width="3%" />
-<col width="3%" />
-<col width="22%" />
+<col width="36%" />
+<col width="11%" />
+<col width="10%" />
+<col width="11%" />
+<col width="14%" />
+<col width="15%" />
 </colgroup>
 <thead>
 <tr class="header">
 <th align="left">Trait</th>
-<th align="right">Significant differential expressed genes</th>
-<th align="right">Up</th>
-<th align="right">Down</th>
-<th align="right">Significant GO enriched pathways</th>
+<th align="right">Significant DE genes</th>
+<th align="right">Up-regulated Genes</th>
+<th align="right">Down-regulated Genes</th>
+<th align="right">Up-regulated GO pathways</th>
+<th align="right">Down-regulated GO pathways</th>
 </tr>
 </thead>
 <tbody>
@@ -2307,63 +2514,72 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells</td>
 <td align="right">712</td>
 <td align="right">685</td>
 <td align="right">27</td>
-<td align="right">157</td>
+<td align="right">144</td>
+<td align="right">16</td>
 </tr>
 <tr class="even">
 <td align="left">Basophil.percentage.of.white.cells_quantile</td>
 <td align="right">184</td>
 <td align="right">64</td>
 <td align="right">120</td>
-<td align="right">75</td>
+<td align="right">61</td>
+<td align="right">89</td>
 </tr>
 <tr class="odd">
 <td align="left">Celiac_GCST90014442_quantile</td>
 <td align="right">336</td>
 <td align="right">124</td>
 <td align="right">212</td>
-<td align="right">301</td>
+<td align="right">105</td>
+<td align="right">320</td>
 </tr>
 <tr class="even">
 <td align="left">Celiac_GCST90468120_quantile</td>
 <td align="right">212</td>
 <td align="right">42</td>
 <td align="right">170</td>
-<td align="right">35</td>
+<td align="right">94</td>
+<td align="right">27</td>
 </tr>
 <tr class="odd">
 <td align="left">Eosinophil.count_quantile</td>
 <td align="right">507</td>
 <td align="right">197</td>
 <td align="right">310</td>
-<td align="right">152</td>
+<td align="right">12</td>
+<td align="right">157</td>
 </tr>
 <tr class="even">
 <td align="left">Eosinophil.percentage.of.white.cells_quantile</td>
 <td align="right">431</td>
 <td align="right">218</td>
 <td align="right">213</td>
-<td align="right">120</td>
+<td align="right">3</td>
+<td align="right">165</td>
 </tr>
 <tr class="odd">
 <td align="left">Hematocrit_quantile</td>
 <td align="right">269</td>
 <td align="right">118</td>
 <td align="right">151</td>
-<td align="right">87</td>
+<td align="right">114</td>
+<td align="right">35</td>
 </tr>
 <tr class="even">
 <td align="left">Hemoglobin.concentration_quantile</td>
 <td align="right">160</td>
 <td align="right">37</td>
 <td align="right">123</td>
-<td align="right">62</td>
+<td align="right">36</td>
+<td align="right">104</td>
 </tr>
 <tr class="odd">
 <td align="left">High.light.scatter.reticulocyte.count_quantile</td>
 <td align="right">225</td>
 <td align="right">93</td>
 <td align="right">132</td>
-<td align="right">113</td>
+<td align="right">61</td>
+<td align="right">98</td>
 </tr>
 <tr class="even">
 <td
@@ -2371,62 +2587,71 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells_quantile</t
 <td align="right">312</td>
 <td align="right">141</td>
 <td align="right">171</td>
-<td align="right">170</td>
+<td align="right">49</td>
+<td align="right">158</td>
 </tr>
 <tr class="odd">
 <td align="left">IBD_GCST90013901_quantile</td>
 <td align="right">272</td>
 <td align="right">204</td>
 <td align="right">68</td>
-<td align="right">177</td>
+<td align="right">147</td>
+<td align="right">130</td>
 </tr>
 <tr class="even">
 <td align="left">IBD_GCST90013951_quantile</td>
 <td align="right">346</td>
 <td align="right">256</td>
 <td align="right">90</td>
-<td align="right">186</td>
+<td align="right">158</td>
+<td align="right">65</td>
 </tr>
 <tr class="odd">
 <td align="left">Immature.fraction.of.reticulocytes_quantile</td>
 <td align="right">473</td>
 <td align="right">128</td>
 <td align="right">345</td>
-<td align="right">200</td>
+<td align="right">104</td>
+<td align="right">149</td>
 </tr>
 <tr class="even">
 <td align="left">LUPUS_GCST003156_quantile</td>
 <td align="right">205</td>
 <td align="right">96</td>
 <td align="right">109</td>
-<td align="right">21</td>
+<td align="right">20</td>
+<td align="right">57</td>
 </tr>
 <tr class="odd">
 <td align="left">LUPUS_GCST011096_quantile</td>
 <td align="right">493</td>
 <td align="right">52</td>
 <td align="right">441</td>
-<td align="right">179</td>
+<td align="right">0</td>
+<td align="right">202</td>
 </tr>
 <tr class="even">
 <td align="left">Lymphocyte.count_quantile</td>
 <td align="right">1456</td>
 <td align="right">852</td>
 <td align="right">604</td>
-<td align="right">207</td>
+<td align="right">95</td>
+<td align="right">188</td>
 </tr>
 <tr class="odd">
 <td align="left">Lymphocyte.percentage.of.white.cells_quantile</td>
 <td align="right">532</td>
 <td align="right">289</td>
 <td align="right">243</td>
-<td align="right">129</td>
+<td align="right">37</td>
+<td align="right">112</td>
 </tr>
 <tr class="even">
 <td align="left">Mean.corpuscular.hemoglobin_quantile</td>
 <td align="right">410</td>
 <td align="right">23</td>
 <td align="right">387</td>
+<td align="right">40</td>
 <td align="right">89</td>
 </tr>
 <tr class="odd">
@@ -2434,91 +2659,104 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells_quantile</t
 <td align="right">317</td>
 <td align="right">86</td>
 <td align="right">231</td>
-<td align="right">292</td>
+<td align="right">30</td>
+<td align="right">336</td>
 </tr>
 <tr class="even">
 <td align="left">Mean.corpuscular.volume_quantile</td>
 <td align="right">453</td>
 <td align="right">58</td>
 <td align="right">395</td>
-<td align="right">149</td>
+<td align="right">119</td>
+<td align="right">98</td>
 </tr>
 <tr class="odd">
 <td align="left">Mean.platelet.volume_quantile</td>
 <td align="right">209</td>
 <td align="right">85</td>
 <td align="right">124</td>
-<td align="right">90</td>
+<td align="right">55</td>
+<td align="right">26</td>
 </tr>
 <tr class="even">
 <td align="left">Mean.reticulocyte.volume_quantile</td>
 <td align="right">406</td>
 <td align="right">115</td>
 <td align="right">291</td>
-<td align="right">123</td>
+<td align="right">106</td>
+<td align="right">45</td>
 </tr>
 <tr class="odd">
 <td align="left">Mean.sphered.corpuscular.volume_quantile</td>
 <td align="right">355</td>
 <td align="right">76</td>
 <td align="right">279</td>
-<td align="right">66</td>
+<td align="right">55</td>
+<td align="right">48</td>
 </tr>
 <tr class="even">
 <td align="left">Monocyte.count_quantile</td>
 <td align="right">1175</td>
 <td align="right">845</td>
 <td align="right">330</td>
-<td align="right">138</td>
+<td align="right">109</td>
+<td align="right">62</td>
 </tr>
 <tr class="odd">
 <td align="left">Monocyte.percentage.of.white.cells_quantile</td>
 <td align="right">566</td>
 <td align="right">50</td>
 <td align="right">516</td>
-<td align="right">90</td>
+<td align="right">36</td>
+<td align="right">69</td>
 </tr>
 <tr class="even">
 <td align="left">Neutrophil.count_quantile</td>
 <td align="right">806</td>
 <td align="right">736</td>
 <td align="right">70</td>
-<td align="right">99</td>
+<td align="right">105</td>
+<td align="right">13</td>
 </tr>
 <tr class="odd">
 <td align="left">Neutrophil.percentage.of.white.cells_quantile</td>
 <td align="right">1451</td>
 <td align="right">1330</td>
 <td align="right">121</td>
-<td align="right">385</td>
+<td align="right">396</td>
+<td align="right">31</td>
 </tr>
 <tr class="even">
 <td align="left">Platelet.count_quantile</td>
 <td align="right">248</td>
 <td align="right">59</td>
 <td align="right">189</td>
-<td align="right">114</td>
+<td align="right">59</td>
+<td align="right">48</td>
 </tr>
 <tr class="odd">
 <td align="left">Platelet.crit_quantile</td>
 <td align="right">314</td>
 <td align="right">100</td>
 <td align="right">214</td>
-<td align="right">116</td>
+<td align="right">59</td>
+<td align="right">103</td>
 </tr>
 <tr class="even">
 <td align="left">Platelet.distribution.width_quantile</td>
 <td align="right">469</td>
 <td align="right">149</td>
 <td align="right">320</td>
-<td align="right">126</td>
+<td align="right">39</td>
+<td align="right">160</td>
 </tr>
 <tr class="odd">
 <td align="left">Red.blood.cell.count_quantile</td>
 <td align="right">291</td>
 <td align="right">157</td>
 <td align="right">134</td>
-<td align="right">81</td>
+<td align="right">103</td>
+<td align="right">61</td>
 </tr>
 <tr class="even">
 <td align="left">Red.cell.distribution.width_quantile</td>
@@ -2526,27 +2764,31 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells_quantile</t
 <td align="right">287</td>
 <td align="right">112</td>
 <td align="right">45</td>
+<td align="right">24</td>
 </tr>
 <tr class="odd">
 <td align="left">Reticulocyte.count_quantile</td>
 <td align="right">170</td>
 <td align="right">74</td>
 <td align="right">96</td>
-<td align="right">88</td>
+<td align="right">34</td>
+<td align="right">68</td>
 </tr>
 <tr class="even">
 <td align="left">Reticulocyte.fraction.of.red.cells_quantile</td>
 <td align="right">517</td>
 <td align="right">458</td>
 <td align="right">59</td>
-<td align="right">171</td>
+<td align="right">191</td>
+<td align="right">1</td>
 </tr>
 <tr class="odd">
 <td align="left">T1D_GCST90000529_quantile</td>
 <td align="right">1559</td>
 <td align="right">1438</td>
 <td align="right">121</td>
-<td align="right">300</td>
+<td align="right">268</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">T1D_GCST90014023_quantile</td>
@@ -2554,32 +2796,36 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells_quantile</t
 <td align="right">504</td>
 <td align="right">71</td>
 <td align="right">87</td>
+<td align="right">18</td>
 </tr>
 <tr class="odd">
 <td align="left">White.blood.cell.count_quantile</td>
 <td align="right">1216</td>
 <td align="right">1082</td>
 <td align="right">134</td>
-<td align="right">154</td>
+<td align="right">156</td>
+<td align="right">118</td>
 </tr>
 </tbody>
 </table>
-<table style="width:100%;">
+<table>
 <caption>Quantile PRS with adjusting genotype PCs</caption>
 <colgroup>
-<col width="43%" />
-<col width="27%" />
-<col width="3%" />
-<col width="3%" />
-<col width="22%" />
+<col width="36%" />
+<col width="11%" />
+<col width="10%" />
+<col width="11%" />
+<col width="14%" />
+<col width="15%" />
 </colgroup>
 <thead>
 <tr class="header">
 <th align="left">Trait</th>
-<th align="right">Significant differential expressed genes</th>
-<th align="right">Up</th>
-<th align="right">Down</th>
-<th align="right">Significant GO enriched pathways</th>
+<th align="right">Significant DE genes</th>
+<th align="right">Up-regulated Genes</th>
+<th align="right">Down-regulated Genes</th>
+<th align="right">Up-regulated GO pathways</th>
+<th align="right">Down-regulated GO pathways</th>
 </tr>
 </thead>
 <tbody>
@@ -2588,63 +2834,72 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells_quantile</t
 <td align="right">707</td>
 <td align="right">682</td>
 <td align="right">25</td>
-<td align="right">171</td>
+<td align="right">148</td>
+<td align="right">32</td>
 </tr>
 <tr class="even">
 <td align="left">Basophil.percentage.of.white.cells_quantile</td>
 <td align="right">174</td>
 <td align="right">62</td>
 <td align="right">112</td>
-<td align="right">95</td>
+<td align="right">70</td>
+<td align="right">89</td>
 </tr>
 <tr class="odd">
 <td align="left">Celiac_GCST90014442_quantile</td>
 <td align="right">335</td>
 <td align="right">124</td>
 <td align="right">211</td>
-<td align="right">315</td>
+<td align="right">106</td>
+<td align="right">306</td>
 </tr>
 <tr class="even">
 <td align="left">Celiac_GCST90468120_quantile</td>
 <td align="right">208</td>
 <td align="right">43</td>
 <td align="right">165</td>
-<td align="right">38</td>
+<td align="right">86</td>
+<td align="right">28</td>
 </tr>
 <tr class="odd">
 <td align="left">Eosinophil.count_quantile</td>
 <td align="right">498</td>
 <td align="right">191</td>
 <td align="right">307</td>
-<td align="right">159</td>
+<td align="right">13</td>
+<td align="right">158</td>
 </tr>
 <tr class="even">
 <td align="left">Eosinophil.percentage.of.white.cells_quantile</td>
 <td align="right">426</td>
 <td align="right">219</td>
 <td align="right">207</td>
-<td align="right">118</td>
+<td align="right">3</td>
+<td align="right">160</td>
 </tr>
 <tr class="odd">
 <td align="left">Hematocrit_quantile</td>
 <td align="right">235</td>
 <td align="right">108</td>
 <td align="right">127</td>
-<td align="right">93</td>
+<td align="right">114</td>
+<td align="right">37</td>
 </tr>
 <tr class="even">
 <td align="left">Hemoglobin.concentration_quantile</td>
 <td align="right">156</td>
 <td align="right">35</td>
 <td align="right">121</td>
-<td align="right">65</td>
+<td align="right">0</td>
+<td align="right">117</td>
 </tr>
 <tr class="odd">
 <td align="left">High.light.scatter.reticulocyte.count_quantile</td>
 <td align="right">218</td>
 <td align="right">94</td>
 <td align="right">124</td>
-<td align="right">110</td>
+<td align="right">62</td>
+<td align="right">82</td>
 </tr>
 <tr class="even">
 <td
@@ -2652,196 +2907,224 @@ align="left">High.light.scatter.reticulocyte.percentage.of.red.cells_quantile</t
 <td align="right">316</td>
 <td align="right">149</td>
 <td align="right">167</td>
-<td align="right">138</td>
+<td align="right">42</td>
+<td align="right">151</td>
 </tr>
 <tr class="odd">
 <td align="left">IBD_GCST90013901_quantile</td>
 <td align="right">269</td>
 <td align="right">200</td>
 <td align="right">69</td>
-<td align="right">174</td>
+<td align="right">142</td>
+<td align="right">129</td>
 </tr>
 <tr class="even">
 <td align="left">IBD_GCST90013951_quantile</td>
 <td align="right">337</td>
 <td align="right">250</td>
 <td align="right">87</td>
-<td align="right">177</td>
+<td align="right">168</td>
+<td align="right">66</td>
 </tr>
 <tr class="odd">
 <td align="left">Immature.fraction.of.reticulocytes_quantile</td>
 <td align="right">456</td>
 <td align="right">127</td>
 <td align="right">329</td>
-<td align="right">195</td>
+<td align="right">103</td>
+<td align="right">146</td>
 </tr>
 <tr class="even">
 <td align="left">LUPUS_GCST003156_quantile</td>
 <td align="right">202</td>
 <td align="right">97</td>
 <td align="right">105</td>
-<td align="right">15</td>
+<td align="right">17</td>
+<td align="right">61</td>
 </tr>
 <tr class="odd">
 <td align="left">LUPUS_GCST011096_quantile</td>
 <td align="right">471</td>
 <td align="right">47</td>
 <td align="right">424</td>
-<td align="right">136</td>
+<td align="right">0</td>
+<td align="right">173</td>
 </tr>
 <tr class="even">
 <td align="left">Lymphocyte.count_quantile</td>
 <td align="right">1603</td>
 <td align="right">907</td>
 <td align="right">696</td>
-<td align="right">243</td>
+<td align="right">109</td>
+<td align="right">228</td>
 </tr>
 <tr class="odd">
 <td align="left">Lymphocyte.percentage.of.white.cells_quantile</td>
 <td align="right">511</td>
 <td align="right">285</td>
 <td align="right">226</td>
-<td align="right">124</td>
+<td align="right">37</td>
+<td align="right">117</td>
 </tr>
 <tr class="even">
 <td align="left">Mean.corpuscular.hemoglobin_quantile</td>
 <td align="right">390</td>
 <td align="right">25</td>
 <td align="right">365</td>
-<td align="right">107</td>
+<td align="right">41</td>
+<td align="right">100</td>
 </tr>
 <tr class="odd">
 <td align="left">Mean.corpuscular.hemoglobin.concentration_quantile</td>
 <td align="right">316</td>
 <td align="right">91</td>
 <td align="right">225</td>
-<td align="right">294</td>
+<td align="right">48</td>
+<td align="right">331</td>
 </tr>
 <tr class="even">
 <td align="left">Mean.corpuscular.volume_quantile</td>
 <td align="right">425</td>
 <td align="right">55</td>
 <td align="right">370</td>
-<td align="right">146</td>
+<td align="right">110</td>
+<td align="right">106</td>
 </tr>
 <tr class="odd">
 <td align="left">Mean.platelet.volume_quantile</td>
 <td align="right">205</td>
 <td align="right">85</td>
 <td align="right">120</td>
-<td align="right">86</td>
+<td align="right">106</td>
+<td align="right">28</td>
 </tr>
 <tr class="even">
 <td align="left">Mean.reticulocyte.volume_quantile</td>
 <td align="right">403</td>
 <td align="right">111</td>
 <td align="right">292</td>
-<td align="right">116</td>
+<td align="right">115</td>
+<td align="right">34</td>
 </tr>
 <tr class="odd">
 <td align="left">Mean.sphered.corpuscular.volume_quantile</td>
 <td align="right">366</td>
 <td align="right">78</td>
 <td align="right">288</td>
-<td align="right">76</td>
+<td align="right">62</td>
+<td align="right">45</td>
 </tr>
 <tr class="even">
 <td align="left">Monocyte.count_quantile</td>
 <td align="right">1186</td>
 <td align="right">844</td>
 <td align="right">342</td>
-<td align="right">135</td>
+<td align="right">104</td>
+<td align="right">49</td>
 </tr>
 <tr class="odd">
 <td align="left">Monocyte.percentage.of.white.cells_quantile</td>
 <td align="right">589</td>
 <td align="right">50</td>
 <td align="right">539</td>
-<td align="right">89</td>
+<td align="right">18</td>
+<td align="right">82</td>
 </tr>
 <tr class="even">
 <td align="left">Neutrophil.count_quantile</td>
 <td align="right">808</td>
 <td align="right">736</td>
 <td align="right">72</td>
-<td align="right">114</td>
+<td align="right">121</td>
+<td align="right">13</td>
 </tr>
 <tr class="odd">
 <td align="left">Neutrophil.percentage.of.white.cells_quantile</td>
 <td align="right">1467</td>
 <td align="right">1335</td>
 <td align="right">132</td>
-<td align="right">394</td>
+<td align="right">416</td>
+<td align="right">21</td>
 </tr>
 <tr class="even">
 <td align="left">Platelet.count_quantile</td>
 <td align="right">235</td>
 <td align="right">53</td>
 <td align="right">182</td>
-<td align="right">109</td>
+<td align="right">49</td>
+<td align="right">61</td>
 </tr>
 <tr class="odd">
 <td align="left">Platelet.crit_quantile</td>
 <td align="right">309</td>
 <td align="right">93</td>
 <td align="right">216</td>
-<td align="right">101</td>
+<td align="right">68</td>
+<td align="right">92</td>
 </tr>
 <tr class="even">
 <td align="left">Platelet.distribution.width_quantile</td>
 <td align="right">450</td>
 <td align="right">147</td>
 <td align="right">303</td>
-<td align="right">120</td>
+<td align="right">32</td>
+<td align="right">150</td>
 </tr>
 <tr class="odd">
 <td align="left">Red.blood.cell.count_quantile</td>
 <td align="right">264</td>
 <td align="right">143</td>
 <td align="right">121</td>
-<td align="right">78</td>
+<td align="right">116</td>
+<td align="right">81</td>
 </tr>
 <tr class="even">
 <td align="left">Red.cell.distribution.width_quantile</td>
 <td align="right">405</td>
 <td align="right">293</td>
 <td align="right">112</td>
-<td align="right">40</td>
+<td align="right">44</td>
+<td align="right">23</td>
 </tr>
 <tr class="odd">
 <td align="left">Reticulocyte.count_quantile</td>
 <td align="right">169</td>
 <td align="right">74</td>
 <td align="right">95</td>
-<td align="right">81</td>
+<td align="right">36</td>
+<td align="right">66</td>
 </tr>
 <tr class="even">
 <td align="left">Reticulocyte.fraction.of.red.cells_quantile</td>
 <td align="right">516</td>
 <td align="right">461</td>
 <td align="right">55</td>
-<td align="right">211</td>
+<td align="right">225</td>
+<td align="right">3</td>
 </tr>
 <tr class="odd">
 <td align="left">T1D_GCST90000529_quantile</td>
 <td align="right">1543</td>
 <td align="right">1417</td>
 <td align="right">126</td>
-<td align="right">280</td>
+<td align="right">243</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">T1D_GCST90014023_quantile</td>
 <td align="right">554</td>
 <td align="right">482</td>
 <td align="right">72</td>
-<td align="right">89</td>
+<td align="right">91</td>
+<td align="right">16</td>
 </tr>
 <tr class="odd">
 <td align="left">White.blood.cell.count_quantile</td>
 <td align="right">1173</td>
 <td align="right">1042</td>
 <td align="right">131</td>
-<td align="right">147</td>
+<td align="right">181</td>
+<td align="right">120</td>
 </tr>
 </tbody>
 </table>
@@ -3967,7 +4250,7 @@ loaded via a namespace (and not attached):
 [100] png_0.1-8              treeio_1.22.0          tibble_3.2.1          
 [103] tweenr_2.0.3           geneplotter_1.76.0     bslib_0.9.0           
 [106] stringi_1.8.4          ps_1.8.1               lattice_0.22-6        
-[109] Matrix_1.5-1           vctrs_0.6.5            pillar_1.10.1         
+[109] Matrix_1.6-4           vctrs_0.6.5            pillar_1.10.1         
 [112] lifecycle_1.0.4        triebeard_0.4.1        jquerylib_0.1.4       
 [115] cowplot_1.1.3          bitops_1.0-9           httpuv_1.6.15         
 [118] patchwork_1.3.0        qvalue_2.30.0          R6_2.5.1              
