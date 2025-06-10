@@ -389,11 +389,12 @@ Gene Ontology enrichment is applied to both models, with and without adjusting 2
 **Continuous PRS:**
 
 ```{r, warning=FALSE, eval=FALSE}
-dir_path <- "analysis/continuous"
-files <- list.files(dir_path, pattern = "differential_expression_.*_results_M2.csv", full.names = TRUE)
+dir_path <- "analysis/continuous_wb"
+files <- list.files(dir_path, pattern = "differential_expression_.*_results.csv", 
+                    full.names = TRUE)
 
 for (file in files) {
-  trait <- gsub("differential_expression_(.*)_results_M2.csv", "\\1", basename(file))
+  trait <- gsub("differential_expression_(.*)_results.csv", "\\1", basename(file))
   trait
   res_tableOE <- read.csv(file, header = T, row.names = 1)
   
@@ -401,43 +402,84 @@ for (file in files) {
                            abs(res_tableOE$log2FoldChange) >= 0.5, ]
   deGenes$gene_id <- gsub("\\.\\d+$", "", rownames(deGenes))
   
-  gse <- enrichGO(gene = deGenes$gene_id, ont = "BP", 
-                OrgDb ="org.Hs.eg.db", keyType = "ENSEMBL", readable = T)
+  # Separate upregulated and downregulated genes
+  upregulated_genes <- deGenes[deGenes$log2FoldChange > 0, ]$gene_id
+  downregulated_genes <- deGenes[deGenes$log2FoldChange < 0, ]$gene_id
   
-  write.csv(as.data.frame(gse), file = paste0("GO_enrichment_", trait, "_results_M2.csv"))
+  # Run GO enrichment for upregulated genes
+  gse_up <- enrichGO(gene = upregulated_genes, ont = "BP", 
+                   OrgDb = "org.Hs.eg.db", keyType = "ENSEMBL", readable = T)
   
-  gse <- as.data.frame(gse)
-  gse$GeneRatio_num <- as.numeric(sapply(strsplit(gse$GeneRatio, "/"), 
-                                         function(x) x[1])) /
-                     as.numeric(sapply(strsplit(gse$GeneRatio, "/"), function(x) x[2]))
+  # Run GO enrichment for downregulated genes
+  gse_down <- enrichGO(gene = downregulated_genes, ont = "BP", 
+                     OrgDb = "org.Hs.eg.db", keyType = "ENSEMBL", readable = T)
+  
+  # Convert enrichment results to data frames and calculate additional ratios
+  if (is.null(gse_up)) {
+    gse_up <- data.frame(ID = character(), Description = character(),
+                       GeneRatio = character(), BgRatio = character(),
+                       pvalue = numeric(), p.adjust = numeric(),
+                       qvalue = numeric(), geneID = character(),
+                       Count = integer(), stringsAsFactors = FALSE)
+  } else { 
+    gse_up <- as.data.frame(gse_up)}
+  
+  gse_down <- as.data.frame(gse_down)
+  
+  gse_up$GeneRatio_num <- as.numeric(sapply(strsplit(gse_up$GeneRatio, "/"), function(x) x[1])) / 
+                        as.numeric(sapply(strsplit(gse_up$GeneRatio, "/"), function(x) x[2]))
+  gse_up$BgRatio_num <- as.numeric(sapply(strsplit(gse_up$BgRatio, "/"), function(x) x[1])) / 
+                        as.numeric(sapply(strsplit(gse_up$BgRatio, "/"), function(x) x[2]))
+  gse_up <- cbind(gse_up, FoldEnrich = gse_up$GeneRatio_num / gse_up$BgRatio_num)
 
-  gse$BgRatio_num <- as.numeric(sapply(strsplit(gse$BgRatio, "/"), function(x) x[1])) / 
-                     as.numeric(sapply(strsplit(gse$BgRatio, "/"), function(x) x[2]))
+  gse_down$GeneRatio_num <- as.numeric(sapply(strsplit(gse_down$GeneRatio, "/"), function(x) x[1])) / 
+                          as.numeric(sapply(strsplit(gse_down$GeneRatio, "/"), function(x) x[2]))
+  gse_down$BgRatio_num <- as.numeric(sapply(strsplit(gse_down$BgRatio, "/"), function(x) x[1])) / 
+                          as.numeric(sapply(strsplit(gse_down$BgRatio, "/"), function(x) x[2]))
+  gse_down <- cbind(gse_down, FoldEnrich = gse_down$GeneRatio_num / gse_down$BgRatio_num)
   
-  gse <- cbind(gse, FoldEnrich = gse$GeneRatio_num/gse$BgRatio_num)
+if (nrow(gse_up) >= 20) {
+  enrich_plot_up <- plotEnrich(gse_up[1:20, ], plot_type = "dot", scale_ratio = 0.4) +
+    labs(title = paste("Continuous: Upregulated Enrichment Pathways for", trait)) +
+    theme(plot.title = element_text(size = 6), axis.text.y   = element_text(size = 5))
+} else {
+  enrich_plot_up <- plotEnrich(gse_up, plot_type = "dot", scale_ratio = 0.4) +
+    labs(title = paste("Continuous: Upregulated Enrichment Pathways for", trait)) +
+    theme(plot.title = element_text(size = 6), axis.text.y   = element_text(size = 5))
+}
   
-  if (nrow(gse) >= 20) {
-    enrich_plot <- plotEnrich(gse[1:20,], plot_type = "dot", scale_ratio = 0.5) +
-    labs(title = paste("Continuous (M2): Enrichment plot for", trait)) + 
-    theme(plot.title = element_text(size = 10)) 
-  }else{
-    enrich_plot <- plotEnrich(gse, plot_type = "dot", scale_ratio = 0.5) +
-    labs(title = paste("Continuous (M2): Enrichment plot for", trait)) + 
-    theme(plot.title = element_text(size = 10)) 
-  }
-  ggsave(paste0("enrichment_plot_", trait, "_M2.png"), plot = enrich_plot, width = 8, height = 6)
+if (nrow(gse_down) >= 20) {
+  enrich_plot_down <- plotEnrich(gse_down[1:20, ], plot_type = "dot", scale_ratio = 0.4) +
+    labs(title = paste("Continuous: Downregulated Enrichment Pathways for", trait)) +
+    theme(plot.title = element_text(size = 6), axis.text.y   = element_text(size = 5))
+} else {
+  enrich_plot_down <- plotEnrich(gse_down, plot_type = "dot", scale_ratio = 0.4) +
+    labs(title = paste("Continuous: Downregulated Enrichment Pathways for", trait)) +
+    theme(plot.title = element_text(size = 6), axis.text.y   = element_text(size = 5))
+}
+  
+  # Arrange the two plots side by side
+  combined_plot <- grid.arrange(enrich_plot_up, enrich_plot_down, ncol = 2)
+  
+  # Save the combined plot
+  ggsave(paste0("enrichment_plot_", trait, ".png"), plot = combined_plot, 
+         width = 15, height = 6)
+  
+  # Save the GO enrichment results to CSV
+  write.csv(gse_up, file = paste0("GO_enrichment_", trait, "_upregulated.csv"))
+  write.csv(gse_down, file = paste0("GO_enrichment_", trait, "_downregulated.csv"))
 }
 ```
 
 **Quantile PRS:**
 
 ```{r, warning=FALSE, eval=FALSE}
-dir_path <- "analysis/quantile"
-files <- list.files(dir_path, pattern = "differential_expression_.*_quantile_results_M2.csv",
+dir_path <- "analysis/quantile_wb"
+files <- list.files(dir_path, pattern = "differential_expression_.*_quantile_results.csv", 
                     full.names = TRUE)
 
 for (file in files) {
-  trait <- gsub("differential_expression_(.*)_quantile_results_M2.csv", "\\1", basename(file))
+  trait <- gsub("differential_expression_(.*)_quantile_results.csv", "\\1", basename(file))
   trait
   res_tableOE <- read.csv(file, header = T, row.names = 1)
   
@@ -445,32 +487,72 @@ for (file in files) {
                            abs(res_tableOE$log2FoldChange) >= 0.5, ]
   deGenes$gene_id <- gsub("\\.\\d+$", "", rownames(deGenes))
   
-  gse <- enrichGO(gene = deGenes$gene_id, ont = "BP", 
-                OrgDb ="org.Hs.eg.db", keyType = "ENSEMBL")
+  # Separate upregulated and downregulated genes
+  upregulated_genes <- deGenes[deGenes$log2FoldChange > 0, ]$gene_id
+  downregulated_genes <- deGenes[deGenes$log2FoldChange < 0, ]$gene_id
   
-  write.csv(as.data.frame(gse), file = paste0("GO_enrichment_quantile_", trait, "_results_M2.csv"))
+  # Run GO enrichment for upregulated genes
+  gse_up <- enrichGO(gene = upregulated_genes, ont = "BP", 
+                   OrgDb = "org.Hs.eg.db", keyType = "ENSEMBL", readable = T)
   
-  gse <- as.data.frame(gse)
-  gse$GeneRatio_num <- as.numeric(sapply(strsplit(gse$GeneRatio, "/"), 
-                                         function(x) x[1])) /
-                     as.numeric(sapply(strsplit(gse$GeneRatio, "/"), function(x) x[2]))
+  # Run GO enrichment for downregulated genes
+  gse_down <- enrichGO(gene = downregulated_genes, ont = "BP", 
+                     OrgDb = "org.Hs.eg.db", keyType = "ENSEMBL", readable = T)
+  
+  # Convert enrichment results to data frames and calculate additional ratios
+  if (is.null(gse_up)) {
+    gse_up <- data.frame(ID = character(), Description = character(),
+                       GeneRatio = character(), BgRatio = character(),
+                       pvalue = numeric(), p.adjust = numeric(),
+                       qvalue = numeric(), geneID = character(),
+                       Count = integer(), stringsAsFactors = FALSE)
+  } else { 
+    gse_up <- as.data.frame(gse_up)}
+  
+  gse_down <- as.data.frame(gse_down)
+  
+  gse_up$GeneRatio_num <- as.numeric(sapply(strsplit(gse_up$GeneRatio, "/"), function(x) x[1])) / 
+                        as.numeric(sapply(strsplit(gse_up$GeneRatio, "/"), function(x) x[2]))
+  gse_up$BgRatio_num <- as.numeric(sapply(strsplit(gse_up$BgRatio, "/"), function(x) x[1])) / 
+                        as.numeric(sapply(strsplit(gse_up$BgRatio, "/"), function(x) x[2]))
+  gse_up <- cbind(gse_up, FoldEnrich = gse_up$GeneRatio_num / gse_up$BgRatio_num)
 
-  gse$BgRatio_num <- as.numeric(sapply(strsplit(gse$BgRatio, "/"), function(x) x[1])) / 
-                     as.numeric(sapply(strsplit(gse$BgRatio, "/"), function(x) x[2]))
+  gse_down$GeneRatio_num <- as.numeric(sapply(strsplit(gse_down$GeneRatio, "/"), function(x) x[1])) / 
+                          as.numeric(sapply(strsplit(gse_down$GeneRatio, "/"), function(x) x[2]))
+  gse_down$BgRatio_num <- as.numeric(sapply(strsplit(gse_down$BgRatio, "/"), function(x) x[1])) / 
+                          as.numeric(sapply(strsplit(gse_down$BgRatio, "/"), function(x) x[2]))
+  gse_down <- cbind(gse_down, FoldEnrich = gse_down$GeneRatio_num / gse_down$BgRatio_num)
   
-  gse <- cbind(gse, FoldEnrich = gse$GeneRatio_num/gse$BgRatio_num)
+if (nrow(gse_up) >= 20) {
+  enrich_plot_up <- plotEnrich(gse_up[1:20, ], plot_type = "dot", scale_ratio = 0.4) +
+    labs(title = paste("Quantile: Upregulated Enrichment Pathways for", trait)) +
+    theme(plot.title = element_text(size = 6), axis.text.y   = element_text(size = 5))
+} else {
+  enrich_plot_up <- plotEnrich(gse_up, plot_type = "dot", scale_ratio = 0.4) +
+    labs(title = paste("Quantile: Upregulated Enrichment Pathways for", trait)) +
+    theme(plot.title = element_text(size = 6), axis.text.y   = element_text(size = 5))
+}
   
-  if (nrow(gse) >= 20) {
-    enrich_plot <- plotEnrich(gse[1:20,], plot_type = "dot", scale_ratio = 0.3) +
-    labs(title = paste("Quantile (M2): Enrichment plot for", trait)) + 
-    theme(plot.title = element_text(size = 10)) 
-  }else{
-    enrich_plot <- plotEnrich(gse, plot_type = "dot", scale_ratio = 0.3) +
-    labs(title = paste("Quantile (M2): Enrichment plot for", trait)) + 
-    theme(plot.title = element_text(size = 10)) 
-  }
+if (nrow(gse_down) >= 20) {
+  enrich_plot_down <- plotEnrich(gse_down[1:20, ], plot_type = "dot", scale_ratio = 0.4) +
+    labs(title = paste("Quantile: Downregulated Enrichment Pathways for", trait)) +
+    theme(plot.title = element_text(size = 6), axis.text.y   = element_text(size = 5))
+} else {
+  enrich_plot_down <- plotEnrich(gse_down, plot_type = "dot", scale_ratio = 0.4) +
+    labs(title = paste("Quantile: Downregulated Enrichment Pathways for", trait)) +
+    theme(plot.title = element_text(size = 6), axis.text.y   = element_text(size = 5))
+}
   
-  ggsave(paste0("enrichment_plot_quantile_", trait, "_M2.png"), plot = enrich_plot, width = 8, height = 6)
+  # Arrange the two plots side by side
+  combined_plot <- grid.arrange(enrich_plot_up, enrich_plot_down, ncol = 2)
+  
+  # Save the combined plot
+  ggsave(paste0("enrichment_plot_quantile_", trait, ".png"), plot = combined_plot, 
+         width = 15, height = 6)
+  
+  # Save the GO enrichment results to CSV
+  write.csv(gse_up, file = paste0("GO_enrichment_", trait, "_quantile_upregulated.csv"))
+  write.csv(gse_down, file = paste0("GO_enrichment_", trait, "_quantile_downregulated.csv"))
 }
 ```
 
@@ -487,20 +569,28 @@ quantile_m2_dir <- "analysis/quantile_wb_m2"
 # Get the list of differential expression results and GO enrichment results
 de_files_continuous <- list.files(continuous_dir, pattern = "differential_expression_.*_results.csv", 
                                   full.names = TRUE)
-go_files_continuous <- list.files(continuous_dir, pattern = "GO_enrichment_.*_results.csv", 
+up_files_continuous <- list.files(continuous_dir, pattern = "GO_enrichment_.*_upregulated.csv", 
+                                  full.names = TRUE)
+down_files_continuous <- list.files(continuous_dir, pattern = "GO_enrichment_.*_downregulated.csv", 
                                   full.names = TRUE)
 de_files_continuous_m2 <- list.files(continuous_m2_dir, pattern = "differential_expression_.*_results_M2.csv", 
                                      full.names = TRUE)
-go_files_continuous_m2 <- list.files(continuous_m2_dir, pattern = "GO_enrichment_.*_results_M2.csv", 
+up_files_continuous_m2 <- list.files(continuous_m2_dir, pattern = "GO_enrichment_.*_upregulated_M2.csv", 
+                                  full.names = TRUE)
+down_files_continuous_m2 <- list.files(continuous_m2_dir, pattern = "GO_enrichment_.*_downregulated_M2.csv", 
                                   full.names = TRUE)
 
 de_files_quantile <- list.files(quantile_dir, pattern = "differential_expression_.*_quantile_results.csv", 
                                 full.names = TRUE)
-go_files_quantile <- list.files(quantile_dir, pattern = "GO_enrichment_quantile_.*_results.csv", 
+up_files_quantile <- list.files(quantile_dir, pattern = "GO_enrichment_.*_quantile_upregulated.csv", 
+                                full.names = TRUE)
+down_files_quantile <- list.files(quantile_dir, pattern = "GO_enrichment_.*_quantile_downregulated.csv", 
                                 full.names = TRUE)
 de_files_quantile_m2 <- list.files(quantile_m2_dir, pattern = "differential_expression_.*_quantile_results_M2.csv", 
                                 full.names = TRUE)
-go_files_quantile_m2 <- list.files(quantile_m2_dir, pattern = "GO_enrichment_quantile_.*_results_M2.csv", 
+up_files_quantile_m2 <- list.files(quantile_m2_dir, pattern = "GO_enrichment_.*_quantile_upregulated_M2.csv", 
+                                full.names = TRUE)
+down_files_quantile_m2 <- list.files(quantile_m2_dir, pattern = "GO_enrichment.*_quantile_downregulated_M2.csv", 
                                 full.names = TRUE)
 
 # Initialize a data frame to store the results
@@ -508,32 +598,36 @@ results_df_continuous <- data.frame(trait = character(),
                                     num_significant_de = integer(),
                                     upregulated = integer(),
                                     downregulated = integer(),
-                                    num_enriched_go = integer(),
+                                    up_enriched_go = integer(),
+                                    down_enriched_go = integer(),
                                     stringsAsFactors = FALSE)
 
 results_df_quantile <- data.frame(trait = character(),
                                   num_significant_de = integer(),
                                   upregulated = integer(),
                                   downregulated = integer(),
-                                  num_enriched_go = integer(),
+                                  up_enriched_go = integer(),
+                                  down_enriched_go = integer(),
                                   stringsAsFactors = FALSE)
 
 results_df_continuous_m2 <- data.frame(trait = character(),
                                     num_significant_de = integer(),
                                     upregulated = integer(),
                                     downregulated = integer(),
-                                    num_enriched_go = integer(),
+                                    up_enriched_go = integer(),
+                                    down_enriched_go = integer(),
                                     stringsAsFactors = FALSE)
 
 results_df_quantile_m2 <- data.frame(trait = character(),
                                   num_significant_de = integer(),
                                   upregulated = integer(),
                                   downregulated = integer(),
-                                  num_enriched_go = integer(),
+                                  up_enriched_go = integer(),
+                                  down_enriched_go = integer(),
                                   stringsAsFactors = FALSE)
 
 # Function to extract significant DE genes and GO enriched pathways
-extract_results <- function(de_file, go_file, analysis_type) {
+extract_results <- function(de_file, up_go_file, down_go_file, analysis_type) {
   # Load the differential expression results
   res <- read.csv(de_file, header = T, row.names = 1)
   
@@ -545,10 +639,11 @@ extract_results <- function(de_file, go_file, analysis_type) {
   downregulated <- sum(significant_de$log2FoldChange < 0)
   
   # Load the GO enrichment results
-  go_res <- read.csv(go_file, header = T, row.names = 1)
+  up_go   <- read.csv(up_go_file,   header = TRUE, row.names = 1)
+  down_go <- read.csv(down_go_file, header = TRUE, row.names = 1)
   
-  # Count the number of enriched GO pathways (adjusted p-value < 0.05)
-  enriched_go <- sum(go_res$p.adjust < 0.05)
+  up_paths   <- sum(up_go$p.adjust < 0.05, na.rm = TRUE)
+  down_paths <- sum(down_go$p.adjust < 0.05, na.rm = TRUE)
   
   # Extract trait name from the file name
   trait_name <- gsub("differential_expression_|_results(.*).csv", "", basename(de_file))
@@ -559,7 +654,8 @@ extract_results <- function(de_file, go_file, analysis_type) {
     num_significant_de = nrow(significant_de),
     upregulated = upregulated,
     downregulated = downregulated,
-    num_enriched_go = enriched_go
+    up_enriched_go = up_paths,
+    down_enriched_go = down_paths 
   )
   if (analysis_type == "continuous") {
     results_df_continuous <<- rbind(results_df_continuous, new_row)
@@ -574,33 +670,34 @@ extract_results <- function(de_file, go_file, analysis_type) {
 
 # Loop through the continuous files and extract results
 for (i in seq_along(de_files_continuous)) {
-  extract_results(de_files_continuous[i], go_files_continuous[i], "continuous")
+  extract_results(de_files_continuous[i], up_files_continuous[i], down_files_continuous[i], "continuous")
 }
 
 for (i in seq_along(de_files_continuous_m2)) {
-  extract_results(de_files_continuous_m2[i], go_files_continuous_m2[i], "continuous_m2")
+  extract_results(de_files_continuous_m2[i], up_files_continuous_m2[i], down_files_continuous_m2[i], "continuous_m2")
 }
 
 # Loop through the quantile files and extract results
 for (i in seq_along(de_files_quantile)) {
-  extract_results(de_files_quantile[i], go_files_quantile[i], "quantile")
-}
-for (i in seq_along(de_files_quantile)) {
-  extract_results(de_files_quantile_m2[i], go_files_quantile_m2[i], "quantile_m2")
+  extract_results(de_files_quantile[i], up_files_quantile[i], down_files_quantile[i], "quantile")
 }
 
-colnames(results_df_continuous) <- c("Trait",
-                          "Significant differential expressed genes", 
-                          "Up", "Down", "Significant GO enriched pathways")
-colnames(results_df_quantile) <- c("Trait",
-                          "Significant differential expressed genes", 
-                          "Up", "Down", "Significant GO enriched pathways")
-colnames(results_df_continuous_m2) <- c("Trait",
-                          "Significant differential expressed genes", 
-                          "Up", "Down", "Significant GO enriched pathways")
-colnames(results_df_quantile_m2) <- c("Trait",
-                          "Significant differential expressed genes", 
-                          "Up", "Down", "Significant GO enriched pathways")
+for (i in seq_along(de_files_quantile)) {
+  extract_results(de_files_quantile_m2[i], up_files_quantile_m2[i], down_files_quantile_m2[i], "quantile_m2")
+}
+
+colnames(results_df_continuous) <- c("Trait", "Significant DE genes", 
+                                     "Up-regulated Genes", "Down-regulated Genes", 
+                                     "Up-regulated GO pathways", "Down-regulated GO pathways")
+colnames(results_df_quantile) <- c("Trait", "Significant DE genes", 
+                                   "Up-regulated Genes", "Down-regulated Genes", 
+                                   "Up-regulated GO pathways", "Down-regulated GO pathways")
+colnames(results_df_continuous_m2) <- c("Trait", "Significant DE genes", 
+                                     "Up-regulated Genes", "Down-regulated Genes", 
+                                     "Up-regulated GO pathways", "Down-regulated GO pathways")
+colnames(results_df_quantile_m2) <- c("Trait", "Significant DE genes", 
+                                     "Up-regulated Genes", "Down-regulated Genes", 
+                                     "Up-regulated GO pathways", "Down-regulated GO pathways")
 
 knitr::kable(results_df_continuous, caption = "Continuous PRS without adjusting genotype PCs")
 knitr::kable(results_df_continuous_m2, caption = "Continuous PRS with adjusting genotype PCs")
@@ -610,19 +707,19 @@ knitr::kable(results_df_quantile_m2, caption = "Quantile PRS with adjusting geno
 
 **Interpretation:**
 
-In the quantile analysis, the number of significant differential expressed genes is generally higher compared to the continuous analysis, which suggests that stratifying by PRS (top 25%) may identify more genes with stronger associations to the traits. We observed that certain genes were identified in both the continuous and quantile PRS analyses, though not all genes overlapped. Specifically, for the Eosinophil count trait, ACTN3, HAMP, SCGB3A1, CH25H, and NPIPA8 appeared among the top 10 DEGs across both analyses, suggesting that these genes might play a key role in the trait regardless of the analysis approach. For example:  
+In the quantile analysis, the number of significant differential expressed genes is generally higher compared to the continuous analysis, which suggests that stratifying by PRS (top 25%) may identify more genes with stronger associations to the traits. We observed that certain genes were identified in both the continuous and quantile PRS analyses, though not all genes overlapped. Specifically, for the Eosinophil count trait, ACTN3, HAMP, SCGB3A1, CH25H, and NPIPA8 appeared among the top 10 DEGs across both analyses, suggesting that these genes might play a key role in the trait regardless of the analysis approach. For example:
 
-- HAMP encodes Hepcidin, which is involved in the maintenance of iron homeostasis. 
+-   HAMP encodes Hepcidin, which is involved in the maintenance of iron homeostasis.
 
-- SCGB3A1 predicts to enable cytokin activity. 
+-   SCGB3A1 predicts to enable cytokin activity.
 
-- CH25H encodes for cholesterol 25-hydroxylase, involved in lipid metabolism and modulating immune responses.
+-   CH25H encodes for cholesterol 25-hydroxylase, involved in lipid metabolism and modulating immune responses.
 
 Additionally, the GO enrichment analysis provides insights into the biological pathways and processes that are potentially involved in these traits. BgRatio is the ratio of the total number of genes in a specific pathway (GO term) to the total number of genes. GeneRatio is the ratio of the number of genes enriched in specific pathway to the number of genes that were tested in the analysis. FoldEnrichment is the ratio of GeneRatio to BgRatio, showing how much more enriched a pathway is in your genes of interest compared to the total gene set. Higher FoldEnrichment values indicate that a particular GO term is overrepresented in your gene set compared to the general gene pool, suggesting it may be biologically relevant for the trait. Some traits show higher pathway enrichment in the quantile analysis, indicating that stratification by PRS may provide more biologically meaningful results.
 
 For highly correlated traits, they tend to share similar GO enriched pathways. For example, mean corpuscular hemoglobin and mean corpucular volume are both involved in read blood cell biology, so it's expected that their GO enrichment would point to similar biological processes, such as hemoglobin metabolism, iron homeostasis and erythropoiesis.
 
-To account for population stratification, we adjusted the model by including the first two genotype principal components (PCs), as they explain most of the genetic variation in the data. For Eosinophil count, we observed that genes were consistently identified as top differentially expressed with and without adjustment. The only difference is that instead of SLC6A9, WFDC2 was detected as top 10 DEGs when adjusting for the first two genotype PCs. WFBC2 is a protease inhibitor with a potential role in innate immune defense ([L Bingle, 2006](https://doi.org/10.1186/1465-9921-7-61)). Although same genes are identified as top DEGs for continuous analysis, additional pathways such as response to inactivity were highlighted when adjusting for the first two genotype PCs. 
+To account for population stratification, we adjusted the model by including the first two genotype principal components (PCs), as they explain most of the genetic variation in the data. For Eosinophil count, we observed that genes were consistently identified as top differentially expressed with and without adjustment. The only difference is that instead of SLC6A9, WFDC2 was detected as top 10 DEGs when adjusting for the first two genotype PCs. WFBC2 is a protease inhibitor with a potential role in innate immune defense ([L Bingle, 2006](https://doi.org/10.1186/1465-9921-7-61)). Although same genes are identified as top DEGs for continuous analysis, additional pathways such as response to inactivity were highlighted when adjusting for the first two genotype PCs.
 
 ## Basophil count
 
@@ -632,24 +729,24 @@ To account for population stratification, we adjusted the model by including the
 ![](figure/differential_expression.Rmd/volcano_plot_quantile_Basophil.count.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_Basophil.count.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Basophil.count.png)
-
+ 
 ![](figure/differential_expression.Rmd/ma_plot_Basophil.count_M2.png) 
 ![](figure/differential_expression.Rmd/ma_plot_quantile_Basophil.count_M2.png) 
-![](figure/differential_expression.Rmd/volcano_plot_Basophil.count_M2.png) 
+![](figure/differential_expression.Rmd/volcano_plot_Basophil.count_M2.png)
 ![](figure/differential_expression.Rmd/volcano_plot_quantile_Basophil.count_M2.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_Basophil.count_M2.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Basophil.count_M2.png)
 
 ## Basophil.percentage.of.white.cells
 
-![](figure/differential_expression.Rmd/ma_plot_Basophil.percentage.of.white.cells.png) 
+![](figure/differential_expression.Rmd/ma_plot_Basophil.percentage.of.white.cells.png)
 ![](figure/differential_expression.Rmd/ma_plot_quantile_Basophil.percentage.of.white.cells.png) 
 ![](figure/differential_expression.Rmd/volcano_plot_Basophil.percentage.of.white.cells.png) 
 ![](figure/differential_expression.Rmd/volcano_plot_quantile_Basophil.percentage.of.white.cells.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_Basophil.percentage.of.white.cells.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Basophil.percentage.of.white.cells.png)
 
-![](figure/differential_expression.Rmd/ma_plot_Basophil.percentage.of.white.cells_M2.png) 
+![](figure/differential_expression.Rmd/ma_plot_Basophil.percentage.of.white.cells_M2.png)
 ![](figure/differential_expression.Rmd/ma_plot_quantile_Basophil.percentage.of.white.cells_M2.png) 
 ![](figure/differential_expression.Rmd/volcano_plot_Basophil.percentage.of.white.cells_M2.png) 
 ![](figure/differential_expression.Rmd/volcano_plot_quantile_Basophil.percentage.of.white.cells_M2.png) 
@@ -672,7 +769,6 @@ To account for population stratification, we adjusted the model by including the
 ![](figure/differential_expression.Rmd/enrichment_plot_Eosinophil.count_M2.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Eosinophil.count_M2.png)
 
-
 ## Eosinophil.percentage.of.white.cells
 
 ![](figure/differential_expression.Rmd/ma_plot_Eosinophil.percentage.of.white.cells.png) 
@@ -688,7 +784,6 @@ To account for population stratification, we adjusted the model by including the
 ![](figure/differential_expression.Rmd/volcano_plot_quantile_Eosinophil.percentage.of.white.cells_M2.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_Eosinophil.percentage.of.white.cells_M2.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Eosinophil.percentage.of.white.cells_M2.png)
-
 
 ## Hematocrit
 
@@ -722,7 +817,6 @@ To account for population stratification, we adjusted the model by including the
 ![](figure/differential_expression.Rmd/enrichment_plot_Hemoglobin.concentration_M2.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Hemoglobin.concentration.png)
 
-
 ## High.light.scatter.reticulocyte.count
 
 ![](figure/differential_expression.Rmd/ma_plot_High.light.scatter.reticulocyte.count.png) 
@@ -738,7 +832,6 @@ To account for population stratification, we adjusted the model by including the
 ![](figure/differential_expression.Rmd/volcano_plot_quantile_High.light.scatter.reticulocyte.count_M2.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_High.light.scatter.reticulocyte.count_M2.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_quantile_High.light.scatter.reticulocyte.count_M2.png)
-
 
 ## High.light.scatter.reticulocyte.percentage.of.red.cells
 
@@ -772,7 +865,6 @@ To account for population stratification, we adjusted the model by including the
 ![](figure/differential_expression.Rmd/enrichment_plot_Immature.fraction.of.reticulocytes_M2.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Immature.fraction.of.reticulocytes_M2.png)
 
-
 ## Lymphocyte.count
 
 ![](figure/differential_expression.Rmd/ma_plot_Lymphocyte.count.png) 
@@ -805,7 +897,6 @@ To account for population stratification, we adjusted the model by including the
 ![](figure/differential_expression.Rmd/enrichment_plot_Lymphocyte.percentage.of.white.cells_M2.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Lymphocyte.percentage.of.white.cells_M2.png)
 
-
 ## Mean.corpuscular.hemoglobin.concentration
 
 ![](figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.hemoglobin.concentration.png) 
@@ -822,7 +913,6 @@ To account for population stratification, we adjusted the model by including the
 ![](figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.hemoglobin.concentration_M2.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.hemoglobin.concentration_M2.png)
 
-
 ## Mean.corpuscular.hemoglobin
 
 ![](figure/differential_expression.Rmd/ma_plot_Mean.corpuscular.hemoglobin.png) 
@@ -838,7 +928,6 @@ To account for population stratification, we adjusted the model by including the
 ![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.corpuscular.hemoglobin_M2.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_Mean.corpuscular.hemoglobin_M2.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.corpuscular.hemoglobin_M2.png)
-
 
 ## Mean.corpuscular.volume
 
@@ -864,6 +953,7 @@ To account for population stratification, we adjusted the model by including the
 ![](figure/differential_expression.Rmd/volcano_plot_quantile_Mean.platelet.volume.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_Mean.platelet.volume.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Mean.platelet.volume.png)
+
 
 ![](figure/differential_expression.Rmd/ma_plot_Mean.platelet.volume_M2.png) 
 ![](figure/differential_expression.Rmd/ma_plot_quantile_Mean.platelet.volume_M2.png) 
@@ -1107,7 +1197,7 @@ To account for population stratification, we adjusted the model by including the
 
 ![](figure/differential_expression.Rmd/ma_plot_Celiac_GCST90014442_M2.png) 
 ![](figure/differential_expression.Rmd/ma_plot_quantile_Celiac_GCST90014442_M2.png) 
-![](figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90014442_M2.png)
+![](figure/differential_expression.Rmd/volcano_plot_Celiac_GCST90014442_M2.png) 
 ![](figure/differential_expression.Rmd/volcano_plot_quantile_Celiac_GCST90014442_M2.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_Celiac_GCST90014442_M2.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_quantile_Celiac_GCST90014442_M2.png)
@@ -1185,7 +1275,7 @@ To account for population stratification, we adjusted the model by including the
 ![](figure/differential_expression.Rmd/enrichment_plot_LUPUS_GCST011096.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_quantile_LUPUS_GCST011096.png)
 
-![](figure/differential_expression.Rmd/ma_plot_LUPUS_GCST011096_M2.png)
+![](figure/differential_expression.Rmd/ma_plot_LUPUS_GCST011096_M2.png) 
 ![](figure/differential_expression.Rmd/ma_plot_quantile_LUPUS_GCST011096_M2.png) 
 ![](figure/differential_expression.Rmd/volcano_plot_LUPUS_GCST011096_M2.png) 
 ![](figure/differential_expression.Rmd/volcano_plot_quantile_LUPUS_GCST011096_M2.png) 
@@ -1218,7 +1308,7 @@ To account for population stratification, we adjusted the model by including the
 ![](figure/differential_expression.Rmd/enrichment_plot_quantile_T1D_GCST90014023.png)
 
 ![](figure/differential_expression.Rmd/ma_plot_T1D_GCST90014023_M2.png) 
-![](figure/differential_expression.Rmd/ma_plot_quantile_T1D_GCST90014023_M2.png)
+![](figure/differential_expression.Rmd/ma_plot_quantile_T1D_GCST90014023_M2.png) 
 ![](figure/differential_expression.Rmd/volcano_plot_T1D_GCST90014023_M2.png) 
 ![](figure/differential_expression.Rmd/volcano_plot_quantile_T1D_GCST90014023_M2.png) 
 ![](figure/differential_expression.Rmd/enrichment_plot_T1D_GCST90014023_M2.png) 

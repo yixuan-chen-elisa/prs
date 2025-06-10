@@ -1,7 +1,5 @@
 ---
 title: "Relation between lung gene expression with Asthma PRS"
-author: "Yixuan (Elisa) Chen"
-date: "2025-05-30"
 output: html_document
 ---
 
@@ -21,6 +19,8 @@ library(enrichplot)
 library(clusterProfiler)
 library(gridExtra)
 ```
+
+Use **Lung** GTEx gene expression counts for the analysis.
 
 # Correlation between PRS & expression PCs 
 
